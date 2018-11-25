@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<!--
+	Phantom by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+	<title>Quixilver 8404 - Competition Overview</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="/static/css/main.css" />
+	<noscript>
+		<link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+</head>
+
+<body class="is-preload">
+	<!-- Wrapper -->
+	<div id="wrapper">
+
+		<!-- Header -->
+		<header id="header">
+			<div class="inner">
+
+				<!-- Logo -->
+				<a href="/" class="logo">
+					<span class="symbol"><img src="/static/images/logo.svg" alt="" /></span>
+					<span class="title">Quixilver 8404</span>
+				</a>
+
+				<!-- Nav -->
+				<nav>
+					<ul>
+						<li><a href="#menu">Menu</a></li>
+					</ul>
+				</nav>
+
+			</div>
+		</header>
+
+		<!-- Menu -->
+		<nav id="menu">
+			<h2>Menu</h2>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/competition-overview"> Competition overview</a></li>
+				<li><a href="/pre-game-scouting">Pre-game scouting</a></li>
+				<li><a href="/match-scouting">Match scouting</a></li>
+				<li><a href="/team-rankings">Team rankings</a></li>
+			</ul>
+		</nav>
+
+		<!-- Main -->
+		<div id="main">
+			<div class="inner">
+				<header>
+					<h1>Overview for the {{ data.cityName }} Competition</h1>
+				</header>
+				<section>
+					<h2>Pre-Game Scouting Data</h2>
+					<div class="table-wrapper">
+						<table class="alt">
+							<thead>
+								<tr>
+									{% for key in data.preGameScoutingData[0] %}
+									<th>
+										{{ key }}
+									</th>
+									{% endfor %}
+								</tr>
+							</thead>
+							<tbody>
+								{% for row in data.preGameScoutingData %}
+								<tr>
+									{% for key, value in row.items() %}
+									<td>{{ value }}</td>
+									{% endfor %}
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				</section>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Scripts -->
+	<script src="/static/js/jquery.min.js"></script>
+	<script src="/static/js/browser.min.js"></script>
+	<script src="/static/js/breakpoints.min.js"></script>
+	<script src="/static/js/util.js"></script>
+	<script src="/static/js/main.js"></script>
+
+</body>
+
+</html>
