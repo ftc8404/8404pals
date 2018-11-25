@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Quixilver 8404 - Pre-Game Scouting</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <noscript>
+        <link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+</head>
+
+<body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <!-- Logo -->
+                <a href="/" class="logo">
+                    <span class="symbol"><img src="/static/images/logo.svg" alt="" /></span>
+                    <span class="title">Quixilver 8404</span>
+                </a>
+                <!-- Nav -->
+                <nav>
+                    <ul>
+                        <li><a href="#menu">Menu</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Menu -->
+        <nav id="menu">
+            <h2>Menu</h2>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/pre-game-scouting">Pre-game scouting</a></li>
+                <li><a href="/match-scouting">Match scouting</a></li>
+                <li><a href="/team-rankings">Team rankings</a></li>
+            </ul>
+        </nav>
+
+        <div id="main">
+            <div class="inner">
+                <h1>Pre-Game Scouting</h1>
+                {% if form.error %}
+                <p><em>Error: {{ form.error }}</em></p>
+                {% endif %}
+                <form method="post" action="#">
+                    <div class="row gtr-uniform">
+                        <div class="col-12">
+                            <h2>General Info</h2>
+                        </div>
+                        <div class="col-4 col-12-small">
+                            {{ form.team_number(placeholder=form.team_number.label.text) }}
+                        </div>
+                        <div class="col-8 col-12-small">
+                            {{ form.contact(placeholder=form.contact.label.text) }}
+                        </div>
+
+                        <div class="col-12" style="padding-top: 2em; padding-bottom: 0.3em">
+                            <h2>Autonomous</h2>
+                        </div>
+
+                        {% for field_name in form.auton_field_names %}
+                        <div class="col-3 col-4-large">
+                            <p>{{ form.auton_field_names[field_name] }}:</p>
+                        </div>
+                        <div class="col-3 col-4-large">
+                            {{ form["auton_crater_"+field_name] }}
+                            {{ form["auton_crater_"+field_name].label }}
+                        </div>
+                        <div class="col-6 col-4-large">
+                            {{ form["auton_depot_"+field_name] }}
+                            {{ form["auton_depot_"+field_name].label }}
+                        </div>
+                        {% endfor %}
+
+                        <div class="col-12" style="padding-top: 2em;">
+                            <h2>Tele-Op</h2>
+                        </div>
+                        <div class="col-3 col-4-large col-12-xsmall">
+                            {{ form.teleop_minerals(placeholder=form.teleop_minerals.label.text) }}
+                        </div>
+                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
+                            {{ form.teleop_mineral_cubes }}
+                            {{ form.teleop_mineral_cubes.label }}
+                        </div>
+                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
+                            {{ form.teleop_mineral_balls }}
+                            {{ form.teleop_mineral_balls.label }}
+                        </div>
+                        <div class="col-3 col-4-large col-12-xsmall">
+                            <p>Crater Entry:</p>
+                        </div>
+                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
+                            {{ form.teleop_crater_reach }}
+                            {{ form.teleop_crater_reach.label }}
+                        </div>
+                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
+                            {{ form.teleop_crater_enter }}
+                            {{ form.teleop_crater_enter.label }}
+                        </div>
+                        <div class="col-3 col-4-large col-12-xsmall">
+                            <p>Mineral Scoring:</p>
+                        </div>
+                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
+                            {{ form.teleop_score_crater }}
+                            {{ form.teleop_score_crater.label }}
+                        </div>
+                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
+                            {{ form.teleop_score_depot }}
+                            {{ form.teleop_score_depot.label }}
+                        </div>
+                        <div class="col-3 col-4-large col-12-xsmall">
+                            <p>End Game:</p>
+                        </div>
+                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 2em">
+                            {{ form.teleop_hang }}
+                            {{ form.teleop_hang.label }}
+                        </div>
+                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 2em">
+                            {{ form.teleop_full_park }}
+                            {{ form.teleop_full_park.label }}
+                        </div>
+                        <div class="col-12">
+                            <ul class="actions">
+                                <li><input type="submit" value="Submit" class="primary" style="width: 20em" /></li>
+                                <li><input type="reset" value="Reset" style="width: 10em" /></li>
+                            </ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/browser.min.js"></script>
+    <script src="/static/js/breakpoints.min.js"></script>
+    <script src="/static/js/util.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+
+</html>

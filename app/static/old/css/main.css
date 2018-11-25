@@ -1,0 +1,53 @@
+h1{
+    color: hsl(200, 50%, 20%);
+}
+
+h2{
+    color: hsl(200, 50%, 20%);
+}
+
+h3{
+    color: hsl(200, 50%, 20%);
+}
+
+p{
+    color: hsl(200, 0%, 20%);
+}
+
+a:link {
+    color: hsl(200, 50%, 40%);
+}
+
+a:visited {
+    color: hsl(200, 50%, 20%);
+}
+
+a:hover {
+    color: hsl(200, 50%, 20%);
+}
+
+a:active {
+    color: hsl(200, 50%, 20%);
+}
+
+table {
+    border-collapse: collapse;
+    width: 75%;
+}
+
+td, th {
+    border: 3px solid hsl(200, 50%, 75%);
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: lightblue;
+}
+
+hr{
+    border: none;
+    height: 3px;
+    color: lightblue;
+    background-color: lightblue;
+}
