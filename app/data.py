@@ -6,8 +6,8 @@ database = 'quixilver8404data'
 username = 'axchen7'
 password = '7vE+xHxvC-a=~e6mMwcs*xg5S'
 
-driver = '{ODBC Driver 17 for SQL Server}'
-# driver = '{FreeTDS}'
+# driver = '{ODBC Driver 17 for SQL Server}'
+driver = '{FreeTDS}'
 
 sqlConn = pyodbc.connect('DRIVER='+driver+';SERVER='+server +
                          ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
