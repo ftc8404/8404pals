@@ -6,16 +6,22 @@ database = 'quixilver8404data'
 username = 'axchen7'
 password = '7vE+xHxvC-a=~e6mMwcs*xg5S'
 
-# driver = '{ODBC Driver 17 for SQL Server}'
-driver = '{FreeTDS}'
+driver = '{ODBC Driver 17 for SQL Server}'
+# driver = '{FreeTDS}'
 
-sqlConn = pyodbc.connect('DRIVER='+driver+';SERVER='+server +
-                         ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
-sqlCursor = sqlConn.cursor()
+
+def getCurCompetitionCityName():
+    sqlConn = pyodbc.connect('DRIVER='+driver+';SERVER='+server +
+                             ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
+    sqlCursor = sqlConn.cursor()
+    curCompetitionCityName = str(sqlCursor.execute(
+        "SELECT * FROM Competitions WHERE CompetitionId="+str(curCompetitionId)).fetchall()[0][1])
+    sqlConn.close()
+    return curCompetitionCityName
+
 
 curCompetitionId = 1
-curCompetitionCityName = str(sqlCursor.execute(
-    "SELECT * FROM Competitions WHERE CompetitionId="+str(curCompetitionId)).fetchall()[0][1])
+curCompetitionCityName = getCurCompetitionCityName()
 
 preGameScoutingTable = {
     "TeamNumber": "team_number", "Contact": "contact",
@@ -33,6 +39,10 @@ preGameScoutingTable = {
 
 
 def addPreGameScoutingEntry(formValues):
+    sqlConn = pyodbc.connect('DRIVER='+driver+';SERVER='+server +
+                             ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
+    sqlCursor = sqlConn.cursor()
+
     teamNumber = formValues["team_number"]
     exists = False
     if(len(sqlCursor.execute("SELECT * FROM PreGameScoutingEntries WHERE TeamNumber="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId)).fetchall()) > 0):
@@ -68,6 +78,7 @@ def addPreGameScoutingEntry(formValues):
         sqlCursor.execute("INSERT PreGameScoutingEntries ("+tableFieldOrder +
                           ",CompetitionId) VALUES ("+formattedFormValues+","+str(curCompetitionId)+")")
     sqlConn.commit()
+    sqlConn.close()
 
 
 def buildPreGameScoutingForm(*args):
@@ -103,7 +114,30 @@ def buildPreGameScoutingForm(*args):
     return PreGameScoutingForm(*args)
 
 
+def validatePreGameScoutingForm(form):
+    error = ""
+    teamNumber = 0
+    teleopMinerals = 0.0
+    try:
+        teamNumber = int(form['team_number'])
+    except ValueError:
+        error = '"Team Number" must be a positive integer'
+    try:
+        teleopMinerals = float(form['teleop_minerals'])
+    except ValueError:
+        error = '"Estimated Minerals" must be a number from 0 - 150'
+    if teamNumber <= 0:
+        error = '"Team Number" must be a positive integer'
+    if teleopMinerals < 0 or teleopMinerals > 150:
+        error = '"Estimated Minerals" must be a number from 0 - 150'
+    return error
+
+
 def getCompetitionOverviewData():
+    sqlConn = pyodbc.connect('DRIVER='+driver+';SERVER='+server +
+                             ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
+    sqlCursor = sqlConn.cursor()
+
     preGameScoutingData = []
 
     preGameScoutingFormData = [row[1:] for row in sqlCursor.execute(
@@ -111,6 +145,9 @@ def getCompetitionOverviewData():
     for entry in preGameScoutingFormData:
         preGameScoutingData.append(dict(
             zip(preGameScoutingTable.keys(), entry)))
+    preGameScoutingDataIsEmpty = len(preGameScoutingData) == 0
     competitionData = {
-        "cityName": curCompetitionCityName, "id": curCompetitionId, "preGameScoutingData": preGameScoutingData}
+        "cityName": curCompetitionCityName, "id": curCompetitionId, "preGameScoutingData": preGameScoutingData, "preGameScoutingDataIsEmpty": preGameScoutingDataIsEmpty}
+
+    sqlConn.close()
     return competitionData

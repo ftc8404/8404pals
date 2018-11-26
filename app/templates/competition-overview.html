@@ -59,6 +59,7 @@
 				</header>
 				<section>
 					<h2>Pre-Game Scouting Data</h2>
+					{% if not data.preGameScoutingDataIsEmpty %}
 					<div class="table-wrapper">
 						<table class="alt">
 							<thead>
@@ -81,6 +82,9 @@
 							</tbody>
 						</table>
 					</div>
+					{% else %}
+					<p>No data has been entered yet.</p>
+					{% endif %}
 				</section>
 			</div>
 		</div>

@@ -17,21 +17,7 @@ def pre_game_scouting():
     form = data.buildPreGameScoutingForm(request.form)
     print(form.errors)
     if request.method == 'POST':
-        error = ""
-        teamNumber = 0
-        teleopMinerals = 0.0
-        try:
-            teamNumber = int(request.form['team_number'])
-        except ValueError:
-            error = '"Team Number" must be a positive integer'
-        try:
-            teleopMinerals = float(request.form['teleop_minerals'])
-        except ValueError:
-            error = '"Estimated Minerals" must be a number from 0 - 150'
-        if teamNumber <= 0:
-            error = '"Team Number" must be a positive integer'
-        if teleopMinerals < 0 or teleopMinerals > 150:
-            error = '"Estimated Minerals" must be a number from 0 - 150'
+        error = data.validatePreGameScoutingForm(request.form)
 
         if(len(error)):
             form.error = error
