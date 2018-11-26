@@ -49,3 +49,10 @@ def team_rankings():
 @app.route("/competition-overview")
 def competition_overview():
     return render_template('competition-overview.html', data=data.getCompetitionOverviewData())
+
+
+@app.route("/set-competition-id/<int:competition_id>/")
+def set_competition_id(competition_id):
+    data.curCompetitionId = competition_id
+    data.curCompetitionCityName = data.getCurCompetitionCityName()
+    return "Current competition ID set to "+str(competition_id)

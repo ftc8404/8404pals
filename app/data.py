@@ -20,7 +20,7 @@ def getCurCompetitionCityName():
     return curCompetitionCityName
 
 
-curCompetitionId = 1
+curCompetitionId = 21
 curCompetitionCityName = getCurCompetitionCityName()
 
 preGameScoutingTable = {
@@ -138,16 +138,21 @@ def getCompetitionOverviewData():
                              ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
     sqlCursor = sqlConn.cursor()
 
-    preGameScoutingData = []
+    preGameScoutingData = {}
 
     preGameScoutingFormData = [row[1:] for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
+
+    allTeamNames = [str(row[0]) for row in sqlCursor.execute(
+        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
+    for teamName in allTeamNames:
+        preGameScoutingData[teamName] = [teamName]+["N/A"] * \
+            (len(preGameScoutingTable.keys())-1)
+
     for entry in preGameScoutingFormData:
-        preGameScoutingData.append(dict(
-            zip(preGameScoutingTable.keys(), entry)))
-    preGameScoutingDataIsEmpty = len(preGameScoutingData) == 0
+        preGameScoutingData[str(entry[0])] = entry
     competitionData = {
-        "cityName": curCompetitionCityName, "id": curCompetitionId, "preGameScoutingData": preGameScoutingData, "preGameScoutingDataIsEmpty": preGameScoutingDataIsEmpty}
+        "cityName": curCompetitionCityName, "id": curCompetitionId, "preGameScoutingData": preGameScoutingData, "tableKeys": preGameScoutingTable.keys()}
 
     sqlConn.close()
     return competitionData

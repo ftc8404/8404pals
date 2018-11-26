@@ -59,12 +59,11 @@
 				</header>
 				<section>
 					<h2>Pre-Game Scouting Data</h2>
-					{% if not data.preGameScoutingDataIsEmpty %}
 					<div class="table-wrapper">
 						<table class="alt">
 							<thead>
 								<tr>
-									{% for key in data.preGameScoutingData[0] %}
+									{% for key in data.tableKeys %}
 									<th>
 										{{ key }}
 									</th>
@@ -72,9 +71,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for row in data.preGameScoutingData %}
+								{% for name, row in data.preGameScoutingData.items() %}
 								<tr>
-									{% for key, value in row.items() %}
+									{% for value in row %}
 									<td>{{ value }}</td>
 									{% endfor %}
 								</tr>
@@ -82,9 +81,6 @@
 							</tbody>
 						</table>
 					</div>
-					{% else %}
-					<p>No data has been entered yet.</p>
-					{% endif %}
 				</section>
 			</div>
 		</div>
