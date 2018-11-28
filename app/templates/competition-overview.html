@@ -58,7 +58,7 @@
 					<h1>Overview for the {{ data.cityName }} Competition</h1>
 				</header>
 				<section>
-					<h2>Pre-Game Scouting Data</h2>
+					<h2>Scouting Data</h2>
 					<div class="table-wrapper">
 						<table class="alt">
 							<thead>
@@ -71,7 +71,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								{% for name, row in data.preGameScoutingData.items() %}
+								{% for name, row in data.allData.items() %}
 								<tr>
 									{% for value in row %}
 									<td>{{ value }}</td>

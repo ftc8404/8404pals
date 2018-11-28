@@ -1,13 +1,17 @@
 import wtforms
 import pyodbc
+import platform
 
 server = 'quixilver8404data.database.windows.net'
 database = 'quixilver8404data'
 username = 'axchen7'
 password = '7vE+xHxvC-a=~e6mMwcs*xg5S'
 
-# driver = '{ODBC Driver 17 for SQL Server}'
-driver = '{FreeTDS}'
+driver = ''
+if platform.system() == 'Windows':
+    driver = '{ODBC Driver 17 for SQL Server}'
+else:
+    driver = '{FreeTDS}'
 
 
 def getSqlConn():
@@ -38,6 +42,75 @@ def getPreGameScoutingFields():
 
 
 preGameScoutingFields = getPreGameScoutingFields()
+
+
+def getMatchScoutingFields():
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    fields = [row[0] for row in sqlCursor.execute(
+        "SELECT column_name FROM information_schema.columns WHERE table_name = 'MatchScoutingEntries'").fetchall() if (row[0] != "EntryId" and row[0] != "CompetitionId")]
+    sqlConn.close()
+    return fields
+
+
+matchScoutingFields = getMatchScoutingFields()
+
+
+def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormData):
+    data = {}
+    matchEntryCount = {}
+
+    fields = ['Decl. Auton Crater-Side Score', 'Decl. Auton Depot-Side Score', 'Decl. Auton Mean Score',
+              'Decl. Tele-Op Score', 'Decl. Total Score', 'Match Auton Score', 'Match Tele-Op Score', 'Match Total Score']
+
+    for teamNumber in allTeamNumbers:
+        entryTeamNumber = str(teamNumber)
+        data[entryTeamNumber] = ['N/A']*len(fields)
+        matchEntryCount[entryTeamNumber] = 0
+
+    for entry in preGameScoutingFormData:
+        entryTeamNumber = str(entry[0])
+
+        preAutonCraterScore = entry[2]*30+(50 if entry[6] else (
+            25 if entry[4] else 0))+entry[8]*15+entry[10]*10
+        preAutonDepotScore = entry[3]*30+(50 if entry[7] else (
+            25 if entry[5] else 0))+entry[9]*15+entry[11]*10
+        preAutonMeanScore = (preAutonCraterScore+preAutonDepotScore)/2
+        data[entryTeamNumber][0] = preAutonCraterScore
+        data[entryTeamNumber][1] = preAutonDepotScore
+        data[entryTeamNumber][2] = preAutonMeanScore
+
+        preTeleopScore = entry[12]*(5 if entry[17] else (2 if entry[18] else 0))+(
+            50 if entry[19] else (25 if entry[20] else 15))
+        data[entryTeamNumber][3] = preTeleopScore
+        data[entryTeamNumber][4] = preAutonMeanScore+preTeleopScore
+
+    for entry in matchScoutingFormData:
+        entryTeamNumber = str(entry[1])
+
+        matchAutonScore = entry[2]*30+(50 if entry[4] else (
+            25 if entry[3] else 0))+entry[5]*15+entry[6]*10
+        matchTeleopScore = entry[7]*5+entry[8]*2 + \
+            ({'none': 0, 'partial': 15, 'full': 25, 'hang': 50}[entry[9]])
+
+        if matchEntryCount[entryTeamNumber] > 0:
+            data[entryTeamNumber][5] += matchAutonScore
+            data[entryTeamNumber][6] += matchTeleopScore
+            data[entryTeamNumber][7] += preAutonMeanScore+preTeleopScore
+        else:
+            data[entryTeamNumber][5] = matchAutonScore
+            data[entryTeamNumber][6] = matchTeleopScore
+            data[entryTeamNumber][7] = preAutonMeanScore+preTeleopScore
+
+        matchEntryCount[entryTeamNumber] += 1
+
+    for teamNumber, amount in matchEntryCount.items():
+        if amount > 0:
+            data[str(teamNumber)][5] /= amount
+            data[str(teamNumber)][6] /= amount
+            data[str(teamNumber)][7] /= amount
+
+    return {'data': data, 'fields': fields}
 
 
 def addPreGameScoutingEntry(formValues):
@@ -76,6 +149,48 @@ def addPreGameScoutingEntry(formValues):
                           " WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId))
     else:
         sqlCursor.execute("INSERT PreGameScoutingEntries ("+tableFieldOrder +
+                          ",CompetitionId) VALUES ("+formattedFormValues+","+str(curCompetitionId)+")")
+    sqlConn.commit()
+    sqlConn.close()
+
+
+def addMatchScoutingEntry(formValues):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+
+    teamNumber = formValues["team_number"]
+    matchNumber = formValues["match_number"]
+    exists = False
+    if(len(sqlCursor.execute("SELECT * FROM MatchScoutingEntries WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId)+" AND match_number="+str(matchNumber)).fetchall()) > 0):
+        exists = True
+
+    tableFieldOrder = str(matchScoutingFields).replace(
+        "'", "").replace('"', "")[1:-1]
+    formattedFormValues = ""
+    updateSet = ""
+    for field in matchScoutingFields:
+        nextformattedFormValues = ""
+        if field in formValues:
+            formValue = formValues[field]
+            if field == "teleop_endgame":
+                nextformattedFormValues = "'"+formValue+"'"
+            elif formValue == "y":
+                nextformattedFormValues = "1"
+            else:
+                nextformattedFormValues = str(formValue)
+        else:
+            nextformattedFormValues = "0"
+        formattedFormValues += nextformattedFormValues+","
+        updateSet += field+"="+nextformattedFormValues+","
+
+    formattedFormValues = formattedFormValues[:-1]
+    updateSet = updateSet[:-1]
+
+    if(exists):
+        sqlCursor.execute("UPDATE MatchScoutingEntries SET "+updateSet +
+                          " WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId)+" AND match_number="+str(matchNumber))
+    else:
+        sqlCursor.execute("INSERT MatchScoutingEntries ("+tableFieldOrder +
                           ",CompetitionId) VALUES ("+formattedFormValues+","+str(curCompetitionId)+")")
     sqlConn.commit()
     sqlConn.close()
@@ -198,10 +313,10 @@ def validateMatchScoutingForm(form):
     try:
         matchNumber = int(form['match_number'])
     except ValueError:
-        return '"Match Number" must be a number from 0 - 500'
+        return '"Match Number" must be a number from 1 - 500'
 
-    if matchNumber < 0 or matchNumber > 150:
-        return '"Estimated Minerals" must be a number from 0 - 500'
+    if matchNumber < 1 or matchNumber > 150:
+        return '"Match Number" must be a number from 1 - 500'
 
     landerMinerals = 0
     try:
@@ -228,21 +343,37 @@ def getCompetitionOverviewData():
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
 
-    preGameScoutingData = {}
-
-    preGameScoutingFormData = [row[1:] for row in sqlCursor.execute(
+    preGameScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
-
-    allTeamNames = [str(row[0]) for row in sqlCursor.execute(
+    allTeamNumbers = [str(row[0]) for row in sqlCursor.execute(
         "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
-    for teamName in allTeamNames:
-        preGameScoutingData[teamName] = [teamName]+["N/A"] * \
-            (len(preGameScoutingFields)-1)
-
-    for entry in preGameScoutingFormData:
-        preGameScoutingData[str(entry[0])] = entry[:-1]
-    competitionData = {
-        "cityName": curCompetitionCityName, "id": curCompetitionId, "preGameScoutingData": preGameScoutingData, "tableKeys": preGameScoutingFields}
+    matchScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
+        "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
 
     sqlConn.close()
+
+    preGameScoutingData = {}
+
+    for teamNumber in allTeamNumbers:
+        preGameScoutingData[teamNumber] = [teamNumber]+["N/A"] * \
+            (len(preGameScoutingFields)-1)
+
+    summaryData = getDataSummary(allTeamNumbers, preGameScoutingFormData,
+                                 matchScoutingFormData)
+
+    for entry in preGameScoutingFormData:
+        teamNumberStr = str(entry[0])
+        preGameScoutingData[teamNumberStr] = list(entry)
+
+    allData = {}
+    for teamNumber in allTeamNumbers:
+        teamNumberStr = str(teamNumber)
+        allData[teamNumberStr] = preGameScoutingData[teamNumberStr] + \
+            list(summaryData['data'][teamNumberStr])
+
+    allTableKeys = preGameScoutingFields+summaryData['fields']
+
+    competitionData = {
+        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys}
+
     return competitionData

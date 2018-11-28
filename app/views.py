@@ -41,7 +41,7 @@ def match_scouting():
             form.error = error
             return render_template('match-scouting.html', form=form)
         else:
-            # data.addPreGameScoutingEntry(request.form)
+            data.addMatchScoutingEntry(request.form)
 
             return render_template('match-scouting-success.html')
 
