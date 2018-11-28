@@ -14,7 +14,7 @@ def hello():
 
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])
 def pre_game_scouting():
-    form = data.buildPreGameScoutingForm(request.form)
+    form = data.PreGameScoutingForm(request.form)
     print(form.errors)
     if request.method == 'POST':
         error = data.validatePreGameScoutingForm(request.form)
@@ -30,10 +30,22 @@ def pre_game_scouting():
     return render_template('pre-game-scouting.html', form=form)
 
 
-@app.route("/match-scouting")
+@app.route("/match-scouting", methods=['GET', 'POST'])
 def match_scouting():
-    # return render_template("match-scouting.html")
-    return "Not  yet implemented :("
+    form = data.MatchScoutingForm(request.form)
+    print(form.errors)
+    if request.method == 'POST':
+        error = data.validateMatchScoutingForm(request.form)
+
+        if(len(error)):
+            form.error = error
+            return render_template('match-scouting.html', form=form)
+        else:
+            # data.addPreGameScoutingEntry(request.form)
+
+            return render_template('match-scouting-success.html')
+
+    return render_template('match-scouting.html', form=form)
 
 
 @app.route("/team-info/<int:team_number>/")

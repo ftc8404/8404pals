@@ -10,9 +10,13 @@ password = '7vE+xHxvC-a=~e6mMwcs*xg5S'
 driver = '{FreeTDS}'
 
 
+def getSqlConn():
+    return pyodbc.connect('DRIVER='+driver+';SERVER='+server +
+                          ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
+
+
 def getCurCompetitionCityName():
-    sqlConn = pyodbc.connect('DRIVER='+driver+';SERVER='+server +
-                             ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
+    sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     curCompetitionCityName = str(sqlCursor.execute(
         "SELECT * FROM Competitions WHERE CompetitionId="+str(curCompetitionId)).fetchall()[0][1])
@@ -23,40 +27,37 @@ def getCurCompetitionCityName():
 curCompetitionId = 21
 curCompetitionCityName = getCurCompetitionCityName()
 
-preGameScoutingTable = {
-    "TeamNumber": "team_number", "Contact": "contact",
-    "AutonLandCrater": "auton_crater_land", "AutonLandDepot": "auton_depot_land",
-    "AutonSampleCrater": "auton_crater_sample", "AutonSampleDepot": "auton_depot_sample",
-    "AutonDoubleSampleCrater": "auton_crater_double_sample", "AutonDoubleSampleDepot": "auton_depot_double_sample",
-    "AutonMarkerCrater": "auton_crater_marker", "AutonMarkerDepot": "auton_depot_marker",
-    "AutonParkCrater": "auton_crater_park", "AutonParkDepot": "auton_depot_park",
-    "TeleopMineral": "teleop_minerals",
-    "TeleopMineralCubes": "teleop_mineral_cubes", "TeleopMineralBalls": "teleop_mineral_balls",
-    "TeleopCraterReach": "teleop_crater_reach", "TeleopCraterEnter": "teleop_crater_enter",
-    "TeleopScoreCrater": "teleop_score_crater", "TeleopScoreDepot": "teleop_score_depot",
-    "TeleopHang": "teleop_hang", "TeleopFullPark": "teleop_full_park"
-}
+
+def getPreGameScoutingFields():
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    fields = [row[0] for row in sqlCursor.execute(
+        "SELECT column_name FROM information_schema.columns WHERE table_name = 'PreGameScoutingEntries'").fetchall() if (row[0] != "EntryId" and row[0] != "CompetitionId")]
+    sqlConn.close()
+    return fields
+
+
+preGameScoutingFields = getPreGameScoutingFields()
 
 
 def addPreGameScoutingEntry(formValues):
-    sqlConn = pyodbc.connect('DRIVER='+driver+';SERVER='+server +
-                             ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
+    sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
 
     teamNumber = formValues["team_number"]
     exists = False
-    if(len(sqlCursor.execute("SELECT * FROM PreGameScoutingEntries WHERE TeamNumber="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId)).fetchall()) > 0):
+    if(len(sqlCursor.execute("SELECT * FROM PreGameScoutingEntries WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId)).fetchall()) > 0):
         exists = True
 
-    tableFieldOrder = ""
+    tableFieldOrder = str(preGameScoutingFields).replace(
+        "'", "").replace('"', "")[1:-1]
     formattedFormValues = ""
     updateSet = ""
-    for tableField, formField in preGameScoutingTable.items():
-        tableFieldOrder += tableField+","
+    for field in preGameScoutingFields:
         nextformattedFormValues = ""
-        if formField in formValues:
-            formValue = formValues[formField]
-            if formField == "contact":
+        if field in formValues:
+            formValue = formValues[field]
+            if field == "contact":
                 nextformattedFormValues = "'"+formValue+"'"
             elif formValue == "y":
                 nextformattedFormValues = "1"
@@ -65,15 +66,14 @@ def addPreGameScoutingEntry(formValues):
         else:
             nextformattedFormValues = "0"
         formattedFormValues += nextformattedFormValues+","
-        updateSet += tableField+"="+nextformattedFormValues+","
+        updateSet += field+"="+nextformattedFormValues+","
 
-    tableFieldOrder = tableFieldOrder[:-1]
     formattedFormValues = formattedFormValues[:-1]
     updateSet = updateSet[:-1]
 
     if(exists):
         sqlCursor.execute("UPDATE PreGameScoutingEntries SET "+updateSet +
-                          " WHERE TeamNumber="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId))
+                          " WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId))
     else:
         sqlCursor.execute("INSERT PreGameScoutingEntries ("+tableFieldOrder +
                           ",CompetitionId) VALUES ("+formattedFormValues+","+str(curCompetitionId)+")")
@@ -81,61 +81,151 @@ def addPreGameScoutingEntry(formValues):
     sqlConn.close()
 
 
-def buildPreGameScoutingForm(*args):
-    class PreGameScoutingForm(wtforms.Form):
-        error = None
+class PreGameScoutingForm(wtforms.Form):
+    error = None
 
-        team_number = wtforms.IntegerField("Team Number", validators=[
-                                           wtforms.validators.required()])
-        contact = wtforms.TextField("Contact / Web Page / Social Media", validators=[
-            wtforms.validators.required()])
+    team_number = wtforms.IntegerField("Team Number", validators=[
+        wtforms.validators.required()])
+    contact = wtforms.TextField("Contact / Web Page / Social Media", validators=[
+        wtforms.validators.required()])
 
-        auton_field_names = {
-            "land": "Land", "sample": "Sample", "double_sample": "Double Sample",
-            "marker": "Marker", "park": "Park"
-        }
+    auton_field_names = {
+        "land": "Land", "sample": "Sample", "double_sample": "Double Sample",
+        "marker": "Marker", "park": "Park"
+    }
 
-        teleop_minerals = wtforms.IntegerField("Estimated Minerals", validators=[
-                                               wtforms.validators.required()])
-        teleop_mineral_cubes = wtforms.BooleanField("Cubes")
-        teleop_mineral_balls = wtforms.BooleanField("Balls")
-        teleop_crater_reach = wtforms.BooleanField("Reach")
-        teleop_crater_enter = wtforms.BooleanField("Enter")
-        teleop_score_crater = wtforms.BooleanField("Crater")
-        teleop_score_depot = wtforms.BooleanField("Depot")
-        teleop_hang = wtforms.BooleanField("Hang")
-        teleop_full_park = wtforms.BooleanField("Full Park")
+    teleop_minerals = wtforms.IntegerField("Estimated Minerals", validators=[
+        wtforms.validators.required()])
+    teleop_mineral_cubes = wtforms.BooleanField("Cubes")
+    teleop_mineral_balls = wtforms.BooleanField("Balls")
+    teleop_crater_reach = wtforms.BooleanField("Reach")
+    teleop_crater_enter = wtforms.BooleanField("Enter")
+    teleop_score_crater = wtforms.BooleanField("Crater")
+    teleop_score_depot = wtforms.BooleanField("Depot")
+    teleop_hang = wtforms.BooleanField("Hang")
+    teleop_full_park = wtforms.BooleanField("Full Park")
 
-    for field_name in PreGameScoutingForm.auton_field_names:
-        setattr(PreGameScoutingForm, "auton_crater_" +
-                field_name, wtforms.BooleanField("Crater"))
-        setattr(PreGameScoutingForm, "auton_depot_" +
-                field_name, wtforms.BooleanField("Depot"))
-    return PreGameScoutingForm(*args)
+
+for field_name in PreGameScoutingForm.auton_field_names:
+    setattr(PreGameScoutingForm, "auton_crater_" +
+            field_name, wtforms.BooleanField("Crater"))
+    setattr(PreGameScoutingForm, "auton_depot_" +
+            field_name, wtforms.BooleanField("Depot"))
+
+
+class MatchScoutingForm(wtforms.Form):
+    error = None
+
+    match_number = wtforms.IntegerField("Match Number", validators=[
+                                        wtforms.validators.required()])
+    team_number = wtforms.IntegerField("Team Number", validators=[
+                                       wtforms.validators.required()])
+
+    auton_field_names = {
+        "auton_land": "Land", "auton_sample": "Sample", "auton_double_sample": "Double Sample",
+        "auton_marker": "Marker", "auton_park": "Park"
+    }
+
+    auton_field_names_row_1 = []
+    auton_field_names_row_2 = []
+
+    for item in auton_field_names:
+        if len(auton_field_names_row_1) < 3:
+            auton_field_names_row_1.append(item)
+        else:
+            auton_field_names_row_2.append(item)
+
+    teleop_minerals_lander = wtforms.IntegerField("Minerals: Lander", validators=[
+        wtforms.validators.required()])
+    teleop_minerals_depot = wtforms.IntegerField("Minerals: Depot", validators=[
+        wtforms.validators.required()])
+    teleop_endgame = wtforms.SelectField("End", choices=[(
+        "none", "None"), ("partial", "Partial Park"), ("full", "Full Park"), ("hang", "Hang")])
+
+
+for field_name, natural_name in MatchScoutingForm.auton_field_names.items():
+    setattr(MatchScoutingForm, field_name, wtforms.BooleanField(natural_name))
 
 
 def validatePreGameScoutingForm(form):
-    error = ""
     teamNumber = 0
     teleopMinerals = 0.0
     try:
         teamNumber = int(form['team_number'])
     except ValueError:
-        error = '"Team Number" must be a positive integer'
+        return '"Team Number" must be a positive integer'
+
+    if teamNumber <= 0:
+        return '"Team Number" must be a positive integer'
+
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
+                                            str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
+    sqlConn.close()
+    if teamMatchAmount == 0:
+        return 'Team "'+str(teamNumber)+'" is not at this competition'
+
     try:
         teleopMinerals = float(form['teleop_minerals'])
     except ValueError:
-        error = '"Estimated Minerals" must be a number from 0 - 150'
-    if teamNumber <= 0:
-        error = '"Team Number" must be a positive integer'
+        return '"Estimated Minerals" must be a number from 0 - 150'
+
     if teleopMinerals < 0 or teleopMinerals > 150:
-        error = '"Estimated Minerals" must be a number from 0 - 150'
-    return error
+        return '"Estimated Minerals" must be a number from 0 - 150'
+    return ""
+
+
+def validateMatchScoutingForm(form):
+    teamNumber = 0
+    try:
+        teamNumber = int(form['team_number'])
+    except ValueError:
+        return '"Team Number" must be a positive integer'
+
+    if teamNumber <= 0:
+        return '"Team Number" must be a positive integer'
+
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
+                                            str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
+    sqlConn.close()
+    if teamMatchAmount == 0:
+        return 'Team "'+str(teamNumber)+'" is not at this competition'
+
+    matchNumber = 0
+    try:
+        matchNumber = int(form['match_number'])
+    except ValueError:
+        return '"Match Number" must be a number from 0 - 500'
+
+    if matchNumber < 0 or matchNumber > 150:
+        return '"Estimated Minerals" must be a number from 0 - 500'
+
+    landerMinerals = 0
+    try:
+        landerMinerals = int(form['teleop_minerals_lander'])
+    except ValueError:
+        return '"Minerals: Lander" must be a number from 0 - 150'
+
+    if landerMinerals < 0 or landerMinerals > 150:
+        return '"Minerals: Lander" must be a number from 0 - 150'
+
+    depotMinerals = 0
+    try:
+        depotMinerals = int(form['teleop_minerals_depot'])
+    except ValueError:
+        return '"Minerals: Depot" must be a number from 0 - 150'
+
+    if depotMinerals < 0 or depotMinerals > 150:
+        return '"Minerals: Depot" must be a number from 0 - 150'
+
+    return ""
 
 
 def getCompetitionOverviewData():
-    sqlConn = pyodbc.connect('DRIVER='+driver+';SERVER='+server +
-                             ';PORT=1433;DATABASE='+database+';UID='+username+';PWD=' + password+';TDS_VERSION=8.0')
+    sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
 
     preGameScoutingData = {}
@@ -147,12 +237,12 @@ def getCompetitionOverviewData():
         "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
     for teamName in allTeamNames:
         preGameScoutingData[teamName] = [teamName]+["N/A"] * \
-            (len(preGameScoutingTable.keys())-1)
+            (len(preGameScoutingFields)-1)
 
     for entry in preGameScoutingFormData:
-        preGameScoutingData[str(entry[0])] = entry
+        preGameScoutingData[str(entry[0])] = entry[:-1]
     competitionData = {
-        "cityName": curCompetitionCityName, "id": curCompetitionId, "preGameScoutingData": preGameScoutingData, "tableKeys": preGameScoutingTable.keys()}
+        "cityName": curCompetitionCityName, "id": curCompetitionId, "preGameScoutingData": preGameScoutingData, "tableKeys": preGameScoutingFields}
 
     sqlConn.close()
     return competitionData
