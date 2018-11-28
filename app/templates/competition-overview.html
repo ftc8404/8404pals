@@ -59,12 +59,22 @@
 				</header>
 				<section>
 					<h2>Scouting Data</h2>
+					<h3>Filter</h3>
+					<div class="row gtr-uniform">
+						{% for key in data.tableKeys %}
+						<div class="col-3 col-4-large col-6-medium">
+							<input name="{{ key }}" id="{{ key }}" type="checkbox" checked>
+							<label for="{{ key }}">{{ key }}</label>
+						</div>
+						{% endfor %}
+					</div>
+					<h3 style="padding-top: 4em">Table</h3>
 					<div class="table-wrapper">
 						<table class="alt">
 							<thead>
 								<tr>
 									{% for key in data.tableKeys %}
-									<th>
+									<th class="filter-{{ key }}">
 										{{ key }}
 									</th>
 									{% endfor %}
@@ -73,8 +83,8 @@
 							<tbody>
 								{% for name, row in data.allData.items() %}
 								<tr>
-									{% for value in row %}
-									<td>{{ value }}</td>
+									{% for i in range(row|length) %}
+									<td class="filter-{{ data.tableKeys[i] }}">{{ row[i] }}</td>
 									{% endfor %}
 								</tr>
 								{% endfor %}
@@ -93,6 +103,7 @@
 	<script src="/static/js/breakpoints.min.js"></script>
 	<script src="/static/js/util.js"></script>
 	<script src="/static/js/main.js"></script>
+	<script src="/static/js/competition-overview-filter.js"></script>
 
 </body>
 
