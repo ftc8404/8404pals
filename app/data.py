@@ -60,8 +60,8 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     data = {}
     matchEntryCount = {}
 
-    fields = ['Decl. Auton Crater-Side Score', 'Decl. Auton Depot-Side Score', 'Decl. Auton Mean Score',
-              'Decl. Tele-Op Score', 'Decl. Total Score', 'Match Auton Score', 'Match Tele-Op Score', 'Match Total Score']
+    fields = ['Theoretical Auton Crater-Side Score', 'Theoretical Auton Depot-Side Score', 'Theoretical Auton Mean Score',
+              'Theoretical Tele-Op Score', 'Theoretical Total Score', 'Match Auton Score', 'Match Tele-Op Score', 'Match Total Score']
 
     for teamNumber in allTeamNumbers:
         entryTeamNumber = str(teamNumber)
@@ -75,7 +75,8 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
             25 if entry[4] else 0))+entry[8]*15+entry[10]*10
         preAutonDepotScore = entry[3]*30+(50 if entry[7] else (
             25 if entry[5] else 0))+entry[9]*15+entry[11]*10
-        preAutonMeanScore = (preAutonCraterScore+preAutonDepotScore)/2
+        preAutonMeanScore = int(
+            (preAutonCraterScore+preAutonDepotScore)/2)
         data[entryTeamNumber][0] = preAutonCraterScore
         data[entryTeamNumber][1] = preAutonDepotScore
         data[entryTeamNumber][2] = preAutonMeanScore
@@ -96,19 +97,22 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
         if matchEntryCount[entryTeamNumber] > 0:
             data[entryTeamNumber][5] += matchAutonScore
             data[entryTeamNumber][6] += matchTeleopScore
-            data[entryTeamNumber][7] += preAutonMeanScore+preTeleopScore
+            data[entryTeamNumber][7] += matchAutonScore+matchTeleopScore
         else:
             data[entryTeamNumber][5] = matchAutonScore
             data[entryTeamNumber][6] = matchTeleopScore
-            data[entryTeamNumber][7] = preAutonMeanScore+preTeleopScore
+            data[entryTeamNumber][7] = matchAutonScore+matchTeleopScore
 
         matchEntryCount[entryTeamNumber] += 1
 
     for teamNumber, amount in matchEntryCount.items():
         if amount > 0:
-            data[str(teamNumber)][5] /= amount
-            data[str(teamNumber)][6] /= amount
-            data[str(teamNumber)][7] /= amount
+            data[str(teamNumber)][5] = round(
+                data[str(teamNumber)][5]/amount, 1)
+            data[str(teamNumber)][6] = round(
+                data[str(teamNumber)][6]/amount, 1)
+            data[str(teamNumber)][7] = round(
+                data[str(teamNumber)][7]/amount, 1)
 
     return {'data': data, 'fields': fields}
 

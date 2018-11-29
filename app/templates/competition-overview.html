@@ -58,16 +58,40 @@
 					<h1>Overview for the {{ data.cityName }} Competition</h1>
 				</header>
 				<section>
-					<h2>Filters</h2>
-					<div class="row gtr-uniform">
-						{% for key in data.tableKeys %}
-						<div class="col-3 col-4-large col-6-small">
-							<input name="{{ key }}" id="{{ key }}" type="checkbox" onchange="changeFilter(this)" checked>
-							<label for="{{ key }}">{{ key }}</label>
+					<h2 id="main-filters-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
+						&#x25B2; Main Filters &#x25B2;</h2>
+					<div id="main-filters" style="display: none">
+						<div class="row gtr-uniform">
+							<div class="col-3 col-4-large col-6-small">
+								<input name="theoretical-capabilities" id="theoretical-capabilities" type="checkbox" onchange="toggleTheoreticalVisibility(this)"
+								 checked>
+								<label for="theoretical-capabilities">Theoretical Capabilities</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="match-performance" id="match-performance" type="checkbox" onchange="toggleMatchPerformanceVisibility(this)"
+								 checked>
+								<label for="match-performance">Match Performance</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="other" id="other" type="checkbox" onchange="toggleOtherVisibility(this)" checked>
+								<label for="other">Other</label>
+							</div>
 						</div>
-						{% endfor %}
 					</div>
-					<h2 style="padding-top: 3em">Scouting Data</h2>
+
+					<h2 id="all-filters-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
+						&#x25B2; All Filters &#x25B2;</h2>
+					<div id="all-filters" style="display: none">
+						<div class="row gtr-uniform">
+							{% for key in data.tableKeys[1:] %}
+							<div class="col-3 col-4-large col-6-small">
+								<input name="{{ key }}" id="{{ key }}" type="checkbox" onchange="changeFilter(this)" checked>
+								<label for="{{ key }}">{{ key }}</label>
+							</div>
+							{% endfor %}
+						</div>
+					</div>
+					<h2>Scouting Data</h2>
 					<div class="table-wrapper">
 						<table class="alt">
 							<thead>
