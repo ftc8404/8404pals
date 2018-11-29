@@ -319,7 +319,7 @@ def validateMatchScoutingForm(form):
     except ValueError:
         return '"Match Number" must be a number from 1 - 500'
 
-    if matchNumber < 1 or matchNumber > 150:
+    if matchNumber < 1 or matchNumber > 500:
         return '"Match Number" must be a number from 1 - 500'
 
     landerMinerals = 0
