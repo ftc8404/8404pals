@@ -56,67 +56,6 @@ def getMatchScoutingFields():
 matchScoutingFields = getMatchScoutingFields()
 
 
-def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormData):
-    data = {}
-    matchEntryCount = {}
-
-    fields = ['Theoretical Auton Crater-Side Score', 'Theoretical Auton Depot-Side Score', 'Theoretical Auton Mean Score',
-              'Theoretical Tele-Op Score', 'Theoretical Total Score', 'Match Auton Score', 'Match Tele-Op Score', 'Match Total Score']
-
-    for teamNumber in allTeamNumbers:
-        entryTeamNumber = str(teamNumber)
-        data[entryTeamNumber] = ['N/A']*len(fields)
-        matchEntryCount[entryTeamNumber] = 0
-
-    for entry in preGameScoutingFormData:
-        entryTeamNumber = str(entry[0])
-
-        preAutonCraterScore = entry[2]*30+(50 if entry[6] else (
-            25 if entry[4] else 0))+entry[8]*15+entry[10]*10
-        preAutonDepotScore = entry[3]*30+(50 if entry[7] else (
-            25 if entry[5] else 0))+entry[9]*15+entry[11]*10
-        preAutonMeanScore = int(
-            (preAutonCraterScore+preAutonDepotScore)/2)
-        data[entryTeamNumber][0] = preAutonCraterScore
-        data[entryTeamNumber][1] = preAutonDepotScore
-        data[entryTeamNumber][2] = preAutonMeanScore
-
-        preTeleopScore = entry[12]*(5 if entry[17] else (2 if entry[18] else 0))+(
-            50 if entry[19] else (25 if entry[20] else 15))
-        data[entryTeamNumber][3] = preTeleopScore
-        data[entryTeamNumber][4] = preAutonMeanScore+preTeleopScore
-
-    for entry in matchScoutingFormData:
-        entryTeamNumber = str(entry[1])
-
-        matchAutonScore = entry[2]*30+(50 if entry[4] else (
-            25 if entry[3] else 0))+entry[5]*15+entry[6]*10
-        matchTeleopScore = entry[7]*5+entry[8]*2 + \
-            ({'none': 0, 'partial': 15, 'full': 25, 'hang': 50}[entry[9]])
-
-        if matchEntryCount[entryTeamNumber] > 0:
-            data[entryTeamNumber][5] += matchAutonScore
-            data[entryTeamNumber][6] += matchTeleopScore
-            data[entryTeamNumber][7] += matchAutonScore+matchTeleopScore
-        else:
-            data[entryTeamNumber][5] = matchAutonScore
-            data[entryTeamNumber][6] = matchTeleopScore
-            data[entryTeamNumber][7] = matchAutonScore+matchTeleopScore
-
-        matchEntryCount[entryTeamNumber] += 1
-
-    for teamNumber, amount in matchEntryCount.items():
-        if amount > 0:
-            data[str(teamNumber)][5] = round(
-                data[str(teamNumber)][5]/amount, 1)
-            data[str(teamNumber)][6] = round(
-                data[str(teamNumber)][6]/amount, 1)
-            data[str(teamNumber)][7] = round(
-                data[str(teamNumber)][7]/amount, 1)
-
-    return {'data': data, 'fields': fields}
-
-
 def addPreGameScoutingEntry(formValues):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
@@ -343,39 +282,160 @@ def validateMatchScoutingForm(form):
     return ""
 
 
-def getCompetitionOverviewData():
+def queryAllFormData():
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
 
+    allTeamNumbers = [row[0] for row in sqlCursor.execute(
+        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
     preGameScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
-    allTeamNumbers = [str(row[0]) for row in sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
     matchScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
         "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
 
     sqlConn.close()
+    return allTeamNumbers, preGameScoutingFormData, matchScoutingFormData
 
-    preGameScoutingData = {}
+
+def getPreGameScoutingData(allTeamNumbers, preGameScoutingFormData):
+    data = {}
+    fields = []
+    for field in preGameScoutingFields[1:]:
+        fieldChars = list(field)
+        uppercaseDist = ord('A')-ord('a')
+        fieldChars[0] = chr(ord(fieldChars[0])+uppercaseDist)
+        for i in range(len(fieldChars)):
+            if(fieldChars[i] == '_' and i < len(fieldChars)-1):
+                fieldChars[i] = ' '
+                fieldChars[i+1] = chr(ord(fieldChars[i+1])+uppercaseDist)
+        fields.append('Pre-Game '+''.join(fieldChars))
 
     for teamNumber in allTeamNumbers:
-        preGameScoutingData[teamNumber] = [teamNumber]+["N/A"] * \
-            (len(preGameScoutingFields)-1)
+        data[teamNumber] = ["N/A"] * (len(fields))
+
+    for entry in preGameScoutingFormData:
+        teamNumber = entry[0]
+        for i in range(len(entry)-1):
+            data[teamNumber][i] = entry[i+1]
+
+    return {'data': data, 'fields': fields}
+
+
+def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
+    data = {}
+    matchEntryCount = {}
+    fields = []
+    for field in matchScoutingFields[2:-1]:
+        fieldChars = list(field)
+        uppercaseDist = ord('A')-ord('a')
+        fieldChars[0] = chr(ord(fieldChars[0])+uppercaseDist)
+        for i in range(len(fieldChars)):
+            if(fieldChars[i] == '_' and i < len(fieldChars)-1):
+                fieldChars[i] = ' '
+                fieldChars[i+1] = chr(ord(fieldChars[i+1])+uppercaseDist)
+        fields.append('Match '+''.join(fieldChars))
+
+    for teamNumber in allTeamNumbers:
+        data[teamNumber] = ['N/A']*len(fields)
+        matchEntryCount[teamNumber] = 0
+
+    for entry in matchScoutingFormData:
+        teamNumber = entry[1]
+        for i in range(len(fields)):
+            if matchEntryCount[teamNumber] == 0:
+                data[teamNumber][i] = entry[i+2]
+            else:
+                data[teamNumber][i] += entry[i+2]
+        matchEntryCount[teamNumber] += 1
+
+    for teamNumber, amount in matchEntryCount.items():
+        if amount > 0:
+            for i in range(len(fields)):
+                data[teamNumber][i] /= amount
+
+    return {'data': data, 'fields': fields}
+
+
+def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormData):
+    data = {}
+    matchEntryCount = {}
+
+    fields = ['Theoretical Auton Crater-Side Score', 'Theoretical Auton Depot-Side Score', 'Theoretical Auton Mean Score',
+              'Theoretical Tele-Op Score', 'Theoretical Total Score', 'Overall Auton Score', 'Overall Tele-Op Score', 'Overall Total Score']
+
+    for teamNumber in allTeamNumbers:
+        data[teamNumber] = ['N/A']*len(fields)
+        matchEntryCount[teamNumber] = 0
+
+    for entry in preGameScoutingFormData:
+        teamNumber = entry[0]
+
+        preAutonCraterScore = entry[2]*30+(50 if entry[6] else (
+            25 if entry[4] else 0))+entry[8]*15+entry[10]*10
+        preAutonDepotScore = entry[3]*30+(50 if entry[7] else (
+            25 if entry[5] else 0))+entry[9]*15+entry[11]*10
+        preAutonMeanScore = int(
+            (preAutonCraterScore+preAutonDepotScore)/2)
+        data[teamNumber][0] = preAutonCraterScore
+        data[teamNumber][1] = preAutonDepotScore
+        data[teamNumber][2] = preAutonMeanScore
+
+        preTeleopScore = entry[12]*(5 if entry[17] else (2 if entry[18] else 0))+(
+            50 if entry[19] else (25 if entry[20] else 15))
+        data[teamNumber][3] = preTeleopScore
+        data[teamNumber][4] = preAutonMeanScore+preTeleopScore
+
+    for entry in matchScoutingFormData:
+        teamNumber = entry[1]
+
+        matchAutonScore = entry[2]*30+(50 if entry[4] else (
+            25 if entry[3] else 0))+entry[5]*15+entry[6]*10
+        matchTeleopScore = entry[7]*5+entry[8]*2 + \
+            ({'none': 0, 'partial': 15, 'full': 25, 'hang': 50}[entry[9]])
+
+        if matchEntryCount[teamNumber] > 0:
+            data[teamNumber][5] += matchAutonScore
+            data[teamNumber][6] += matchTeleopScore
+            data[teamNumber][7] += matchAutonScore+matchTeleopScore
+        else:
+            data[teamNumber][5] = matchAutonScore
+            data[teamNumber][6] = matchTeleopScore
+            data[teamNumber][7] = matchAutonScore+matchTeleopScore
+
+        matchEntryCount[teamNumber] += 1
+
+    for teamNumber, amount in matchEntryCount.items():
+        if amount > 0:
+            data[teamNumber][5] = round(
+                data[teamNumber][5]/amount, 1)
+            data[teamNumber][6] = round(
+                data[teamNumber][6]/amount, 1)
+            data[teamNumber][7] = round(
+                data[teamNumber][7]/amount, 1)
+
+    return {'data': data, 'fields': fields}
+
+
+def getCompetitionOverviewData():
+    allTeamNumbers, preGameScoutingFormData, matchScoutingFormData = queryAllFormData()
+
+    preGameScoutingData = getPreGameScoutingData(
+        allTeamNumbers, preGameScoutingFormData)
+
+    matchScoutingData = getMatchScoutingData(
+        allTeamNumbers, matchScoutingFormData)
 
     summaryData = getDataSummary(allTeamNumbers, preGameScoutingFormData,
                                  matchScoutingFormData)
 
-    for entry in preGameScoutingFormData:
-        teamNumberStr = str(entry[0])
-        preGameScoutingData[teamNumberStr] = list(entry)
-
     allData = {}
     for teamNumber in allTeamNumbers:
-        teamNumberStr = str(teamNumber)
-        allData[teamNumberStr] = preGameScoutingData[teamNumberStr] + \
-            list(summaryData['data'][teamNumberStr])
+        allData[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
+            matchScoutingData['data'][teamNumber] + \
+            (summaryData['data'][teamNumber])
 
-    allTableKeys = preGameScoutingFields+summaryData['fields']
+    allTableKeys = ['Team Number']+preGameScoutingData['fields'] + \
+        matchScoutingData['fields']+summaryData['fields']
 
     competitionData = {
         "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys}

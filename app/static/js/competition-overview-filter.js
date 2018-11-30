@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('#other').css('padding-bottom', '4em');
-    $("[id='Match Total Score']").css('padding-bottom', '4em');
+    $("[id='Overall Total Score']").css('padding-bottom', '4em');
     setupFilters();
     $('#main-filters-toggle').click();
     $('#other').click();
@@ -39,7 +39,7 @@ function toggleTheoreticalVisibility(checkboxElem) {
 function toggleMatchPerformanceVisibility(checkboxElem) {
     var inputs = document.getElementById('all-filters').getElementsByTagName('input');
     for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i].id.substr(0, 5) == 'Match') {
+        if (inputs[i].id.substr(0, 7) == 'Overall') {
             if (inputs[i].checked != checkboxElem.checked) {
                 inputs[i].checked = checkboxElem.checked;
                 changeFilter(inputs[i]);
@@ -51,7 +51,7 @@ function toggleMatchPerformanceVisibility(checkboxElem) {
 function toggleOtherVisibility(checkboxElem) {
     var inputs = document.getElementById('all-filters').getElementsByTagName('input');
     for (var i = 0; i < inputs.length; i++) {
-        if (inputs[i].id.substr(0, 11) != 'Theoretical' && inputs[i].id.substr(0, 5) != 'Match') {
+        if (inputs[i].id.substr(0, 11) != 'Theoretical' && inputs[i].id.substr(0, 7) != 'Overall') {
             if (inputs[i].checked != checkboxElem.checked) {
                 inputs[i].checked = checkboxElem.checked;
                 changeFilter(inputs[i]);
