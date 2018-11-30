@@ -91,28 +91,42 @@
 							{% endfor %}
 						</div>
 					</div>
-					<h2>Scouting Data</h2>
-					<div class="table-wrapper">
-						<table class="alt">
-							<thead>
-								<tr>
-									{% for key in data.tableKeys %}
-									<th class='filter-{{ key }}'>
-										{{ key }}
-									</th>
+				</section>
+				<section>
+					<h2 id="chart-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
+						&#x25B2; Chart &#x25B2;</h2>
+					<div id="chart-parent" style="display: none">
+						<div class="chart-container" style="padding-bottom: 3em; height:{{ (data.allData|length)*2+4 }}em; width:100%">
+							<canvas id="chart"></canvas>
+						</div>
+					</div>
+				</section>
+				<section>
+					<h2 id="table-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">&#x25B2;
+						Scouting Data &#x25B2;</h2>
+					<div id="table-parent" style="display: none">
+						<div class="table-wrapper">
+							<table class="alt">
+								<thead>
+									<tr>
+										{% for key in data.tableKeys %}
+										<th class='filter-{{ key }}'>
+											{{ key }}
+										</th>
+										{% endfor %}
+									</tr>
+								</thead>
+								<tbody>
+									{% for name, row in data.allData.items() %}
+									<tr>
+										{% for i in range(row|length) %}
+										<td class='filter-{{ data.tableKeys[i] }}'>{{ row[i] }}</td>
+										{% endfor %}
+									</tr>
 									{% endfor %}
-								</tr>
-							</thead>
-							<tbody>
-								{% for name, row in data.allData.items() %}
-								<tr>
-									{% for i in range(row|length) %}
-									<td class='filter-{{ data.tableKeys[i] }}'>{{ row[i] }}</td>
-									{% endfor %}
-								</tr>
-								{% endfor %}
-							</tbody>
-						</table>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</section>
 			</div>

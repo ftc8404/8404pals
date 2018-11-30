@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import json
 
 import data
 
@@ -68,3 +69,8 @@ def set_competition_id(competition_id):
     data.curCompetitionId = competition_id
     data.curCompetitionCityName = data.getCurCompetitionCityName()
     return "Current competition ID set to "+str(competition_id)
+
+
+@app.route("/api/competition-overview-data")
+def api_competition_overview_data():
+    return json.dumps(data.getCompetitionOverviewData())

@@ -4,6 +4,8 @@ $(document).ready(function () {
     setupFilters();
     $('#main-filters-toggle').click();
     $('#other').click();
+    $('#chart-toggle').click();
+    $('#table-toggle').click();
 });
 
 function setupFilters() {
@@ -22,9 +24,33 @@ function setupFilters() {
     $('#main-filters-toggle').mouseup(function () {
         $('#main-filters-toggle').css('color', '');
     });
+
+    $('#chart-toggle').click(toggleChartVisibility);
+    $('#chart-toggle').mousedown(function () {
+        $('#chart-toggle').css('color', '#84aaf2');
+    });
+    $('#chart-toggle').mouseup(function () {
+        $('#chart-toggle').css('color', '');
+    });
+
+    $('#table-toggle').click(toggleTableVisibility);
+    $('#table-toggle').mousedown(function () {
+        $('#table-toggle').css('color', '#84aaf2');
+    });
+    $('#table-toggle').mouseup(function () {
+        $('#table-toggle').css('color', '');
+    });
+
+    updateChartScope();
 }
 
+var viewPreGameData = true;
+var viewMatchPerformanceData = true;
+var viewOtherData = true;
+
 function toggleTheoreticalVisibility(checkboxElem) {
+    viewPreGameData = checkboxElem.checked;
+    updateChartScope();
     var inputs = document.getElementById('all-filters').getElementsByTagName('input');
     for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].id.substr(0, 11) == 'Theoretical') {
@@ -37,6 +63,8 @@ function toggleTheoreticalVisibility(checkboxElem) {
 }
 
 function toggleMatchPerformanceVisibility(checkboxElem) {
+    viewMatchPerformanceData = checkboxElem.checked;
+    updateChartScope();
     var inputs = document.getElementById('all-filters').getElementsByTagName('input');
     for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].id.substr(0, 7) == 'Overall') {
@@ -49,6 +77,8 @@ function toggleMatchPerformanceVisibility(checkboxElem) {
 }
 
 function toggleOtherVisibility(checkboxElem) {
+    viewOtherData = checkboxElem.checked;
+    updateChartScope();
     var inputs = document.getElementById('all-filters').getElementsByTagName('input');
     for (var i = 0; i < inputs.length; i++) {
         if (inputs[i].id.substr(0, 11) != 'Theoretical' && inputs[i].id.substr(0, 7) != 'Overall') {
@@ -77,6 +107,26 @@ function toggleMainFilterVisibility() {
     } else {
         $('#main-filters').css("display", "none")
         $('#main-filters-toggle').text("\u25B2 Main Filters \u25B2")
+    }
+}
+
+function toggleChartVisibility() {
+    if ($('#chart-parent').css("display") == "none") {
+        $('#chart-parent').css("display", "block")
+        $('#chart-toggle').text("\u25BC Chart \u25BC")
+    } else {
+        $('#chart-parent').css("display", "none")
+        $('#chart-toggle').text("\u25B2 Chart \u25B2")
+    }
+}
+
+function toggleTableVisibility() {
+    if ($('#table-parent').css("display") == "none") {
+        $('#table-parent').css("display", "block")
+        $('#table-toggle').text("\u25BC Scouting Data \u25BC")
+    } else {
+        $('#table-parent').css("display", "none")
+        $('#table-toggle').text("\u25B2 Scouting Data \u25B2")
     }
 }
 
