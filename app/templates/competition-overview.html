@@ -58,6 +58,22 @@
 					<h1>Overview for the {{ data.cityName }} Competition</h1>
 				</header>
 				<section>
+					<h2 id="chart-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
+						&#x25B2; Chart &#x25B2;</h2>
+					<div id="chart-parent" style="display: none">
+						<div>
+							<input type="radio" name="chart-scope" id="chart-scope-pre-game" value="pre-game" onchange="updateChartScope()"
+							 checked>
+							<label for="chart-scope-pre-game">Pre-Game</label>
+							<input type="radio" name="chart-scope" id="chart-scope-match" value="match" onchange="updateChartScope()">
+							<label for="chart-scope-match">Match</label>
+						</div>
+						<div class="chart-container" style="padding-bottom: 3em; height:{{ (data.allData|length)*2+4 }}em; width:100%">
+							<canvas id="chart"></canvas>
+						</div>
+					</div>
+				</section>
+				<section>
 					<h2 id="main-filters-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
 						&#x25B2; Main Filters &#x25B2;</h2>
 					<div id="main-filters" style="display: none">
@@ -89,15 +105,6 @@
 								<label for="{{ key }}">{{ key }}</label>
 							</div>
 							{% endfor %}
-						</div>
-					</div>
-				</section>
-				<section>
-					<h2 id="chart-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
-						&#x25B2; Chart &#x25B2;</h2>
-					<div id="chart-parent" style="display: none">
-						<div class="chart-container" style="padding-bottom: 3em; height:{{ (data.allData|length)*2+4 }}em; width:100%">
-							<canvas id="chart"></canvas>
 						</div>
 					</div>
 				</section>

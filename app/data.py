@@ -158,7 +158,7 @@ class PreGameScoutingForm(wtforms.Form):
     teleop_mineral_balls = wtforms.BooleanField("Balls")
     teleop_crater_reach = wtforms.BooleanField("Reach")
     teleop_crater_enter = wtforms.BooleanField("Enter")
-    teleop_score_crater = wtforms.BooleanField("Crater")
+    teleop_score_lander = wtforms.BooleanField("Lander")
     teleop_score_depot = wtforms.BooleanField("Depot")
     teleop_hang = wtforms.BooleanField("Hang")
     teleop_full_park = wtforms.BooleanField("Full Park")
@@ -361,7 +361,7 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     matchEntryCount = {}
 
     fields = ['Theoretical Auton Crater-Side Score', 'Theoretical Auton Depot-Side Score', 'Theoretical Auton Mean Score',
-              'Theoretical Tele-Op Score', 'Theoretical Total Score', 'Overall Auton Score', 'Overall Tele-Op Score', 'Overall Total Score']
+              'Theoretical Tele-Op Score', 'Theoretical Total Score', 'Overall Match Auton Score', 'Overall Match Tele-Op Score', 'Overall Match Total Score']
 
     for teamNumber in allTeamNumbers:
         data[teamNumber] = ['N/A']*len(fields)

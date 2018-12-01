@@ -9,30 +9,21 @@ Chart.defaults.global.defaultFontColor.defaultFontSize = 16;
 
 var allData = compData.allData;
 var allTeams = [];
-var preGameDatasets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ff6699', stack: 'pre-game' }];
+var preGameDatasets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ff6699', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }];
 var matchDatasets = [{ label: 'Match Autonomous', data: [], backgroundColor: '#cc99ff', stack: 'main' }, { label: 'Match Tele-Op', data: [], backgroundColor: '#6699ff', stack: 'main' }];
-var allDataSets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ff6699', stack: 'pre-game' },
-{ label: 'Match Autonomous', data: [], backgroundColor: '#cc99ff', stack: 'match' }, { label: 'Match Tele-Op', data: [], backgroundColor: '#6699ff', stack: 'match' }];
 for (let teamNumber in allData) {
     allTeams.push(teamNumber);
     let teamDataRaw = allData[teamNumber];
 
-    preGameDatasets[0].data.push(teamDataRaw[30]);
+    preGameDatasets[0].data.push(Math.max(teamDataRaw[28], teamDataRaw[29]));
     preGameDatasets[1].data.push(teamDataRaw[31]);
 
     matchDatasets[0].data.push(teamDataRaw[33]);
     matchDatasets[1].data.push(teamDataRaw[34]);
-
-    allDataSets[0].data.push(teamDataRaw[30]);
-    allDataSets[1].data.push(teamDataRaw[31]);
-    allDataSets[2].data.push(teamDataRaw[33]);
-    allDataSets[3].data.push(teamDataRaw[34]);
 }
 
 function updateChartScope() {
-    if (viewPreGameData && viewMatchPerformanceData) {
-        chartDispAllScouting();
-    } else if (viewPreGameData) {
+    if ($('input[name=chart-scope]:checked').val() == 'pre-game') {
         chartDispPreGameScouting();
     } else {
         chartDispMatchScouting();

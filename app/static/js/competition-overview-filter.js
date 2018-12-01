@@ -1,11 +1,13 @@
 $(document).ready(function () {
     $('#other').css('padding-bottom', '4em');
-    $("[id='Overall Total Score']").css('padding-bottom', '4em');
+    $("[id='Overall Match Total Score']").css('padding-bottom', '4em');
     setupFilters();
     $('#main-filters-toggle').click();
     $('#other').click();
     $('#chart-toggle').click();
     $('#table-toggle').click();
+
+    updateChartScope();
 });
 
 function setupFilters() {
@@ -40,8 +42,6 @@ function setupFilters() {
     $('#table-toggle').mouseup(function () {
         $('#table-toggle').css('color', '');
     });
-
-    updateChartScope();
 }
 
 var viewPreGameData = true;
