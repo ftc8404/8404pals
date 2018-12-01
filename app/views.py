@@ -54,9 +54,14 @@ def team(team_number):
     return "This  site will eventually show information about team "+str(team_number)+"!"
 
 
-@app.route("/team-rankings")
-def team_rankings():
-    return "Not  yet implemented :("
+@app.route("/team-info")
+def team_info():
+    pass
+
+
+@app.route("/match-info")
+def match_info():
+    return render_template('match-info.html', data=data.getCompetitionOverviewData())
 
 
 @app.route("/competition-overview")

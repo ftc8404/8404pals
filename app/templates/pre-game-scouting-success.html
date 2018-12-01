@@ -13,33 +13,10 @@
     <!-- Wrapper -->
     <div id="wrapper">
         <!-- Header -->
-        <header id="header">
-            <div class="inner">
-                <!-- Logo -->
-                <a href="/" class="logo">
-                    <span class="symbol"><img src="/static/images/logo.svg" alt="" /></span>
-                    <span class="title">Quixilver 8404</span>
-                </a>
-                <!-- Nav -->
-                <nav>
-                    <ul>
-                        <li><a href="#menu">Menu</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+        {% include 'header.html' %}
 
         <!-- Menu -->
-        <nav id="menu">
-			<h2>Menu</h2>
-			<ul>
-				<li><a href="/">Home</a></li>
-				<li><a href="/competition-overview"> Competition overview</a></li>
-				<li><a href="/pre-game-scouting">Pre-game scouting</a></li>
-				<li><a href="/match-scouting">Match scouting</a></li>
-				<li><a href="/team-rankings">Team rankings</a></li>
-			</ul>
-		</nav>
+        {% include 'menu.html' %}
 
         <div id="main">
             <div class="inner">
