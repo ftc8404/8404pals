@@ -45,12 +45,16 @@
 									</tr>
 								</thead>
 								<tbody>
-									{% for i in range(1,51) %}
+									{% for i in range(1,data.tableRows+1) %}
 									<tr>
 										<td>{{ i }}</td>
-										{% for i in range(4) %}
+										{% for j in range(4) %}
 										<td>
+											{% if i in data.matchList %}
+											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text" placeholder="" value="{{ data.matchList[i][j] }}">
+											{% else %}
 											<input name="" id="" type="text" placeholder="" value="">
+											{% endif %}
 										</td>
 										{% endfor %}
 									</tr>
@@ -58,6 +62,9 @@
 								</tbody>
 							</table>
 						</div>
+						<ul class="actions">
+							<li><input type="submit" value="Update" class="primary" style="width: 20em" /></li>
+						</ul>
 					</form>
 				</section>
 			</div>
