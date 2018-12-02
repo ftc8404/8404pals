@@ -441,3 +441,16 @@ def getCompetitionOverviewData():
         "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys}
 
     return competitionData
+
+
+def setMatchList(competitionId, data):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    sqlCursor.execute(
+        "DELETE FROM MatchListEntries WHERE CompetitionID="+str(competitionId))
+    sqlCursor.execute(
+        "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+")")
+
+
+def getMatchList(compeititonId):
+    pass
