@@ -283,14 +283,51 @@ def validateMatchScoutingForm(form):
 
 
 def validateMatchInfoForm(form):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    allTeamNumbers = [row[0] for row in sqlCursor.execute(
+        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
+    sqlConn.close()
+
     teamList = {}
     curMatch = 1
     curMatchCount = 0
     for fieldName, value in form.items():
         matchNumber, teamIndex = tuple(
             [int(value2) for value2 in fieldName.split('_')])
-        if(matchNumber!=curMatch):
-            return "Error"
+        if value == '':
+            continue
+        try:
+            teamNumber = int(value)
+        except ValueError:
+            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None
+        if teamNumber <= 0:
+            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None
+
+        if teamNumber not in allTeamNumbers:
+            return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None
+
+        if matchNumber != curMatch or teamIndex != curMatchCount:
+            return "Error: missing data for match "+str(curMatch), False, None
+
+        for teamIndex2 in range(teamIndex):
+            if form[str(matchNumber)+'_'+str(teamIndex2)] == value:
+                return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None
+
+        if curMatchCount == 0:
+            teamList[str(matchNumber)] = []
+        teamList[str(matchNumber)].append(teamNumber)
+
+        if curMatchCount == 3:
+            curMatch += 1
+            curMatchCount = 0
+        else:
+            curMatchCount += 1
+
+    if curMatchCount != 0:
+        return "Error: missing data for match "+str(curMatch),  False, None
+
+    return "", True, teamList
 
 
 def queryAllFormData():
@@ -458,10 +495,11 @@ def setMatchList(data, competitionId=curCompetitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     sqlCursor.execute(
-        "DELETE FROM MatchListEntries WHERE CompetitionID="+str(competitionId))
-    for match, matchData in data.item():
+        "DELETE FROM MatchListEntries WHERE CompetitionId="+str(competitionId))
+    for match, matchData in data.items():
         sqlCursor.execute(
             "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
+    sqlConn.commit()
     sqlConn.close()
 
 
@@ -469,8 +507,9 @@ def getMatchList(competitionId=curCompetitionId):
     data = {}
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    rawData = sqlCursor.execute("SELECT * FROM MatchListEntries WHERE CompetitionID=" +
+    rawData = sqlCursor.execute("SELECT * FROM MatchListEntries WHERE CompetitionId=" +
                                 str(competitionId)).fetchall()
+    sqlConn.close()
     for row in rawData:
         data[row[1]] = list(row[2:])
     return data

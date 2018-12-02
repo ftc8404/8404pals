@@ -62,18 +62,19 @@ def team_info():
 @app.route("/match-info", methods=['GET', 'POST'])
 def match_info():
     message = ''
+    formValues = None
     if request.method == 'POST':
+        formValues = request.form
         message, success, matchList = data.validateMatchInfoForm(request.form)
         if success:
-            pass
-            # data.setMatchList()
+            data.setMatchList(matchList)
 
     matchList = data.getMatchList()
     largestMatch = 50
     matchNumbers = [int(matchNumberStr) for matchNumberStr in matchList]
     for matchNumber in matchNumbers:
         largestMatch = max(largestMatch, matchNumber+1)
-    return render_template('match-info.html', message=message, data={"cityName": data.curCompetitionCityName, "id": data.curCompetitionId, "matchList": data.getMatchList(), "tableRows": largestMatch})
+    return render_template('match-info.html', formValues=formValues, message=message, data={"cityName": data.curCompetitionCityName, "id": data.curCompetitionId, "matchList": data.getMatchList(), "tableRows": largestMatch})
 
 
 @app.route("/competition-overview")

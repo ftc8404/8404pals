@@ -31,6 +31,9 @@
 				<header>
 					<h1>Matches for the {{ data.cityName }} Competition.</h1>
 				</header>
+				{% if message %}
+				<p><em>{{ message }}</em></p>
+				{% endif %}
 				<section>
 					<form method="post" action="#">
 						<div class="table-wrapper">
@@ -50,10 +53,12 @@
 										<td>{{ i }}</td>
 										{% for j in range(4) %}
 										<td>
-											{% if i in data.matchList %}
+											{% if formValues %}
+											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text" placeholder="" value="{{ formValues[(i|string)+'_'+(j|string)]}}">
+											{% elif i in data.matchList %}
 											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text" placeholder="" value="{{ data.matchList[i][j] }}">
 											{% else %}
-											<input name="" id="" type="text" placeholder="" value="">
+											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text" placeholder="">
 											{% endif %}
 										</td>
 										{% endfor %}
