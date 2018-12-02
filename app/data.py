@@ -282,6 +282,17 @@ def validateMatchScoutingForm(form):
     return ""
 
 
+def validateMatchInfoForm(form):
+    teamList = {}
+    curMatch = 1
+    curMatchCount = 0
+    for fieldName, value in form.items():
+        matchNumber, teamIndex = tuple(
+            [int(value2) for value2 in fieldName.split('_')])
+        if(matchNumber!=curMatch):
+            return "Error"
+
+
 def queryAllFormData():
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
@@ -443,14 +454,23 @@ def getCompetitionOverviewData():
     return competitionData
 
 
-def setMatchList(competitionId, data):
+def setMatchList(data, competitionId=curCompetitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     sqlCursor.execute(
         "DELETE FROM MatchListEntries WHERE CompetitionID="+str(competitionId))
-    sqlCursor.execute(
-        "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+")")
+    for match, matchData in data.item():
+        sqlCursor.execute(
+            "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
+    sqlConn.close()
 
 
-def getMatchList(compeititonId):
-    pass
+def getMatchList(competitionId=curCompetitionId):
+    data = {}
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawData = sqlCursor.execute("SELECT * FROM MatchListEntries WHERE CompetitionID=" +
+                                str(competitionId)).fetchall()
+    for row in rawData:
+        data[row[1]] = list(row[2:])
+    return data
