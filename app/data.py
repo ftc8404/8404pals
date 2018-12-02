@@ -448,8 +448,9 @@ def setMatchList(competitionId, data):
     sqlCursor = sqlConn.cursor()
     sqlCursor.execute(
         "DELETE FROM MatchListEntries WHERE CompetitionID="+str(competitionId))
+    for matchNumber, matchData in data.Items()
     sqlCursor.execute(
-        "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+")")
+        "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+str(match)")")
 
 
 def getMatchList(compeititonId):
