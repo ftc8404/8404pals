@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect
 import json
 
 import data
@@ -51,13 +51,13 @@ def match_scouting():
 
 @app.route("/team-info/<int:team_number>/")
 def team(team_number):
-    generalInfo, compInfo = data.getTeamInfo(team_number)
+    generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return render_template('team-info.html', teamNumber=team_number, generalInfo=generalInfo, compInfo=compInfo)
 
 
 @app.route("/team-info")
 def team_info():
-    pass
+    return redirect("/team-info/8404/")
 
 
 @app.route("/match-info", methods=['GET', 'POST'])
@@ -97,5 +97,5 @@ def api_competition_overview_data():
 
 @app.route("/api/team-info/<int:team_number>/")
 def api_team_info(team_number):
-    generalInfo, compInfo = data.getTeamInfo(team_number)
-    return json.dumps({'generalInfo': generalInfo, 'compInfo': compInfo})
+    generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
+    return json.dumps({'generalInfo': generalInfo, 'performance': performanceInfo, 'compInfo': compInfo})

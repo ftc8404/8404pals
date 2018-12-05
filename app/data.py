@@ -521,6 +521,7 @@ def getTeamInfo(teamNumber):
     sqlCursor = sqlConn.cursor()
     rawTeamData = sqlCursor.execute("SELECT * FROM Teams WHERE TeamNumber=" +
                                     str(teamNumber)).fetchall()
+    generalInfo['teamNumber'] = teamNumber
     generalInfo['teamName'] = rawTeamData[0][1]
     quals = []
     for i in range(3):
@@ -541,6 +542,13 @@ def getTeamInfo(teamNumber):
     sqlConn.close()
     generalInfo['qualifiers'] = quals
 
+    rawPerfData = getCompetitionOverviewData()['allData'][teamNumber]
+
+    performanceInfo = {
+        'preGame': {'auton': max(rawPerfData[28], rawPerfData[29]), 'teleOp': rawPerfData[31]},
+        'match': {'auton': rawPerfData[33], 'teleOp': rawPerfData[34]}
+    }
+
     compInfo = {}
 
     matchList = getMatchList()
@@ -558,10 +566,10 @@ def getTeamInfo(teamNumber):
                 curMatchEntry['color'] = 'Blue'
                 opponents = match[0:2]
                 alliance = match[3] if match[2] == teamNumber else match[2]
-            curMatchEntry['opponents1'] = opponents[0]
-            curMatchEntry['opponents2'] = opponents[1]
+            curMatchEntry['opponent1'] = opponents[0]
+            curMatchEntry['opponent2'] = opponents[1]
             curMatchEntry['alliance'] = alliance
             teamMatches.append(curMatchEntry)
     compInfo['matches'] = teamMatches
 
-    return generalInfo, compInfo
+    return generalInfo, performanceInfo, compInfo

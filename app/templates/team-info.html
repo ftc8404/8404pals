@@ -7,7 +7,7 @@
 <html>
 
 <head>
-	{% include 'title.html' %}
+	<title>Team {{ teamNumber }} Info - 8404 PALS</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="/static/css/main.css" />
@@ -29,20 +29,22 @@
 		<div id="main">
 			<div class="inner">
 				<header>
-					<h1>Info for Team {{ teamNumber }}</h1>
+					<h1>Info for Team {{ teamNumber }} {{ generalInfo.teamName }}</h1>
 				</header>
 				<h2>General</h2>
-				<p>Name: {{ generalInfo.teamName }}</p>
-				{% for i in range(generalInfo.qualifiers|length) %}
-				<p>Qualifier {{ i+1 }}: {{ generalInfo.qualifiers[i] }}</p>
-				{% endfor %}
-				<h2>Performance</h2>
+				<p>
+					{% for i in range(generalInfo.qualifiers|length) %}
+					Qualifier {{ i+1 }}: {{ generalInfo.qualifiers[i] }}<br>
+					{% endfor %}
+				</p>
+				<!-- <h2>Performance</h2> -->
 				<h2>Current Competition</h2>
 				<div class="row gtr-uniform">
 					{% for match in compInfo.matches %}
 					<div class="col-6 col-12-medium">
-						<div class="chart-container" style="height:20em; width:100%">
-							<canvas id="chart-{{ match }}"></canvas>
+						<h3 style="margin-bottom: 1em">Match #{{ match.number }}</h3>
+						<div class="chart-container" style="height:auto; width:100%; max-width: 35em;">
+							<canvas id="chart-{{ match.number }}"></canvas>
 						</div>
 					</div>
 					{% endfor %}
