@@ -7,7 +7,7 @@
 <html>
 
 <head>
-	<title>Quixilver 8404 - Data Hub</title>
+	{% include 'title.html' %}
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="/static/css/main.css" />
@@ -29,7 +29,7 @@
 		<div id="main">
 			<div class="inner">
 				<header>
-					<h1>Matches for the {{ data.cityName }} Competition.</h1>
+					<h1>Matches for the {{ data.cityName }} Competition</h1>
 				</header>
 				{% if message %}
 				<p><em>{{ message }}</em></p>

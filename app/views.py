@@ -51,7 +51,8 @@ def match_scouting():
 
 @app.route("/team-info/<int:team_number>/")
 def team(team_number):
-    return "This  site will eventually show information about team "+str(team_number)+"!"
+    generalInfo, compInfo = data.getTeamInfo(team_number)
+    return render_template('team-info.html', teamNumber=team_number, generalInfo=generalInfo, compInfo=compInfo)
 
 
 @app.route("/team-info")
@@ -92,3 +93,9 @@ def set_competition_id(competition_id):
 @app.route("/api/competition-overview-data")
 def api_competition_overview_data():
     return json.dumps(data.getCompetitionOverviewData())
+
+
+@app.route("/api/team-info/<int:team_number>/")
+def api_team_info(team_number):
+    generalInfo, compInfo = data.getTeamInfo(team_number)
+    return json.dumps({'generalInfo': generalInfo, 'compInfo': compInfo})
