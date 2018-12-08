@@ -43,15 +43,15 @@
 					<div class="col-6 col-12-medium">
 						<h3>Autonomous</h3>
 						<div class="chart-container" style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
-							<canvas id="chart-perf"></canvas>
+							<canvas id="chart-perf-pre-game"></canvas>
 						</div>
 					</div>
 					<div class="col-6 col-12-medium">
-							<h3>Tele-Op</h3>
-							<div class="chart-container" style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
-								<canvas id="chart-perf"></canvas>
-							</div>
+						<h3>Tele-Op</h3>
+						<div class="chart-container" style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
+							<canvas id="chart-perf-match"></canvas>
 						</div>
+					</div>
 					{% for match in compInfo.matches %}
 					<div class="col-6 col-12-medium">
 						<h3 style="margin-bottom: 1em">Match #{{ match.number }}</h3>

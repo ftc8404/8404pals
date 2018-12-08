@@ -24,11 +24,6 @@ var matches = compInfo.matches;
 var allData = compData.allData;
 var curTeamData = allData[teamNumber];
 
-var perfData = []
-var offset = 0;
-if (curTeamData[29] > curTeamData[28]) {
-    offset = 1;
-}
 var perfLabels = [
     'Land', 'Sample', 'Marker', 'Park',
     'Minerals', 'End-Game'
@@ -37,6 +32,12 @@ var perfColors = [
     '#00ff99', '#99ffcc', '#66ff66', '#ccff99',
     '#ffcc66', '#ffcc99'
 ];
+
+var perfData = []
+var offset = 0;
+if (curTeamData[29] > curTeamData[28]) {
+    offset = 1;
+}
 perfData.push(curTeamData[2 + offset] * 30);
 perfData.push(Math.max(curTeamData[4 + offset] * 25, curTeamData[6 + offset] * 50));
 perfData.push(curTeamData[8 + offset] * 15);
@@ -59,7 +60,40 @@ if (curTeamData[19]) {
 }
 perfData.push(endGame);
 
-var ctx = document.getElementById("chart-perf").getContext('2d');
+var ctx = document.getElementById("chart-perf-pre-game").getContext('2d');
+var perfChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        datasets: [{
+            data: perfData,
+            backgroundColor: perfColors
+        }],
+
+        // These labels appear in the legend and in the tooltips when hovering different arcs
+        labels: perfLabels
+    },
+    options: {
+        aspectRatio: 1.5,
+        maintainAspectRatio: true
+    }
+});
+
+var perfLabels = [
+    'Land', 'Sample', 'Marker', 'Park',
+    'Minerals', 'End-Game'
+]
+var perfColors = [
+    '#00ff99', '#99ffcc', '#66ff66', '#ccff99',
+    '#ffcc66', '#ffcc99'
+];
+
+var perfData = []
+perfData.push(curTeamData[21] * 30);
+perfData.push(Math.max(curTeamData[22] * 25, curTeamData[23] * 50));
+perfData.push(curTeamData[24] * 15);
+perfData.push(curTeamData[25] * 10);
+
+var ctx = document.getElementById("chart-perf-match").getContext('2d');
 var perfChart = new Chart(ctx, {
     type: 'doughnut',
     data: {
