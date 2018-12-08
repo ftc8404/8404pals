@@ -35,7 +35,7 @@ var perfColors = [
 
 var perfData = []
 var offset = 0;
-if (curTeamData[29] > curTeamData[28]) {
+if (curTeamData[30] > curTeamData[29]) {
     offset = 1;
 }
 perfData.push(curTeamData[2 + offset] * 30);
@@ -80,11 +80,11 @@ var perfChart = new Chart(ctx, {
 
 var perfLabels = [
     'Land', 'Sample', 'Marker', 'Park',
-    'Minerals', 'End-Game'
+    'Minerals Lander', 'Minerals Depot', 'End-Game'
 ]
 var perfColors = [
     '#00ff99', '#99ffcc', '#66ff66', '#ccff99',
-    '#ffcc66', '#ffcc99'
+    '#ffcc66', '#ff9933', '#ffcc99'
 ];
 
 var perfData = []
@@ -92,6 +92,9 @@ perfData.push(curTeamData[21] * 30);
 perfData.push(Math.max(curTeamData[22] * 25, curTeamData[23] * 50));
 perfData.push(curTeamData[24] * 15);
 perfData.push(curTeamData[25] * 10);
+perfData.push(curTeamData[26] * 5);
+perfData.push(curTeamData[27] * 2);
+perfData.push(curTeamData[28] * 1);
 
 var ctx = document.getElementById("chart-perf-match").getContext('2d');
 var perfChart = new Chart(ctx, {
@@ -122,8 +125,8 @@ for (let i = 0; i < matches.length; i++) {
     for (let j = 0; j < 4; j++) {
         rowTeamNumber = teamGraphOrder[j]
         let teamDataRaw = allData[rowTeamNumber];
-        preGameScores.push(Math.max(teamDataRaw[28], teamDataRaw[29]) + teamDataRaw[31]);
-        matchScores.push(teamDataRaw[33] + teamDataRaw[34]);
+        preGameScores.push(Math.max(teamDataRaw[29], teamDataRaw[30]) + teamDataRaw[32]);
+        matchScores.push(teamDataRaw[34] + teamDataRaw[35]);
     }
 
     let ctx = document.getElementById("chart-" + matchNumber).getContext('2d');

@@ -15,11 +15,11 @@ for (let teamNumber in allData) {
     allTeams.push(teamNumber);
     let teamDataRaw = allData[teamNumber];
 
-    preGameDatasets[0].data.push(Math.max(teamDataRaw[28], teamDataRaw[29]));
-    preGameDatasets[1].data.push(teamDataRaw[31]);
+    preGameDatasets[0].data.push(Math.max(teamDataRaw[29], teamDataRaw[30]));
+    preGameDatasets[1].data.push(teamDataRaw[32]);
 
-    matchDatasets[0].data.push(teamDataRaw[33]);
-    matchDatasets[1].data.push(teamDataRaw[34]);
+    matchDatasets[0].data.push(teamDataRaw[34]);
+    matchDatasets[1].data.push(teamDataRaw[35]);
 }
 
 function updateChartScope() {

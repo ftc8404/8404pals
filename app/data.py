@@ -373,7 +373,7 @@ def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
     data = {}
     matchEntryCount = {}
     fields = []
-    for field in matchScoutingFields[2:-1]:
+    for field in matchScoutingFields[2:]:
         fieldChars = list(field)
         uppercaseDist = ord('A')-ord('a')
         fieldChars[0] = chr(ord(fieldChars[0])+uppercaseDist)
@@ -390,10 +390,13 @@ def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
     for entry in matchScoutingFormData:
         teamNumber = entry[1]
         for i in range(len(fields)):
+            n=entry[i+2]
+            if i==7:
+                n={'none': 0, 'partial': 15, 'full': 25, 'hang': 50}[n]
             if matchEntryCount[teamNumber] == 0:
-                data[teamNumber][i] = entry[i+2]
+                data[teamNumber][i] = n
             else:
-                data[teamNumber][i] += entry[i+2]
+                data[teamNumber][i] += n
         matchEntryCount[teamNumber] += 1
 
     for teamNumber, amount in matchEntryCount.items():
@@ -545,8 +548,8 @@ def getTeamInfo(teamNumber):
     rawPerfData = getCompetitionOverviewData()['allData'][teamNumber]
 
     performanceInfo = {
-        'preGame': {'auton': max(rawPerfData[28], rawPerfData[29]), 'teleOp': rawPerfData[31]},
-        'match': {'auton': rawPerfData[33], 'teleOp': rawPerfData[34]}
+        'preGame': {'auton': max(rawPerfData[29], rawPerfData[30]), 'teleOp': rawPerfData[32]},
+        'match': {'auton': rawPerfData[34], 'teleOp': rawPerfData[35]}
     }
 
     compInfo = {}

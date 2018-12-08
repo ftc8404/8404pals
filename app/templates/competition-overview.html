@@ -7,7 +7,7 @@
 <html>
 
 <head>
-		<title>Competition Overview - 8404 PALS</title>
+	<title>Competition Overview - 8404 PALS</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="/static/css/main.css" />
@@ -100,7 +100,8 @@
 								<tbody>
 									{% for name, row in data.allData.items() %}
 									<tr>
-										{% for i in range(row|length) %}
+										<td class='filter-{{ data.tableKeys[0] }}'><a href='team-info/{{ row[0] }}/'>{{ row[0] }}</a></td>
+										{% for i in range(1, row|length) %}
 										<td class='filter-{{ data.tableKeys[i] }}'>{{ row[i] }}</td>
 										{% endfor %}
 									</tr>
