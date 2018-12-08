@@ -40,6 +40,18 @@
 				<!-- <h2>Performance</h2> -->
 				<h2>Current Competition</h2>
 				<div class="row gtr-uniform">
+					<div class="col-6 col-12-medium">
+						<h3>Autonomous</h3>
+						<div class="chart-container" style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
+							<canvas id="chart-perf"></canvas>
+						</div>
+					</div>
+					<div class="col-6 col-12-medium">
+							<h3>Tele-Op</h3>
+							<div class="chart-container" style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
+								<canvas id="chart-perf"></canvas>
+							</div>
+						</div>
 					{% for match in compInfo.matches %}
 					<div class="col-6 col-12-medium">
 						<h3 style="margin-bottom: 1em">Match #{{ match.number }}</h3>
