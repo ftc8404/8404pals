@@ -31,12 +31,6 @@
 				<header>
 					<h1>Info for Team {{ teamNumber }} {{ generalInfo.teamName }}</h1>
 				</header>
-				<h2>General</h2>
-				<p>
-					{% for i in range(generalInfo.qualifiers|length) %}
-					Qualifier {{ i+1 }}: {{ generalInfo.qualifiers[i] }}<br>
-					{% endfor %}
-				</p>
 				<!-- <h2>Performance</h2> -->
 				<h2>Current Competition</h2>
 				<div class="row gtr-uniform">
@@ -61,6 +55,12 @@
 					</div>
 					{% endfor %}
 				</div>
+				<h2 style="margin-top: 2.5em">General</h2>
+				<p>
+					{% for i in range(generalInfo.qualifiers|length) %}
+					Qualifier {{ i+1 }}: {{ generalInfo.qualifiers[i] }}<br>
+					{% endfor %}
+				</p>
 			</div>
 		</div>
 
