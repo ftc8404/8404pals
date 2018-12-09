@@ -28,7 +28,7 @@ def getCurCompetitionCityName():
     return curCompetitionCityName
 
 
-curCompetitionId = 21
+curCompetitionId = 10
 curCompetitionCityName = getCurCompetitionCityName()
 
 
