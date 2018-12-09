@@ -330,6 +330,15 @@ def validateMatchInfoForm(form):
     return "", True, teamList
 
 
+def getTeamsAtCompetition(competitionId):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
+        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()
+    sqlConn.close()
+    return data
+
+
 def queryAllFormData():
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
@@ -390,9 +399,9 @@ def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
     for entry in matchScoutingFormData:
         teamNumber = entry[1]
         for i in range(len(fields)):
-            n=entry[i+2]
-            if i==7:
-                n={'none': 0, 'partial': 15, 'full': 25, 'hang': 50}[n]
+            n = entry[i+2]
+            if i == 7:
+                n = {'none': 0, 'partial': 15, 'full': 25, 'hang': 50}[n]
             if matchEntryCount[teamNumber] == 0:
                 data[teamNumber][i] = n
             else:

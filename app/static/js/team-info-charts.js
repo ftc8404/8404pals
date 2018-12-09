@@ -10,7 +10,7 @@ HttpreqTeam.send(null);
 var teamData = JSON.parse(HttpreqTeam.responseText);
 
 var HttpreqComp = new XMLHttpRequest(); // a new request
-HttpreqComp.open("GET", "/api/competition-overview-data", false);
+HttpreqComp.open("GET", "/api/competition-overview/", false);
 HttpreqComp.send(null);
 var compData = JSON.parse(HttpreqComp.responseText);
 

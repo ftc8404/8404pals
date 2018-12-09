@@ -90,12 +90,38 @@ def set_competition_id(competition_id):
     return "Current competition ID set to "+str(competition_id)
 
 
-@app.route("/api/competition-overview-data")
-def api_competition_overview_data():
+@app.route("/api/competition-overview/")
+def api_competition_overview():
     return json.dumps(data.getCompetitionOverviewData())
 
 
+@app.route("/api/team-info/")
 @app.route("/api/team-info/<int:team_number>/")
-def api_team_info(team_number):
+def api_team_info(team_number=None):
+    if team_number:
+        generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
+        return json.dumps({'generalInfo': generalInfo, 'performance': performanceInfo, 'compInfo': compInfo})
+    else:
+        rawData = data.getTeamsAtCompetition(data.curCompetitionId)
+        dictData = {}
+        for row in rawData:
+            dictData[row[0]] = row[1]
+        return json.dumps(dictData)
+
+
+@app.route("/api/team-info/<int:team_number>/general/")
+def api_team_info_general(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
-    return json.dumps({'generalInfo': generalInfo, 'performance': performanceInfo, 'compInfo': compInfo})
+    return json.dumps(generalInfo)
+
+
+@app.route("/api/team-info/<int:team_number>/performance/")
+def api_team_info_perf(team_number):
+    generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
+    return json.dumps(performanceInfo)
+
+
+@app.route("/api/team-info/<int:team_number>/matches/")
+def api_team_info_matches(team_number):
+    generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
+    return json.dumps(compInfo['matches'])

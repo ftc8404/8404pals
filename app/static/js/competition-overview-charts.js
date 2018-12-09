@@ -1,5 +1,5 @@
 var Httpreq = new XMLHttpRequest(); // a new request
-Httpreq.open("GET", "/api/competition-overview-data", false);
+Httpreq.open("GET", "/api/competition-overview/", false);
 Httpreq.send(null);
 var compData = JSON.parse(Httpreq.responseText);
 
