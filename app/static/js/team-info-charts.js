@@ -53,9 +53,9 @@ if (curTeamData[17]) {
 perfData.push(minerals);
 
 var endGame = 15;
-if (curTeamData[19]) {
+if (curTeamData[19] != 'N/A' && curTeamData[19]) {
     endGame = 50;
-} else if (curTeamData[20]) {
+} else if (curTeamData[20] != 'N/A' && curTeamData[20]) {
     endGame = 25;
 }
 perfData.push(endGame);
