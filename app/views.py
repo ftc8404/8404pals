@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, redirect
 import json
+import os
 
 import data
 
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config['SECRET_KEY'] = '8asdf98saf9d8f9sdf8sadf8as9dfds7f'
+app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 
 
 @app.route("/")

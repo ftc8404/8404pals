@@ -1,11 +1,12 @@
 import wtforms
 import pyodbc
 import platform
+import os
 
-server = 'quixilver8404data.database.windows.net'
-database = 'quixilver8404data'
-username = 'axchen7'
-password = '7vE+xHxvC-a=~e6mMwcs*xg5S'
+server = os.getenv('SQLCONNSTR_SERVER')
+database = os.getenv('SQLCONNSTR_DATABASE')
+username = os.getenv('SQLCONNSTR_USERNAME')
+password = os.getenv('SQLCONNSTR_PASSWORD')
 
 driver = ''
 if platform.system() == 'Windows':
