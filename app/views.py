@@ -11,7 +11,9 @@ app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 
 @app.route("/")
 def hello():
-    return render_template("home.html")
+    loginForm = data.LoginForm(request.form)
+    registerForm = data.RegisterForm(request.form)
+    return render_template("home.html", loginForm=loginForm, registerForm=registerForm)
 
 
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])

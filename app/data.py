@@ -586,3 +586,23 @@ def getTeamInfo(teamNumber):
     compInfo['matches'] = teamMatches
 
     return generalInfo, performanceInfo, compInfo
+
+
+class LoginForm(wtforms.Form):
+    username = wtforms.TextField(
+        "Username", validators=[wtforms.validators.required()])
+    password = wtforms.PasswordField(
+        "Password", validators=[wtforms.validators.required()])
+
+
+class RegisterForm(wtforms.Form):
+    teamNumber = wtforms.IntegerField(
+        "Team Number", validators=[wtforms.validators.required()])
+    username = wtforms.TextField(
+        "Username", validators=[wtforms.validators.required()])
+    email = wtforms.TextField(
+        "Email", validators=[wtforms.validators.required()])
+    password = wtforms.PasswordField(
+        "Password", validators=[wtforms.validators.required()])
+    passwordConfirm = wtforms.PasswordField(
+        "Confirm Password", validators=[wtforms.validators.required()])
