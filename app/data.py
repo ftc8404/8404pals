@@ -606,3 +606,27 @@ class RegisterForm(wtforms.Form):
         "Password", validators=[wtforms.validators.required()])
     passwordConfirm = wtforms.PasswordField(
         "Confirm Password", validators=[wtforms.validators.required()])
+
+
+def validateRegisterForm(form):
+    teamNumber = form["teamNumber"]
+    username = form["username"]
+    email = form["email"]
+    password = form["password"]
+    passwordConfirm = ["passwordConfirm"]
+
+    try:
+        teamNumber = int(teamNumber)
+    except ValueError:
+        return '"Team Number" must be a positive integer'
+
+    if teamNumber <= 0:
+        return '"Team Number" must be a positive integer'
+
+    uChars = username.split("")
+    numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    for char in uChars:
+        if char.isalpha() == False and char not in numbers:
+            return '"Username" can only contain letters and numbers'
+    
+    
