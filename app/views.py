@@ -9,11 +9,16 @@ app.config.from_object(__name__)
 app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 
 
-@app.route("/")
-def hello():
+@app.route("/", methods=['GET', 'POST'])
+def home():
     loginForm = data.LoginForm(request.form)
+    return render_template("home.html", loginForm=loginForm, loginError=None)
+
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
     registerForm = data.RegisterForm(request.form)
-    return render_template("home.html", loginForm=loginForm, registerForm=registerForm)
+    return render_template("register.html", registerForm=registerForm, registerError=None)
 
 
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])

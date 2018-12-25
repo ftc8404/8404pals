@@ -2112,8 +2112,8 @@ input, select, textarea {
 
 	label {
 		display: block;
-		font-size: 0.9em;
-		font-weight: 900;
+		font-size: 1em;
+		font-weight: 750;
 		margin: 0 0 1em 0;
 	}
 
@@ -2524,7 +2524,7 @@ input, select, textarea {
 			input[type="button"].primary:active,
 			button.primary:active,
 			.button.primary:active {
-				background-color: #ee5f81;
+				background-color: #84aaf2;
 			}
 
 		input[type="submit"].disabled, input[type="submit"]:disabled,
