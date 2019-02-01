@@ -18,7 +18,12 @@ def home():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     registerForm = data.RegisterForm(request.form)
-    return render_template("register.html", registerForm=registerForm, registerError=None)
+    error = None
+    if request.method == 'POST':
+        error = data.validateRegisterForm(request.form)
+        if error is None:
+            return redirect("/")
+    return render_template("register.html", registerForm=registerForm, registerError=error)
 
 
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])

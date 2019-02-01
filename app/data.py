@@ -2,6 +2,7 @@ import wtforms
 import pyodbc
 import platform
 import os
+import re
 
 server = os.getenv('SQLCONNSTR_SERVER')
 database = os.getenv('SQLCONNSTR_DATABASE')
@@ -613,7 +614,7 @@ def validateRegisterForm(form):
     username = form["username"]
     email = form["email"]
     password = form["password"]
-    passwordConfirm = ["passwordConfirm"]
+    passwordConfirm = form["passwordConfirm"]
 
     try:
         teamNumber = int(teamNumber)
@@ -623,10 +624,13 @@ def validateRegisterForm(form):
     if teamNumber <= 0:
         return '"Team Number" must be a positive integer'
 
-    uChars = username.split("")
-    numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    for char in uChars:
-        if char.isalpha() == False and char not in numbers:
-            return '"Username" can only contain letters and numbers'
-    
-    
+    if re.match(r'^(?![-._])(?!.*[_.-]{2})[\w.-]{6,16}(?<![-._])$', username) is None:
+        return '"Username" must only contain alphanumeric characters and be 6-16 characters in length'
+    if email.count(" ") > 0 or (not re.match(r"[^@]+@[^@]+\.[^@]+", email)):
+        return '"Email" is not valid'
+    if len(password) < 8 or re.search("[0-9]", password) is None:
+        return '"Password" must be have at 8-64 digits and have at least one number'
+    if passwordConfirm != password:
+        return 'Passwords do not match'
+
+    return None
