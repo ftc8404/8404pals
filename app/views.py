@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, url_for
 import json
 import os
 
 import data
+import oauth
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -10,12 +11,43 @@ app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
 
 
 @app.route("/")
-def hello():
-    return render_template("home.html")
+def home():
+    authenticated = oauth.check_if_auth()
+
+    return render_template("home.html", authenticated=authenticated)
+
+
+@app.route("/login-oauth")
+def login_oauth():
+    from_url = url_for('home')
+    if(request.args.get('from')):
+        from_url = request.args.get('from')
+    session['auth_from_url'] = from_url
+    return redirect(oauth.get_auth_url())
+
+
+@app.route("/oauth2callback")
+def oauth_callback():
+    from_url = request.args.get('from')
+    if(request.args.get('error') == None):
+        auth_code = request.args.get('code')
+        # oauth.getToken(auth_code)
+        session['authenticated'] = True
+        return redirect(session['auth_from_url'])
+    else:
+        return redirect(url_for('login_error'))
+
+
+@app.route("/login-error")
+def login_error():
+    return "Not Authroized"
 
 
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])
 def pre_game_scouting():
+    if(not oauth.check_if_auth()):
+        return redirect(oauth.get_login_url(url_for(request.endpoint)))
+
     form = data.PreGameScoutingForm(request.form)
     print(form.errors)
     if request.method == 'POST':
@@ -34,6 +66,9 @@ def pre_game_scouting():
 
 @app.route("/match-scouting", methods=['GET', 'POST'])
 def match_scouting():
+    if(not oauth.check_if_auth()):
+        return redirect(oauth.get_login_url(url_for(request.endpoint)))
+
     form = data.MatchScoutingForm(request.form)
     print(form.errors)
     if request.method == 'POST':
@@ -52,17 +87,26 @@ def match_scouting():
 
 @app.route("/team-info/<int:team_number>/")
 def team(team_number):
+    if(not oauth.check_if_auth()):
+        return redirect(oauth.get_login_url(url_for(request.endpoint)))
+
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return render_template('team-info.html', teamNumber=team_number, generalInfo=generalInfo, compInfo=compInfo)
 
 
 @app.route("/team-info")
 def team_info():
+    if(not oauth.check_if_auth()):
+        return redirect(oauth.get_login_url(url_for(request.endpoint)))
+
     return redirect("/team-info/8404/")
 
 
 @app.route("/match-info", methods=['GET', 'POST'])
 def match_info():
+    if(not oauth.check_if_auth()):
+        return redirect(oauth.get_login_url(url_for(request.endpoint)))
+
     message = ''
     formValues = None
     if request.method == 'POST':
@@ -81,6 +125,9 @@ def match_info():
 
 @app.route("/competition-overview")
 def competition_overview():
+    if(not oauth.check_if_auth()):
+        return redirect(oauth.get_login_url(url_for(request.endpoint)))
+
     return render_template('competition-overview.html', data=data.getCompetitionOverviewData())
 
 
