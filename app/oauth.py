@@ -2,6 +2,12 @@ import google.oauth2.credentials
 import google_auth_oauthlib.flow
 from flask import session, url_for, request
 import secrets
+import os
+
+oauth_conn_json_str=os.getenv('OAUTH_JSON')
+if not os.path.isfile('google_oauth_client_secret.json'):
+    with open('google_oauth_client_secret.json','w+') as oauth_secrets_json:
+        oauth_secrets_json.write(oauth_conn_json_str)
 
 
 def setup_session():
