@@ -355,6 +355,22 @@ def getTeamsAtCompetition(competitionId):
     return data2
 
 
+def getTeamDivisions():
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
+        "SELECT * FROM NorcalRegionalsTeams").fetchall()
+    allTeamNames = getAllTeamNames()
+    data2 = {}
+    for row in data:
+        if row[1] == 0:
+            data2[row[0]] = "Gold"
+        else:
+            data2[row[0]] = "Silicon"
+    sqlConn.close()
+    return data2
+
+
 def queryAllFormData():
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
@@ -504,17 +520,25 @@ def getCompetitionOverviewData():
     summaryData = getDataSummary(allTeamNumbers, preGameScoutingFormData,
                                  matchScoutingFormData)
 
+    teamDivisions = getTeamDivisions()
+
     allData = {}
+    allData2 = {}
     for teamNumber in allTeamNumbers:
-        allData[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
-            matchScoutingData['data'][teamNumber] + \
-            (summaryData['data'][teamNumber])
+        if(teamDivisions[teamNumber] == "Silicon"):
+            allData[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
+                matchScoutingData['data'][teamNumber] + \
+                (summaryData['data'][teamNumber])
+        else:
+            allData2[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
+                matchScoutingData['data'][teamNumber] + \
+                (summaryData['data'][teamNumber])
 
     allTableKeys = ['Team Number']+preGameScoutingData['fields'] + \
         matchScoutingData['fields']+summaryData['fields']
 
     competitionData = {
-        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys}
+        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "allData2": allData2, "tableKeys": allTableKeys}
 
     return competitionData
 

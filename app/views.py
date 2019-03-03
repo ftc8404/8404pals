@@ -104,10 +104,12 @@ def api_team_info(team_number=None):
         return json.dumps({'generalInfo': generalInfo, 'performance': performanceInfo, 'compInfo': compInfo})
     else:
         rawData = data.getTeamsAtCompetition(data.curCompetitionId)
+        teamDivisions = data.getTeamDivisions()
         dictData = {}
         for row in rawData:
-            rowList=list(row)
-            dictData[rowList[0]] = rowList[1]
+            rowList = list(row)
+            dictData[rowList[0]] = rowList[1] + \
+                " ("+teamDivisions[rowList[0]]+")"
         return json.dumps(dictData)
 
 
