@@ -174,7 +174,7 @@ for (let i = 0; i < matches.length; i++) {
         },
         options: {
             scales: {
-                yAxes: [{
+                xAxes: [{
                     ticks: {
                         beginAtZero: true
                     }
