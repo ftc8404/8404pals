@@ -72,7 +72,7 @@ def match_info():
             data.setMatchList(matchList)
 
     matchList = data.getMatchList()
-    largestMatch = 50
+    largestMatch = 150
     matchNumbers = [int(matchNumberStr) for matchNumberStr in matchList]
     for matchNumber in matchNumbers:
         largestMatch = max(largestMatch, matchNumber+1)
@@ -106,7 +106,8 @@ def api_team_info(team_number=None):
         rawData = data.getTeamsAtCompetition(data.curCompetitionId)
         dictData = {}
         for row in rawData:
-            dictData[row[0]] = row[1]
+            rowList=list(row)
+            dictData[rowList[0]] = rowList[1]
         return json.dumps(dictData)
 
 

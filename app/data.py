@@ -29,7 +29,7 @@ def getCurCompetitionCityName():
     return curCompetitionCityName
 
 
-curCompetitionId = 10
+curCompetitionId = 23
 curCompetitionCityName = getCurCompetitionCityName()
 
 
@@ -219,8 +219,8 @@ def validatePreGameScoutingForm(form):
 
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
-                                            str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
+    teamMatchAmount = len(sqlCursor.execute(
+        "SELECT * FROM NorcalRegionalsTeams WHERE TeamNumber="+str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
@@ -247,8 +247,8 @@ def validateMatchScoutingForm(form):
 
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
-                                            str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
+    teamMatchAmount = len(sqlCursor.execute(
+        "SELECT * FROM NorcalRegionalsTeams WHERE TeamNumber="+str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
@@ -287,7 +287,7 @@ def validateMatchInfoForm(form):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
+        "SELECT * FROM NorcalRegionalsTeams").fetchall()]
     sqlConn.close()
 
     teamList = {}
@@ -331,13 +331,28 @@ def validateMatchInfoForm(form):
     return "", True, teamList
 
 
+def getAllTeamNames():
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
+        "SELECT * FROM TEAMS").fetchall()
+    data = [row[:2] for row in data]
+    dictTeams = {}
+    for row in data:
+        dictTeams[row[0]] = row[1]
+    sqlConn.close()
+    return dictTeams
+
+
 def getTeamsAtCompetition(competitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     data = sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()
+        "SELECT * FROM NorcalRegionalsTeams").fetchall()
+    allTeamNames = getAllTeamNames()
+    data2 = [[row[0], allTeamNames[row[0]]] for row in data]
     sqlConn.close()
-    return data
+    return data2
 
 
 def queryAllFormData():
@@ -345,7 +360,7 @@ def queryAllFormData():
     sqlCursor = sqlConn.cursor()
 
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
+        "SELECT * FROM NorcalRegionalsTeams").fetchall()]
     preGameScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
     matchScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
