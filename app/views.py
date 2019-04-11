@@ -129,3 +129,10 @@ def api_team_info_perf(team_number):
 def api_team_info_matches(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return json.dumps(compInfo['matches'])
+
+
+@app.route("/api/match-results/")
+@app.route("/api/match-results/<int:team_number>/")
+def api_matche_results(team_number=None):
+    matches = data.getMatchResults(teamNumber=team_number)
+    return json.dumps(matches)

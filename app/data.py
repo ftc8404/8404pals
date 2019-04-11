@@ -567,6 +567,29 @@ def getMatchList(competitionId=curCompetitionId):
     return data
 
 
+def getMatchResults(competitionId=curCompetitionId, teamNumber=None):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawData = sqlCursor.execute(
+        "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(competitionId)).fetchall()
+    sqlConn.close()
+    matches = {}
+    fields = getMatchScoutingFields()
+    for row in rawData:
+        curTeamNumber = row[2]
+        curMatch = row[1]
+        if teamNumber:
+            if curTeamNumber == teamNumber:
+                teamDataDict = dict(zip(fields[2:], row[3:-1]))
+                matches[curMatch] = teamDataDict
+        else:
+            if curMatch not in matches:
+                matches[curMatch] = {}
+            teamDataDict = dict(zip(fields[2:], row[3:-1]))
+            matches[curMatch][curTeamNumber] = teamDataDict
+    return matches
+
+
 def getTeamInfo(teamNumber):
     generalInfo = {}
     sqlConn = getSqlConn()
