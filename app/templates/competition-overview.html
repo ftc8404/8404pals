@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="/static/css/main.css" />
 	<noscript>
 		<link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+	{% include 'favicon.html' %}
 </head>
 
 <body class="is-preload">
@@ -32,55 +33,63 @@
 					<h1>Overview for the {{ data.cityName }} Competition</h1>
 				</header>
 				<section>
-					<h2 id="chart-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
+					<h2 id="chart-toggle"
+						style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
 						&#x25B2; Chart &#x25B2;</h2>
 					<div id="chart-parent" style="display: none">
 						<div>
-							<input type="radio" name="chart-scope" id="chart-scope-pre-game" value="pre-game" onchange="updateChartScope()"
-							 checked>
+							<input type="radio" name="chart-scope" id="chart-scope-pre-game" value="pre-game"
+								onchange="updateChartScope()" checked>
 							<label for="chart-scope-pre-game">Pre-Game</label>
-							<input type="radio" name="chart-scope" id="chart-scope-match" value="match" onchange="updateChartScope()">
+							<input type="radio" name="chart-scope" id="chart-scope-match" value="match"
+								onchange="updateChartScope()">
 							<label for="chart-scope-match">Match</label>
 						</div>
 						<h3>Silicon Division</h3>
-						<div class="chart-container" style="padding-bottom: 3em; height:{{ (data.allData|length)*2+4 }}em; width:100%">
+						<div class="chart-container"
+							style="padding-bottom: 3em; height:{{ (data.allData|length)*2+4 }}em; width:100%">
 							<canvas id="chart"></canvas>
 						</div>
 						<h3>Gold Division</h3>
-						<div class="chart-container2" style="padding-bottom: 3em; height:{{ (data.allData2|length)*2+4 }}em; width:100%">
+						<div class="chart-container2"
+							style="padding-bottom: 3em; height:{{ (data.allData2|length)*2+4 }}em; width:100%">
 							<canvas id="chart2"></canvas>
 						</div>
 					</div>
 				</section>
 				<section>
-					<h2 id="main-filters-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
+					<h2 id="main-filters-toggle"
+						style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
 						&#x25B2; Main Filters &#x25B2;</h2>
 					<div id="main-filters" style="display: none">
 						<div class="row gtr-uniform">
 							<div class="col-3 col-4-large col-6-small">
-								<input name="theoretical-capabilities" id="theoretical-capabilities" type="checkbox" onchange="toggleTheoreticalVisibility(this)"
-								 checked>
+								<input name="theoretical-capabilities" id="theoretical-capabilities" type="checkbox"
+									onchange="toggleTheoreticalVisibility(this)" checked>
 								<label for="theoretical-capabilities">Theoretical Capabilities</label>
 							</div>
 							<div class="col-3 col-4-large col-6-small">
-								<input name="match-performance" id="match-performance" type="checkbox" onchange="toggleMatchPerformanceVisibility(this)"
-								 checked>
+								<input name="match-performance" id="match-performance" type="checkbox"
+									onchange="toggleMatchPerformanceVisibility(this)" checked>
 								<label for="match-performance">Match Performance</label>
 							</div>
 							<div class="col-3 col-4-large col-6-small">
-								<input name="other" id="other" type="checkbox" onchange="toggleOtherVisibility(this)" checked>
+								<input name="other" id="other" type="checkbox" onchange="toggleOtherVisibility(this)"
+									checked>
 								<label for="other">Other</label>
 							</div>
 						</div>
 					</div>
 
-					<h2 id="all-filters-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
+					<h2 id="all-filters-toggle"
+						style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
 						&#x25B2; All Filters &#x25B2;</h2>
 					<div id="all-filters" style="display: none">
 						<div class="row gtr-uniform">
 							{% for key in data.tableKeys[1:] %}
 							<div class="col-3 col-4-large col-6-small">
-								<input name="{{ key }}" id="{{ key }}" type="checkbox" onchange="changeFilter(this)" checked>
+								<input name="{{ key }}" id="{{ key }}" type="checkbox" onchange="changeFilter(this)"
+									checked>
 								<label for="{{ key }}">{{ key }}</label>
 							</div>
 							{% endfor %}
@@ -88,7 +97,9 @@
 					</div>
 				</section>
 				<section>
-					<h2 id="table-toggle" style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">&#x25B2;
+					<h2 id="table-toggle"
+						style="-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;">
+						&#x25B2;
 						Scouting Data &#x25B2;</h2>
 					<div id="table-parent" style="display: none">
 						<div class="table-wrapper">
@@ -105,7 +116,8 @@
 								<tbody>
 									{% for name, row in data.allData.items() %}
 									<tr>
-										<td class='filter-{{ data.tableKeys[0] }}'><a href='team-info/{{ row[0] }}/'>{{ row[0] }}</a></td>
+										<td class='filter-{{ data.tableKeys[0] }}'><a
+												href='team-info/{{ row[0] }}/'>{{ row[0] }}</a></td>
 										{% for i in range(1, row|length) %}
 										<td class='filter-{{ data.tableKeys[i] }}'>{{ row[i] }}</td>
 										{% endfor %}

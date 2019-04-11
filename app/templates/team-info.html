@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="/static/css/main.css" />
 	<noscript>
 		<link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+	{% include 'favicon.html' %}
 </head>
 
 <body class="is-preload">
@@ -36,13 +37,15 @@
 				<div class="row gtr-uniform">
 					<div class="col-6 col-12-medium">
 						<h3>Pre-Game Data</h3>
-						<div class="chart-container" style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
+						<div class="chart-container"
+							style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
 							<canvas id="chart-perf-pre-game"></canvas>
 						</div>
 					</div>
 					<div class="col-6 col-12-medium">
 						<h3>Match Data</h3>
-						<div class="chart-container" style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
+						<div class="chart-container"
+							style="height:auto; width:100%; max-width: 35em;margin-bottom: 2em;">
 							<canvas id="chart-perf-match"></canvas>
 						</div>
 					</div>

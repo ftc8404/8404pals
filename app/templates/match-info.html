@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="/static/css/main.css" />
 	<noscript>
 		<link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+	{% include 'favicon.html' %}
 </head>
 
 <body class="is-preload">
@@ -54,11 +55,14 @@
 										{% for j in range(4) %}
 										<td>
 											{% if formValues %}
-											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text" placeholder="" value="{{ formValues[(i|string)+'_'+(j|string)]}}">
+											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
+												placeholder="" value="{{ formValues[(i|string)+'_'+(j|string)]}}">
 											{% elif i in data.matchList %}
-											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text" placeholder="" value="{{ data.matchList[i][j] }}">
+											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
+												placeholder="" value="{{ data.matchList[i][j] }}">
 											{% else %}
-											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text" placeholder="">
+											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
+												placeholder="">
 											{% endif %}
 										</td>
 										{% endfor %}

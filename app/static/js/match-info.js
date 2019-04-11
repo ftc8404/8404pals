@@ -37,10 +37,23 @@ for (matchNumber in matchResults) {
 }
 
 function clickScore(event) {
-    event.srcElement.removeEventListener("click", clickScore);
-    let teamNumber = event.srcElement.parentElement.children[0].value
-    let matchNumber = event.srcElement.parentElement.parentElement.children[0].innerHTML;
+    expandRow(event.srcElement.parentElement.parentElement);
+}
+
+function expandRow(rowElement) {
+    for (let i = 1; i < 5; i++) {
+        expandCell(rowElement.children[i]);
+    }
+}
+
+function expandCell(cellElement) {
+    cellElement.children[0].removeEventListener("click", clickScore);
+    let teamNumber = cellElement.children[0].value
+    let matchNumber = cellElement.parentElement.children[0].innerHTML;
     let data = matchResults[matchNumber][teamNumber]
+    if (data == null) {
+        return;
+    }
     let text = ""
     text += "Auton land: " + (data["auton_land"] ? "yes" : "no") + "<br>";
     text += "Auton sample: " + (data["auton_sample"] ? "yes" : "no") + "<br>";
@@ -51,5 +64,5 @@ function clickScore(event) {
     text += "Tele-op minerals depot: " + data["teleop_minerals_depot"] + "<br>";
     text += "Tele-op endgame: " + data["teleop_endgame"];
 
-    event.srcElement.parentElement.innerHTML += "<p style=\"margin:0 0 0 0;\">" + text + "</p>";
+    cellElement.innerHTML += "<p style=\"margin:0 0 0 0;\">" + text + "</p>";
 }
