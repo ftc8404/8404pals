@@ -568,6 +568,8 @@ def getMatchList(competitionId=curCompetitionId):
 
 
 def getMatchResults(competitionId=curCompetitionId, teamNumber=None):
+    matchList = getMatchList()
+
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     rawData = sqlCursor.execute(
@@ -578,14 +580,23 @@ def getMatchResults(competitionId=curCompetitionId, teamNumber=None):
     for row in rawData:
         curTeamNumber = row[2]
         curMatch = row[1]
+        alliance = "unknown"
+        if curMatch in matchList:
+            if curTeamNumber in matchList[curMatch][:2]:
+                alliance = "red"
+            elif curTeamNumber in matchList[curMatch][2:]:
+                alliance = "blue"
+
         if teamNumber:
             if curTeamNumber == teamNumber:
                 teamDataDict = dict(zip(fields[2:], row[3:-1]))
+                teamDataDict["alliance"] = alliance
                 matches[curMatch] = teamDataDict
         else:
             if curMatch not in matches:
                 matches[curMatch] = {}
             teamDataDict = dict(zip(fields[2:], row[3:-1]))
+            teamDataDict["alliance"] = alliance
             matches[curMatch][curTeamNumber] = teamDataDict
     return matches
 
