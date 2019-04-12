@@ -14,5 +14,7 @@ LICENSE
 env
 venv
 ENV
+misc
+.vscode
 __pycache__
 google_oauth_client_secret.json
