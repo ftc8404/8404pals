@@ -164,6 +164,8 @@ class PreGameScoutingForm(wtforms.Form):
     teleop_hang = wtforms.BooleanField("Hang")
     teleop_full_park = wtforms.BooleanField("Full Park")
 
+    notes = wtforms.TextAreaField()
+
 
 for field_name in PreGameScoutingForm.auton_field_names:
     setattr(PreGameScoutingForm, "auton_crater_" +
@@ -200,6 +202,8 @@ class MatchScoutingForm(wtforms.Form):
         wtforms.validators.required()])
     teleop_endgame = wtforms.SelectField("End", choices=[(
         "none", "None"), ("partial", "Partial Park"), ("full", "Full Park"), ("hang", "Hang")])
+
+    notes = wtforms.TextAreaField()
 
 
 for field_name, natural_name in MatchScoutingForm.auton_field_names.items():

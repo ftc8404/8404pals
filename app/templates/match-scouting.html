@@ -70,10 +70,18 @@
                         <div class="col-12" style="padding-top: 2em; padding-bottom: 0">
                             <p>End Game:</p>
                         </div>
-                        <div class="col-8 col-12-medium" style="padding-top: 0em; padding-bottom: 2em">
+                        <div class="col-6 col-8-large col-12-small" style="padding-top: 0em;">
                             {{ form.teleop_endgame }}
                         </div>
-                        <div class="col-12">
+
+                        <div class="col-12" style="padding-top: 2em;">
+                            <h2>Extra Notes</h2>
+                        </div>
+                        <div class="col-6 col-8-large col-12-small">
+                            {{ form.notes(placeholder="message", rows="1") }}
+                        </div>
+
+                        <div class="col-12" style="padding-top: 2em;">
                             <ul class="actions">
                                 <li><input type="submit" value="Submit" class="primary" style="width: 20em" /></li>
                                 <li><input type="reset" value="Reset" style="width: 10em" /></li>
