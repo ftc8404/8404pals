@@ -2,6 +2,7 @@ import wtforms
 import pyodbc
 import platform
 import os
+import re
 
 server = os.getenv('SQLCONNSTR_SERVER')
 database = os.getenv('SQLCONNSTR_DATABASE')
@@ -210,6 +211,13 @@ for field_name, natural_name in MatchScoutingForm.auton_field_names.items():
     setattr(MatchScoutingForm, field_name, wtforms.BooleanField(natural_name))
 
 
+notesReSearch = re.compile(r'[^a-z0-9.]').search
+
+
+def validateNotes(notes):
+    return not bool(notesReSearch(notes))
+
+
 def validatePreGameScoutingForm(form):
     teamNumber = 0
     teleopMinerals = 0.0
@@ -236,6 +244,13 @@ def validatePreGameScoutingForm(form):
 
     if teleopMinerals < 0 or teleopMinerals > 150:
         return '"Estimated Minerals" must be a number from 0 - 150'
+
+    notes = form['notes']
+    if len(notes) > 800:
+        return '"Notes must not exceed 800 characters"'
+    if not validateNotes(notes):
+        return '"Invalid characters in notes. Only Letters, numbers, and certain symbols are allowed"'
+
     return ""
 
 
@@ -283,6 +298,12 @@ def validateMatchScoutingForm(form):
 
     if depotMinerals < 0 or depotMinerals > 150:
         return '"Minerals: Depot" must be a number from 0 - 150'
+
+    notes = form['notes']
+    if len(notes) > 800:
+        return '"Notes must not exceed 800 characters"'
+    if not validateNotes(notes):
+        return '"Invalid characters in notes. Only Letters, numbers, and certain symbols are allowed"'
 
     return ""
 
