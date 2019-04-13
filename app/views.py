@@ -139,6 +139,12 @@ def api_team_info_matches(team_number):
 
 @app.route("/api/match-results/")
 @app.route("/api/match-results/<int:team_number>/")
-def api_matche_results(team_number=None):
+def api_match_results(team_number=None):
     matches = data.getMatchResults(teamNumber=team_number)
     return json.dumps(matches)
+
+
+@app.route("/api/notes/<int:team_number>/")
+def api_notes(team_number):
+    allNotes = data.getNoteEntries(team_number)
+    return json.dumps(allNotes)

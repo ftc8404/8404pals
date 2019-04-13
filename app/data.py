@@ -2,7 +2,6 @@ import wtforms
 import pyodbc
 import platform
 import os
-import re
 
 server = os.getenv('SQLCONNSTR_SERVER')
 database = os.getenv('SQLCONNSTR_DATABASE')
@@ -58,6 +57,31 @@ def getMatchScoutingFields():
 matchScoutingFields = getMatchScoutingFields()
 
 
+def addNoteEntry(teamNumber, tag, message):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    message = message.replace("\r\n", "\n")
+    sqlCursor.execute("INSERT NoteEntries (team_number, tag, message, CompetitionId) VALUES (" +
+                      str(teamNumber) + ", "+"'"+str(tag)+"'"+","+"'"+str(message)+"'"+","+str(curCompetitionId)+")")
+    sqlConn.commit()
+    sqlConn.close()
+
+
+def getNoteEntries(teamNumber):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawNotes = sqlCursor.execute("SELECT tag, message FROM NoteEntries WHERE team_number="+str(
+        teamNumber)+" AND CompetitionId="+str(curCompetitionId)).fetchall()
+    sqlConn.close()
+    formattedNotes = []
+    for row in rawNotes:
+        formattedRow = {}
+        formattedRow['tag'] = row[0]
+        formattedRow['message'] = row[1]
+        formattedNotes.append(formattedRow)
+    return formattedNotes
+
+
 def addPreGameScoutingEntry(formValues):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
@@ -97,6 +121,11 @@ def addPreGameScoutingEntry(formValues):
                           ",CompetitionId) VALUES ("+formattedFormValues+","+str(curCompetitionId)+")")
     sqlConn.commit()
     sqlConn.close()
+
+    notes = formValues["notes"]
+    if len(notes) > 0:
+        tag = "Pre-game observations"
+        addNoteEntry(teamNumber, tag, notes)
 
 
 def addMatchScoutingEntry(formValues):
@@ -139,6 +168,11 @@ def addMatchScoutingEntry(formValues):
                           ",CompetitionId) VALUES ("+formattedFormValues+","+str(curCompetitionId)+")")
     sqlConn.commit()
     sqlConn.close()
+
+    notes = formValues["notes"]
+    if len(notes) > 0:
+        tag = "Match observations"
+        addNoteEntry(teamNumber, tag, notes)
 
 
 class PreGameScoutingForm(wtforms.Form):
@@ -211,11 +245,8 @@ for field_name, natural_name in MatchScoutingForm.auton_field_names.items():
     setattr(MatchScoutingForm, field_name, wtforms.BooleanField(natural_name))
 
 
-notesReSearch = re.compile(r'[^a-z0-9.]').search
-
-
-def validateNotes(notes):
-    return not bool(notesReSearch(notes))
+def checkASCII(text):
+    return len(text) == len(text.encode())
 
 
 def validatePreGameScoutingForm(form):
@@ -248,8 +279,8 @@ def validatePreGameScoutingForm(form):
     notes = form['notes']
     if len(notes) > 800:
         return '"Notes must not exceed 800 characters"'
-    if not validateNotes(notes):
-        return '"Invalid characters in notes. Only Letters, numbers, and certain symbols are allowed"'
+    if not checkASCII(notes):
+        return '"Invalid characters in notes. Only ASCII characters are allowed."'
 
     return ""
 
@@ -302,8 +333,8 @@ def validateMatchScoutingForm(form):
     notes = form['notes']
     if len(notes) > 800:
         return '"Notes must not exceed 800 characters"'
-    if not validateNotes(notes):
-        return '"Invalid characters in notes. Only Letters, numbers, and certain symbols are allowed"'
+    if not checkASCII(notes):
+        return '"Invalid characters in notes. Only ASCII characters are allowed."'
 
     return ""
 
