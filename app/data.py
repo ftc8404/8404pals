@@ -29,7 +29,7 @@ def getCurCompetitionCityName():
     return curCompetitionCityName
 
 
-curCompetitionId = 23
+curCompetitionId = 24
 curCompetitionCityName = getCurCompetitionCityName()
 
 
@@ -263,7 +263,7 @@ def validatePreGameScoutingForm(form):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     teamMatchAmount = len(sqlCursor.execute(
-        "SELECT * FROM NorcalRegionalsTeams WHERE TeamNumber="+str(teamNumber)).fetchall())
+        "SELECT * FROM HoustonWorldChampionshipTeams WHERE TeamNumber="+str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
@@ -298,7 +298,7 @@ def validateMatchScoutingForm(form):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     teamMatchAmount = len(sqlCursor.execute(
-        "SELECT * FROM NorcalRegionalsTeams WHERE TeamNumber="+str(teamNumber)).fetchall())
+        "SELECT * FROM HoustonWorldChampionshipTeams WHERE TeamNumber="+str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
@@ -343,7 +343,7 @@ def validateMatchInfoForm(form):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
-        "SELECT * FROM NorcalRegionalsTeams").fetchall()]
+        "SELECT * FROM HoustonWorldChampionshipTeams").fetchall()]
     sqlConn.close()
 
     teamList = {}
@@ -404,7 +404,7 @@ def getTeamsAtCompetition(competitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     data = sqlCursor.execute(
-        "SELECT * FROM NorcalRegionalsTeams").fetchall()
+        "SELECT * FROM HoustonWorldChampionshipTeams").fetchall()
     allTeamNames = getAllTeamNames()
     data2 = [[row[0], allTeamNames[row[0]]] for row in data]
     sqlConn.close()
@@ -415,14 +415,14 @@ def getTeamDivisions():
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     data = sqlCursor.execute(
-        "SELECT * FROM NorcalRegionalsTeams").fetchall()
+        "SELECT * FROM HoustonWorldChampionshipTeams").fetchall()
     allTeamNames = getAllTeamNames()
     data2 = {}
     for row in data:
         if row[1] == 0:
-            data2[row[0]] = "Gold"
+            data2[row[0]] = "Franklin"
         else:
-            data2[row[0]] = "Silicon"
+            data2[row[0]] = "Jemison"
     sqlConn.close()
     return data2
 
@@ -432,7 +432,7 @@ def queryAllFormData():
     sqlCursor = sqlConn.cursor()
 
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
-        "SELECT * FROM NorcalRegionalsTeams").fetchall()]
+        "SELECT * FROM HoustonWorldChampionshipTeams").fetchall()]
     preGameScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
     matchScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
@@ -581,7 +581,7 @@ def getCompetitionOverviewData():
     allData = {}
     allData2 = {}
     for teamNumber in allTeamNumbers:
-        if(teamDivisions[teamNumber] == "Silicon"):
+        if(teamDivisions[teamNumber] == "Franklin"):
             allData[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
                 matchScoutingData['data'][teamNumber] + \
                 (summaryData['data'][teamNumber])
