@@ -56,10 +56,18 @@ def match_scouting():
     return render_template('match-scouting.html', form=form)
 
 
-@app.route("/team-info/<int:team_number>/")
+@app.route("/team-info/<int:team_number>/", methods=['GET', 'POST'])
 def team(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
-    return render_template('team-info.html', teamNumber=team_number, generalInfo=generalInfo, compInfo=compInfo)
+    error = ""
+    if request.method == 'POST':
+        error = data.validateNotesForm(request.form)
+        if error == "":
+            data.addNoteEntry(
+                team_number, request.form['tag'], request.form['message'])
+    notes = data.getNoteEntries(team_number)
+
+    return render_template('team-info.html', teamNumber=team_number, generalInfo=generalInfo, compInfo=compInfo, notes=notes, error=error)
 
 
 @app.route("/team-info")
@@ -71,17 +79,19 @@ def team_info():
 def match_info():
     message = ''
     formValues = None
+    largestMatch = 50
     if request.method == 'POST':
         formValues = request.form
-        message, success, matchList = data.validateMatchInfoForm(request.form)
+        message, success, matchList, tempLargestMatch = data.validateMatchInfoForm(
+            request.form)
+        largestMatch = max(largestMatch, tempLargestMatch)
         if success:
             data.setMatchList(matchList)
 
     matchList = data.getMatchList()
-    largestMatch = 150
     matchNumbers = [int(matchNumberStr) for matchNumberStr in matchList]
     for matchNumber in matchNumbers:
-        largestMatch = max(largestMatch, matchNumber+1)
+        largestMatch = max(largestMatch, matchNumber)
     return render_template('match-info.html', formValues=formValues, message=message, data={"cityName": data.curCompetitionCityName, "id": data.curCompetitionId, "matchList": data.getMatchList(), "tableRows": largestMatch})
 
 

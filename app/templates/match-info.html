@@ -37,43 +37,51 @@
 				{% endif %}
 				<section>
 					<form method="post" action="#">
-						<div class="table-wrapper">
-							<table class="alt" id="matches-table">
-								<thead>
-									<tr>
-										<th>Match</th>
-										<th>Red 1</th>
-										<th>Red 2</th>
-										<th>Blue 1</th>
-										<th>Blue 2</th>
-									</tr>
-								</thead>
-								<tbody>
-									{% for i in range(1,data.tableRows+1) %}
-									<tr>
-										<td>{{ i }}</td>
-										{% for j in range(4) %}
-										<td>
-											{% if formValues %}
-											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
-												placeholder="" value="{{ formValues[(i|string)+'_'+(j|string)]}}">
-											{% elif i in data.matchList %}
-											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
-												placeholder="" value="{{ data.matchList[i][j] }}">
-											{% else %}
-											<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
-												placeholder="">
-											{% endif %}
-										</td>
-										{% endfor %}
-									</tr>
-									{% endfor %}
-								</tbody>
-							</table>
+						<div class="row gtr-uniform">
+							<div class="col-12">
+								<div class="table-wrapper">
+									<table class="alt" id="matches-table">
+										<thead>
+											<tr>
+												<th>Match</th>
+												<th>Red 1</th>
+												<th>Red 2</th>
+												<th>Blue 1</th>
+												<th>Blue 2</th>
+											</tr>
+										</thead>
+										<tbody id="table-body">
+											{% for i in range(1,data.tableRows+1) %}
+											<tr>
+												<td>{{ i }}</td>
+												{% for j in range(4) %}
+												<td>
+													{% if formValues %}
+													<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
+														placeholder=""
+														value="{{ formValues[(i|string)+'_'+(j|string)]}}">
+													{% elif i in data.matchList %}
+													<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
+														placeholder="" value="{{ data.matchList[i][j] }}">
+													{% else %}
+													<input name="{{ i }}_{{ j }}" id="{{ i }}_{{ j }}" type="text"
+														placeholder="">
+													{% endif %}
+												</td>
+												{% endfor %}
+											</tr>
+											{% endfor %}
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="col-12">
+								<ul class="actions">
+									<li><a class="button" style="width: 15em" onclick="addRows()">Add 50 rows</a></li>
+									<li><input type="submit" value="Submit" class="primary" style="width: 15em" /></li>
+								</ul>
+							</div>
 						</div>
-						<ul class="actions">
-							<li><input type="submit" value="Update" class="primary" style="width: 20em" /></li>
-						</ul>
 					</form>
 				</section>
 			</div>

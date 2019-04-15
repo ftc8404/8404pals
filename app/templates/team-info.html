@@ -32,6 +32,9 @@
 				<header>
 					<h1>Info for Team {{ teamNumber }} {{ generalInfo.teamName }}</h1>
 				</header>
+				{% if error %}
+				<p><em>Error: {{ error }}</em></p>
+				{% endif %}
 				<!-- <h2>Performance</h2> -->
 				<h2>Current Competition</h2>
 				<div class="row gtr-uniform">
@@ -58,12 +61,30 @@
 					</div>
 					{% endfor %}
 				</div>
-				<h2 style="margin-top: 2.5em">General</h2>
-				<p>
-					{% for i in range(generalInfo.qualifiers|length) %}
-					Qualifier {{ i+1 }}: {{ generalInfo.qualifiers[i] }}<br>
-					{% endfor %}
-				</p>
+				<h2 style="margin-top: 2.5em">Notes</h2>
+				{% for note in notes %}
+				<h4 style="margin-bottom: 1em;">{{ note['tag'] }}</h4>
+				<pre style="white-space: pre-wrap; word-break: break-word;">{{ note['message'] }}</pre>
+				{% endfor %}
+				<h3>New Note</h3>
+				<form method="post" action="#">
+					<div class="row gtr-uniform">
+						<div class="col-6 col-12-medium">
+							<input id="tag" name="tag" placeholder="Tag" required type="text"
+								style="margin-bottom: 1em;">
+						</div>
+						<div class="col-12">
+							<textarea id="message" name="message" placeholder="Message" rows="1"
+								style="overflow: hidden; resize: none; height: 79px;" required></textarea>
+						</div>
+						<div class="col-12" style="padding-top: 2em;">
+							<ul class="actions">
+								<li><input type="submit" value="Submit" class="primary" style="width: 20em" /></li>
+								<li><input type="reset" value="Clear" style="width: 10em" /></li>
+							</ul>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 

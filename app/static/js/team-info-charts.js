@@ -22,6 +22,9 @@ var compInfo = teamData.compInfo;
 var matches = compInfo.matches;
 
 var allData = compData.allData;
+for (var attr in compData.allData2) {
+    allData[attr] = compData.allData2[attr];
+}
 var curTeamData = allData[teamNumber];
 
 var perfLabels = [

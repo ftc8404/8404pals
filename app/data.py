@@ -249,6 +249,25 @@ def checkASCII(text):
     return len(text) == len(text.encode())
 
 
+def validateNotesForm(form):
+    tag = form['tag']
+    if len(tag) == 0:
+        return '"Empty tag"'
+    if len(tag) > 60:
+        return '"Tag must not exceed 800 characters"'
+    if not checkASCII(tag):
+        return '"Invalid characters in tag. Only ASCII characters are allowed."'
+
+    message = form['message']
+    if len(message) == 0:
+        return '"Empty message"'
+    if len(message) > 60:
+        return '"Message must not exceed 800 characters"'
+    if not checkASCII(message):
+        return '"Invalid characters in message. Only ASCII characters are allowed."'
+    return ""
+
+
 def validatePreGameScoutingForm(form):
     teamNumber = 0
     teleopMinerals = 0.0
@@ -347,44 +366,41 @@ def validateMatchInfoForm(form):
     sqlConn.close()
 
     teamList = {}
-    curMatch = 1
-    curMatchCount = 0
+    matchesEntered = []
+    largestMatch = 0
+    for fieldName, value in form.items():
+        matchNumber, teamIndex = tuple(
+            [int(value2) for value2 in fieldName.split('_')])
+        if value != '':
+            largestMatch = max(largestMatch, matchNumber)
+
     for fieldName, value in form.items():
         matchNumber, teamIndex = tuple(
             [int(value2) for value2 in fieldName.split('_')])
         if value == '':
+            if matchNumber in matchesEntered:
+                return "Error: missing data for match "+str(matchNumber), False, None, largestMatch
             continue
         try:
             teamNumber = int(value)
         except ValueError:
-            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None
+            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
         if teamNumber <= 0:
-            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None
+            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
 
         if teamNumber not in allTeamNumbers:
-            return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None
-
-        if matchNumber != curMatch or teamIndex != curMatchCount:
-            return "Error: missing data for match "+str(curMatch), False, None
+            return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None, largestMatch
 
         for teamIndex2 in range(teamIndex):
             if form[str(matchNumber)+'_'+str(teamIndex2)] == value:
-                return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None
+                return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None, largestMatch
 
-        if curMatchCount == 0:
+        if matchNumber not in matchesEntered:
             teamList[str(matchNumber)] = []
+            matchesEntered.append(matchNumber)
         teamList[str(matchNumber)].append(teamNumber)
 
-        if curMatchCount == 3:
-            curMatch += 1
-            curMatchCount = 0
-        else:
-            curMatchCount += 1
-
-    if curMatchCount != 0:
-        return "Error: missing data for match "+str(curMatch),  False, None
-
-    return "", True, teamList
+    return "", True, teamList, largestMatch
 
 
 def getAllTeamNames():

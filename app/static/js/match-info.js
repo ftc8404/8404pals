@@ -66,3 +66,26 @@ function expandCell(cellElement) {
 
     cellElement.innerHTML += "<p style=\"margin:0 0 0 0;\">" + text + "</p>";
 }
+
+function addRows() {
+    let tableBody = document.getElementById("table-body");
+    let end = parseInt(tableBody.children[tableBody.children.length - 1].children[0].innerHTML);
+    let start = end + 1;
+    for (let i = start; i < start + 50; i++) {
+        let tRow = document.createElement("tr");
+        matchNumberCell = document.createElement("td");
+        matchNumberCell.appendChild(document.createTextNode(i));
+        tRow.appendChild(matchNumberCell);
+        for (let j = 0; j <= 3; j++) {
+            let id = i + "_" + j;
+            let input = document.createElement("input")
+            input.setAttribute("name", id);
+            input.setAttribute("id", id);
+            input.setAttribute("type", "text");
+            let cell = document.createElement("td");
+            cell.appendChild(input);
+            tRow.appendChild(cell);
+        }
+        tableBody.appendChild(tRow);
+    }
+}
