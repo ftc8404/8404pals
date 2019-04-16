@@ -72,7 +72,7 @@ def team(team_number):
 
 @app.route("/team-info")
 def team_info():
-    return redirect("/team-info/8404/")
+    return render_template('team-info-search.html')
 
 
 @app.route("/match-info", methods=['GET', 'POST'])
@@ -157,4 +157,7 @@ def api_match_results(team_number=None):
 @app.route("/api/notes/<int:team_number>/")
 def api_notes(team_number):
     allNotes = data.getNoteEntries(team_number)
-    return json.dumps(allNotes)
+    allNotesFormatted = {}
+    for i in range(len(allNotes)):
+        allNotesFormatted[i] = allNotes[i]
+    return json.dumps(allNotesFormatted)

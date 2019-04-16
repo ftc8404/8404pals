@@ -7,7 +7,7 @@
 <html>
 
 <head>
-	<title>Home - 8404 PALS</title>
+	<title>Team Search - 8404 PALS</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 	<link rel="stylesheet" href="/static/css/main.css" />
@@ -30,10 +30,20 @@
 		<div id="main">
 			<div class="inner">
 				<header>
-					<h1>Welcome to Quixilver 8404's P.A.L.S.</h1>
-					<p>This is where y'all can access stuff like competition rankings and enter scouting info.<br>
-						(P.A.L.S. = Performance Assessment of Live-Scoring)</p>
+					<h1>Team Search</h1>
 				</header>
+				<form action="javascript:search()">
+					<div class="row gtr-uniform">
+						<div class="col-8 col-9-medium">
+							<input id="search" name="search" placeholder="Team number or name..." type="text"
+								onkeyup="searchChange()">
+						</div>
+						<div class="col-4 col-3-medium">
+							<button type="submit" class="primary">></button>
+						</div>
+					</div>
+				</form>
+				<div id="results"></div>
 			</div>
 		</div>
 
@@ -45,6 +55,7 @@
 	<script src="/static/js/breakpoints.min.js"></script>
 	<script src="/static/js/util.js"></script>
 	<script src="/static/js/main.js"></script>
+	<script src="/static/js/team-info-search.js"></script>
 
 </body>
 

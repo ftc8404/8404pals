@@ -700,7 +700,9 @@ def getTeamInfo(teamNumber):
     sqlConn.close()
     generalInfo['qualifiers'] = quals
 
-    rawPerfData = getCompetitionOverviewData()['allData'][teamNumber]
+    combinedAllData = {**getCompetitionOverviewData()
+                       ['allData'], **getCompetitionOverviewData()['allData2']}
+    rawPerfData = combinedAllData[teamNumber]
 
     performanceInfo = {
         'preGame': {'auton': max(rawPerfData[29], rawPerfData[30]), 'teleOp': rawPerfData[32]},
