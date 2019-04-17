@@ -379,23 +379,28 @@ def validateMatchInfoForm(form):
             [int(value2) for value2 in fieldName.split('_')])
         if value == '':
             if matchNumber in matchesEntered:
-                return "Error: missing data for match "+str(matchNumber), False, None, largestMatch
+                return "Error: Incomplete data for match "+str(matchNumber), False, None, largestMatch
             continue
-        try:
-            teamNumber = int(value)
-        except ValueError:
-            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
-        if teamNumber <= 0:
-            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
+        if str(value).lower() == "del":
+            teamNumber = "del"
+        else:
+            try:
+                teamNumber = int(value)
+            except ValueError:
+                return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
+            if teamNumber <= 0:
+                return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
 
-        if teamNumber not in allTeamNumbers:
-            return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None, largestMatch
+            if teamNumber not in allTeamNumbers:
+                return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None, largestMatch
 
-        for teamIndex2 in range(teamIndex):
-            if form[str(matchNumber)+'_'+str(teamIndex2)] == value:
-                return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None, largestMatch
+            for teamIndex2 in range(teamIndex):
+                if form[str(matchNumber)+'_'+str(teamIndex2)] == value:
+                    return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None, largestMatch
 
         if matchNumber not in matchesEntered:
+            if teamIndex > 0:
+                return "Error: Incomplete data for match "+str(matchNumber), False, None, largestMatch
             teamList[str(matchNumber)] = []
             matchesEntered.append(matchNumber)
         teamList[str(matchNumber)].append(teamNumber)
@@ -618,11 +623,12 @@ def getCompetitionOverviewData():
 def setMatchList(data, competitionId=curCompetitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    sqlCursor.execute(
-        "DELETE FROM MatchListEntries WHERE CompetitionId="+str(competitionId))
     for match, matchData in data.items():
         sqlCursor.execute(
-            "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
+            "DELETE FROM MatchListEntries WHERE MatchNumber="+str(match)+" AND CompetitionId="+str(curCompetitionId))
+        if "del" not in [str(s).lower() for s in matchData]:
+            sqlCursor.execute(
+                "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
     sqlConn.commit()
     sqlConn.close()
 

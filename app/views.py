@@ -87,12 +87,13 @@ def match_info():
         largestMatch = max(largestMatch, tempLargestMatch)
         if success:
             data.setMatchList(matchList)
+            formValues = None
 
     matchList = data.getMatchList()
     matchNumbers = [int(matchNumberStr) for matchNumberStr in matchList]
     for matchNumber in matchNumbers:
         largestMatch = max(largestMatch, matchNumber)
-    return render_template('match-info.html', formValues=formValues, message=message, data={"cityName": data.curCompetitionCityName, "id": data.curCompetitionId, "matchList": data.getMatchList(), "tableRows": largestMatch})
+    return render_template('match-info.html', formValues=formValues, message=message, data={"cityName": data.curCompetitionCityName, "id": data.curCompetitionId, "matchList": matchList, "tableRows": largestMatch})
 
 
 @app.route("/competition-overview")
