@@ -539,10 +539,10 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     for entry in preGameScoutingFormData:
         teamNumber = entry[0]
 
-        preAutonCraterScore = entry[2]*30+(50 if entry[6] else (
-            25 if entry[4] else 0))+entry[8]*15+entry[10]*10
-        preAutonDepotScore = entry[3]*30+(50 if entry[7] else (
-            25 if entry[5] else 0))+entry[9]*15+entry[11]*10
+        preAutonCraterScore = entry[2]*30+(
+            25 if entry[4] else 0)+entry[8]*15+entry[10]*10
+        preAutonDepotScore = entry[3]*30+(
+            25 if entry[5] else 0)+entry[9]*15+entry[11]*10
         preAutonMeanScore = int(
             (preAutonCraterScore+preAutonDepotScore)/2)
         data[teamNumber][0] = preAutonCraterScore

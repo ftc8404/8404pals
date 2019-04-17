@@ -42,7 +42,7 @@ if (curTeamData[30] > curTeamData[29]) {
     offset = 1;
 }
 perfData.push(curTeamData[2 + offset] * 30);
-perfData.push(Math.max(curTeamData[4 + offset] * 25, curTeamData[6 + offset] * 50));
+perfData.push(curTeamData[4 + offset] * 25);
 perfData.push(curTeamData[8 + offset] * 15);
 perfData.push(curTeamData[10 + offset] * 10);
 var minerals = curTeamData[12];
