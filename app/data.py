@@ -331,6 +331,11 @@ def validateMatchScoutingForm(form):
     if matchNumber < 1 or matchNumber > 500:
         return '"Match Number" must be a number from 1 - 500'
 
+    matchList = getMatchList()
+    if matchNumber in matchList and "del" not in matchList[matchNumber]:
+        if teamNumber not in matchList[matchNumber]:
+            return "Team " + str(teamNumber) + " is not in match "+str(matchNumber)
+
     landerMinerals = 0
     try:
         landerMinerals = int(form['teleop_minerals_lander'])
