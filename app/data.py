@@ -62,7 +62,7 @@ def addNoteEntry(teamNumber, tag, message):
     sqlCursor = sqlConn.cursor()
     message = message.replace("\r\n", "\n")
     message = message.replace("'", "''")
-    tag = tag.tag.replace("'", "''")
+    tag = tag.replace("'", "''")
 
     sqlCursor.execute("INSERT NoteEntries (team_number, tag, message, CompetitionId) VALUES (" +
                       str(teamNumber) + ", "+"'"+str(tag)+"'"+","+"'"+str(message)+"'"+","+str(curCompetitionId)+")")
