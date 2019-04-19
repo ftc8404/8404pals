@@ -2,6 +2,7 @@ import wtforms
 import pyodbc
 import platform
 import os
+from unidecode import unidecode
 
 server = os.getenv('SQLCONNSTR_SERVER')
 database = os.getenv('SQLCONNSTR_DATABASE')
@@ -60,8 +61,12 @@ matchScoutingFields = getMatchScoutingFields()
 def addNoteEntry(teamNumber, tag, message):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
+
+    message = unidecode(message)
     message = message.replace("\r\n", "\n")
     message = message.replace("'", "''")
+
+    tag = unidecode(tag)
     tag = tag.replace("'", "''")
 
     sqlCursor.execute("INSERT NoteEntries (team_number, tag, message, CompetitionId) VALUES (" +
@@ -258,16 +263,16 @@ def validateNotesForm(form):
         return '"Empty tag"'
     if len(tag) > 60:
         return '"Tag must not exceed 800 characters"'
-    if not checkASCII(tag):
-        return '"Invalid characters in tag. Only ASCII characters are allowed."'
+    # if not checkASCII(tag):
+    #     return '"Invalid characters in tag. Only ASCII characters are allowed."'
 
     message = form['message']
     if len(message) == 0:
         return '"Empty message"'
     if len(message) > 60:
         return '"Message must not exceed 800 characters"'
-    if not checkASCII(message):
-        return '"Invalid characters in message. Only ASCII characters are allowed."'
+    # if not checkASCII(message):
+    #     return '"Invalid characters in message. Only ASCII characters are allowed."'
     return ""
 
 
