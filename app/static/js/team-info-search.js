@@ -19,9 +19,6 @@ function searchChange() {
 }
 
 function match(text) {
-    if (text.length == 0) {
-        return {};
-    }
     matches1 = {};
     matches2 = {};
     let count = 0;
@@ -35,7 +32,7 @@ function match(text) {
             matches2[teamNumber] = teamName;
             count++;
         }
-        if (count >= 20) {
+        if (count >= 50) {
             break;
         }
     }
