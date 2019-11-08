@@ -132,8 +132,8 @@ for (let i = 0; i < matches.length; i++) {
     for (let j = 0; j < 4; j++) {
         rowTeamNumber = teamGraphOrder[j]
         let teamDataRaw = allData[rowTeamNumber];
-        preGameScores.push(Math.max(teamDataRaw[29], teamDataRaw[30]) + teamDataRaw[32]);
-        matchScores.push(teamDataRaw[34] + teamDataRaw[35]);
+        preGameScores.push(teamDataRaw[24]);
+        matchScores.push(teamDataRaw[27]);
     }
 
     let ctx = document.getElementById("chart-" + matchNumber).getContext('2d');
