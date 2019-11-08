@@ -35,9 +35,9 @@ var perfColors = [
 
 var perfData = []
 if (curTeamData[4] > 0) {
-    perfData.push(curTeamData[2] * 2);
-} else {
     perfData.push(curTeamData[2] * 6);
+} else {
+    perfData.push(curTeamData[2] * 2);
 }
 perfData.push(curTeamData[3] * Math.min(curTeamData[2], 2) * 8);
 perfData.push(curTeamData[5] * 10 + curTeamData[6] * 5);
@@ -84,9 +84,9 @@ var perfColors = [
 
 var perfData = []
 if (curTeamData[14] > 0) {
-    perfData.push(curTeamData[12] * 2);
-} else {
     perfData.push(curTeamData[12] * 6);
+} else {
+    perfData.push(curTeamData[12] * 2);
 }
 perfData.push(curTeamData[13] * Math.min(curTeamData[12], 2) * 8);
 perfData.push(curTeamData[15] * 10 + curTeamData[16] * 5);

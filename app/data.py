@@ -192,6 +192,7 @@ class PreGameScoutingForm(wtforms.Form):
     auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.required()])
     auton_skystone = wtforms.BooleanField("Detect Skystones")
+    auton_place_stones = wtforms.BooleanField("Stones on Foundation")
     auton_foundation = wtforms.BooleanField("Reposition Foundation")
     auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
 
@@ -217,6 +218,7 @@ class MatchScoutingForm(wtforms.Form):
     auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.required()])
     auton_skystone = wtforms.BooleanField("Detect Skystones")
+    auton_place_stones = wtforms.BooleanField("Stones on Foundation")
     auton_foundation = wtforms.BooleanField("Reposition Foundation")
     auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
 
@@ -435,10 +437,17 @@ def queryAllFormData():
 
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
         "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
-    preGameScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
+    preGameScoutingFormData = [list(row[1:-1]) for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
-    matchScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
+    matchScoutingFormData = [list(row[1:-1]) for row in sqlCursor.execute(
         "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
+
+    for i in range(len(preGameScoutingFormData)-1):
+        for j in range(len(preGameScoutingFormData[i])-1):
+            if preGameScoutingFormData[i][j] is True:
+                preGameScoutingFormData[i][j] = 1
+            elif preGameScoutingFormData[i][j] is False:
+                preGameScoutingFormData[i][j] = 0
 
     sqlConn.close()
     return allTeamNumbers, preGameScoutingFormData, matchScoutingFormData
@@ -464,10 +473,6 @@ def getPreGameScoutingData(allTeamNumbers, preGameScoutingFormData):
         teamNumber = entry[0]
         for i in range(len(entry)-1):
             data[teamNumber][i] = entry[i+1]
-            if data[teamNumber][i] is True:
-                data[teamNumber][i]=1
-            elif data[teamNumber][i] is False:
-                data[teamNumber][i]=0
 
     return {'data': data, 'fields': fields}
 
@@ -518,7 +523,6 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     for teamNumber in allTeamNumbers:
         data[teamNumber] = ['N/A']*len(fields)
         matchEntryCount[teamNumber] = 0
-
     for entry in preGameScoutingFormData:
         teamNumber = entry[0]
 
