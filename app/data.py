@@ -2,6 +2,7 @@ import wtforms
 import pyodbc
 import platform
 import os
+from unidecode import unidecode
 
 server = os.getenv('SQLCONNSTR_SERVER')
 database = os.getenv('SQLCONNSTR_DATABASE')
@@ -29,7 +30,7 @@ def getCurCompetitionCityName():
     return curCompetitionCityName
 
 
-curCompetitionId = 10
+curCompetitionId = 24
 curCompetitionCityName = getCurCompetitionCityName()
 
 
@@ -55,6 +56,38 @@ def getMatchScoutingFields():
 
 
 matchScoutingFields = getMatchScoutingFields()
+
+
+def addNoteEntry(teamNumber, tag, message):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+
+    message = unidecode(message)
+    message = message.replace("\r\n", "\n")
+    message = message.replace("'", "''")
+
+    tag = unidecode(tag)
+    tag = tag.replace("'", "''")
+
+    sqlCursor.execute("INSERT NoteEntries (team_number, tag, message, CompetitionId) VALUES (" +
+                      str(teamNumber) + ", "+"'"+str(tag)+"'"+","+"'"+str(message)+"'"+","+str(curCompetitionId)+")")
+    sqlConn.commit()
+    sqlConn.close()
+
+
+def getNoteEntries(teamNumber):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawNotes = sqlCursor.execute("SELECT tag, message FROM NoteEntries WHERE team_number="+str(
+        teamNumber)+" AND CompetitionId="+str(curCompetitionId)).fetchall()
+    sqlConn.close()
+    formattedNotes = []
+    for row in rawNotes:
+        formattedRow = {}
+        formattedRow['tag'] = row[0]
+        formattedRow['message'] = row[1]
+        formattedNotes.append(formattedRow)
+    return formattedNotes
 
 
 def addPreGameScoutingEntry(formValues):
@@ -96,6 +129,11 @@ def addPreGameScoutingEntry(formValues):
                           ",CompetitionId) VALUES ("+formattedFormValues+","+str(curCompetitionId)+")")
     sqlConn.commit()
     sqlConn.close()
+
+    notes = formValues["notes"]
+    if len(notes) > 0:
+        tag = "Pre-game observations"
+        addNoteEntry(teamNumber, tag, notes)
 
 
 def addMatchScoutingEntry(formValues):
@@ -139,6 +177,11 @@ def addMatchScoutingEntry(formValues):
     sqlConn.commit()
     sqlConn.close()
 
+    notes = formValues["notes"]
+    if len(notes) > 0:
+        tag = "Match observations"
+        addNoteEntry(teamNumber, tag, notes)
+
 
 class PreGameScoutingForm(wtforms.Form):
     error = None
@@ -163,6 +206,8 @@ class PreGameScoutingForm(wtforms.Form):
     teleop_score_depot = wtforms.BooleanField("Depot")
     teleop_hang = wtforms.BooleanField("Hang")
     teleop_full_park = wtforms.BooleanField("Full Park")
+
+    notes = wtforms.TextAreaField()
 
 
 for field_name in PreGameScoutingForm.auton_field_names:
@@ -201,9 +246,34 @@ class MatchScoutingForm(wtforms.Form):
     teleop_endgame = wtforms.SelectField("End", choices=[(
         "none", "None"), ("partial", "Partial Park"), ("full", "Full Park"), ("hang", "Hang")])
 
+    notes = wtforms.TextAreaField()
+
 
 for field_name, natural_name in MatchScoutingForm.auton_field_names.items():
     setattr(MatchScoutingForm, field_name, wtforms.BooleanField(natural_name))
+
+
+def checkASCII(text):
+    return len(text) == len(text.encode())
+
+
+def validateNotesForm(form):
+    tag = form['tag']
+    if len(tag) == 0:
+        return '"Empty tag"'
+    if len(tag) > 60:
+        return '"Tag must not exceed 800 characters"'
+    # if not checkASCII(tag):
+    #     return '"Invalid characters in tag. Only ASCII characters are allowed."'
+
+    message = form['message']
+    if len(message) == 0:
+        return '"Empty message"'
+    if len(message) > 60:
+        return '"Message must not exceed 800 characters"'
+    # if not checkASCII(message):
+    #     return '"Invalid characters in message. Only ASCII characters are allowed."'
+    return ""
 
 
 def validatePreGameScoutingForm(form):
@@ -219,8 +289,8 @@ def validatePreGameScoutingForm(form):
 
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
-                                            str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
+    teamMatchAmount = len(sqlCursor.execute(
+        "SELECT * FROM HoustonWorldChampionshipTeams WHERE TeamNumber="+str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
@@ -232,6 +302,13 @@ def validatePreGameScoutingForm(form):
 
     if teleopMinerals < 0 or teleopMinerals > 150:
         return '"Estimated Minerals" must be a number from 0 - 150'
+
+    notes = form['notes']
+    if len(notes) > 800:
+        return '"Notes must not exceed 800 characters"'
+    if not checkASCII(notes):
+        return '"Invalid characters in notes. Only ASCII characters are allowed."'
+
     return ""
 
 
@@ -247,8 +324,8 @@ def validateMatchScoutingForm(form):
 
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
-                                            str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
+    teamMatchAmount = len(sqlCursor.execute(
+        "SELECT * FROM HoustonWorldChampionshipTeams WHERE TeamNumber="+str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
@@ -261,6 +338,11 @@ def validateMatchScoutingForm(form):
 
     if matchNumber < 1 or matchNumber > 500:
         return '"Match Number" must be a number from 1 - 500'
+
+    matchList = getMatchList()
+    if matchNumber in matchList and "del" not in matchList[matchNumber]:
+        if teamNumber not in matchList[matchNumber]:
+            return "Team " + str(teamNumber) + " is not in match "+str(matchNumber)
 
     landerMinerals = 0
     try:
@@ -280,6 +362,12 @@ def validateMatchScoutingForm(form):
     if depotMinerals < 0 or depotMinerals > 150:
         return '"Minerals: Depot" must be a number from 0 - 150'
 
+    notes = form['notes']
+    if len(notes) > 800:
+        return '"Notes must not exceed 800 characters"'
+    if not checkASCII(notes):
+        return '"Invalid characters in notes. Only ASCII characters are allowed."'
+
     return ""
 
 
@@ -287,57 +375,90 @@ def validateMatchInfoForm(form):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
+        "SELECT * FROM HoustonWorldChampionshipTeams").fetchall()]
     sqlConn.close()
 
     teamList = {}
-    curMatch = 1
-    curMatchCount = 0
+    matchesEntered = []
+    largestMatch = 0
+    for fieldName, value in form.items():
+        matchNumber, teamIndex = tuple(
+            [int(value2) for value2 in fieldName.split('_')])
+        if value != '':
+            largestMatch = max(largestMatch, matchNumber)
+
     for fieldName, value in form.items():
         matchNumber, teamIndex = tuple(
             [int(value2) for value2 in fieldName.split('_')])
         if value == '':
+            if matchNumber in matchesEntered:
+                return "Error: Incomplete data for match "+str(matchNumber), False, None, largestMatch
             continue
-        try:
-            teamNumber = int(value)
-        except ValueError:
-            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None
-        if teamNumber <= 0:
-            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None
+        if str(value).lower() == "del":
+            teamNumber = "del"
+        else:
+            try:
+                teamNumber = int(value)
+            except ValueError:
+                return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
+            if teamNumber <= 0:
+                return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
 
-        if teamNumber not in allTeamNumbers:
-            return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None
+            if teamNumber not in allTeamNumbers:
+                return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None, largestMatch
 
-        if matchNumber != curMatch or teamIndex != curMatchCount:
-            return "Error: missing data for match "+str(curMatch), False, None
+            for teamIndex2 in range(teamIndex):
+                if form[str(matchNumber)+'_'+str(teamIndex2)] == value:
+                    return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None, largestMatch
 
-        for teamIndex2 in range(teamIndex):
-            if form[str(matchNumber)+'_'+str(teamIndex2)] == value:
-                return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None
-
-        if curMatchCount == 0:
+        if matchNumber not in matchesEntered:
+            if teamIndex > 0:
+                return "Error: Incomplete data for match "+str(matchNumber), False, None, largestMatch
             teamList[str(matchNumber)] = []
+            matchesEntered.append(matchNumber)
         teamList[str(matchNumber)].append(teamNumber)
 
-        if curMatchCount == 3:
-            curMatch += 1
-            curMatchCount = 0
-        else:
-            curMatchCount += 1
+    return "", True, teamList, largestMatch
 
-    if curMatchCount != 0:
-        return "Error: missing data for match "+str(curMatch),  False, None
 
-    return "", True, teamList
+def getAllTeamNames():
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
+        "SELECT * FROM TEAMS").fetchall()
+    data = [row[:2] for row in data]
+    dictTeams = {}
+    for row in data:
+        dictTeams[row[0]] = row[1]
+    sqlConn.close()
+    return dictTeams
 
 
 def getTeamsAtCompetition(competitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     data = sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()
+        "SELECT * FROM HoustonWorldChampionshipTeams").fetchall()
+    allTeamNames = getAllTeamNames()
+    data2 = [[row[0], allTeamNames[row[0]]] for row in data]
     sqlConn.close()
-    return data
+    return data2
+
+
+def getTeamDivisions():
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
+        "SELECT * FROM HoustonWorldChampionshipTeams").fetchall()
+    allTeamNames = getAllTeamNames()
+    data2 = {}
+    for row in data:
+        if row[1] == 0:
+            data2[row[0]] = "Franklin"
+        else:
+            data2[row[0]] = "Jemison"
+    sqlConn.close()
+    return data2
 
 
 def queryAllFormData():
@@ -345,7 +466,7 @@ def queryAllFormData():
     sqlCursor = sqlConn.cursor()
 
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
+        "SELECT * FROM HoustonWorldChampionshipTeams").fetchall()]
     preGameScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
     matchScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
@@ -431,10 +552,10 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     for entry in preGameScoutingFormData:
         teamNumber = entry[0]
 
-        preAutonCraterScore = entry[2]*30+(50 if entry[6] else (
-            25 if entry[4] else 0))+entry[8]*15+entry[10]*10
-        preAutonDepotScore = entry[3]*30+(50 if entry[7] else (
-            25 if entry[5] else 0))+entry[9]*15+entry[11]*10
+        preAutonCraterScore = entry[2]*30+(
+            25 if entry[4] else 0)+entry[8]*15+entry[10]*10
+        preAutonDepotScore = entry[3]*30+(
+            25 if entry[5] else 0)+entry[9]*15+entry[11]*10
         preAutonMeanScore = int(
             (preAutonCraterScore+preAutonDepotScore)/2)
         data[teamNumber][0] = preAutonCraterScore
@@ -489,17 +610,25 @@ def getCompetitionOverviewData():
     summaryData = getDataSummary(allTeamNumbers, preGameScoutingFormData,
                                  matchScoutingFormData)
 
+    teamDivisions = getTeamDivisions()
+
     allData = {}
+    allData2 = {}
     for teamNumber in allTeamNumbers:
-        allData[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
-            matchScoutingData['data'][teamNumber] + \
-            (summaryData['data'][teamNumber])
+        if(teamDivisions[teamNumber] == "Franklin"):
+            allData[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
+                matchScoutingData['data'][teamNumber] + \
+                (summaryData['data'][teamNumber])
+        else:
+            allData2[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
+                matchScoutingData['data'][teamNumber] + \
+                (summaryData['data'][teamNumber])
 
     allTableKeys = ['Team Number']+preGameScoutingData['fields'] + \
         matchScoutingData['fields']+summaryData['fields']
 
     competitionData = {
-        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys}
+        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "allData2": allData2, "tableKeys": allTableKeys}
 
     return competitionData
 
@@ -507,11 +636,12 @@ def getCompetitionOverviewData():
 def setMatchList(data, competitionId=curCompetitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    sqlCursor.execute(
-        "DELETE FROM MatchListEntries WHERE CompetitionId="+str(competitionId))
     for match, matchData in data.items():
         sqlCursor.execute(
-            "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
+            "DELETE FROM MatchListEntries WHERE MatchNumber="+str(match)+" AND CompetitionId="+str(curCompetitionId))
+        if "del" not in [str(s).lower() for s in matchData]:
+            sqlCursor.execute(
+                "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
     sqlConn.commit()
     sqlConn.close()
 
@@ -526,6 +656,40 @@ def getMatchList(competitionId=curCompetitionId):
     for row in rawData:
         data[row[1]] = list(row[2:])
     return data
+
+
+def getMatchResults(competitionId=curCompetitionId, teamNumber=None):
+    matchList = getMatchList()
+
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawData = sqlCursor.execute(
+        "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(competitionId)).fetchall()
+    sqlConn.close()
+    matches = {}
+    fields = getMatchScoutingFields()
+    for row in rawData:
+        curTeamNumber = row[2]
+        curMatch = row[1]
+        alliance = "unknown"
+        if curMatch in matchList:
+            if curTeamNumber in matchList[curMatch][:2]:
+                alliance = "red"
+            elif curTeamNumber in matchList[curMatch][2:]:
+                alliance = "blue"
+
+        if teamNumber:
+            if curTeamNumber == teamNumber:
+                teamDataDict = dict(zip(fields[2:], row[3:-1]))
+                teamDataDict["alliance"] = alliance
+                matches[curMatch] = teamDataDict
+        else:
+            if curMatch not in matches:
+                matches[curMatch] = {}
+            teamDataDict = dict(zip(fields[2:], row[3:-1]))
+            teamDataDict["alliance"] = alliance
+            matches[curMatch][curTeamNumber] = teamDataDict
+    return matches
 
 
 def getTeamInfo(teamNumber):
@@ -555,7 +719,9 @@ def getTeamInfo(teamNumber):
     sqlConn.close()
     generalInfo['qualifiers'] = quals
 
-    rawPerfData = getCompetitionOverviewData()['allData'][teamNumber]
+    combinedAllData = {**getCompetitionOverviewData()
+                       ['allData'], **getCompetitionOverviewData()['allData2']}
+    rawPerfData = combinedAllData[teamNumber]
 
     performanceInfo = {
         'preGame': {'auton': max(rawPerfData[29], rawPerfData[30]), 'teleOp': rawPerfData[32]},

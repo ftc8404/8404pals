@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/main.css" />
     <noscript>
         <link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+    {% include 'favicon.html' %}
 </head>
 
 <body class="is-preload">
@@ -61,18 +62,54 @@
                             <h2>Tele-Op</h2>
                         </div>
                         <div class="col-4 col-6-medium">
-                            {{ form.teleop_minerals_lander(placeholder=form.teleop_minerals_lander.label.text) }}
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_minerals_lander'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_minerals_lander(placeholder=form.teleop_minerals_lander.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_minerals_lander'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-4 col-6-medium">
-                            {{ form.teleop_minerals_depot(placeholder=form.teleop_minerals_depot.label.text) }}
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_minerals_depot'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-right: 0.5em; padding-left: 0.5em; font-size: 1.5em">
+                                        -</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_minerals_depot(placeholder=form.teleop_minerals_depot.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_minerals_depot'))">
+                                    <p style="margin-bottom: 0; padding-left: 0.5em; font-size: 1.5em">+</p>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-12" style="padding-top: 2em; padding-bottom: 0">
                             <p>End Game:</p>
                         </div>
-                        <div class="col-8 col-12-medium" style="padding-top: 0em; padding-bottom: 2em">
+                        <div class="col-6 col-8-large col-12-small" style="padding-top: 0em;">
                             {{ form.teleop_endgame }}
                         </div>
-                        <div class="col-12">
+
+                        <div class="col-12" style="padding-top: 2em;">
+                            <h2>Extra Notes</h2>
+                        </div>
+                        <div class="col-6 col-8-large col-12-small">
+                            {{ form.notes(placeholder="message", rows="1") }}
+                        </div>
+
+                        <div class="col-12" style="padding-top: 2em;">
                             <ul class="actions">
                                 <li><input type="submit" value="Submit" class="primary" style="width: 20em" /></li>
                                 <li><input type="reset" value="Reset" style="width: 10em" /></li>
@@ -91,6 +128,24 @@
     <script src="/static/js/util.js"></script>
     <script src="/static/js/main.js"></script>
     <!-- <script src="/static/js/pre-game-scouting.js"></script> -->
+    <script>
+        function increment(element) {
+            let num = parseInt(element.value);
+            if (isNaN(num)) num = 0;
+            num++;
+            if (num < 0) num = 0;
+            element.value = num;
+        }
+        function decrement(element) {
+            let num = parseInt(element.value);
+            if (isNaN(num)) num = 0;
+            num--;
+            if (num < 0) num = 0;
+            element.value = num;
+        }
+        document.getElementById('teleop_minerals_lander').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_minerals_depot').setAttribute("style", "text-align:center");
+    </script>
 </body>
 
 </html>

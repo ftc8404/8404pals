@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/main.css" />
     <noscript>
         <link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+    {% include 'favicon.html' %}
 </head>
 
 <body class="is-preload">
@@ -93,15 +94,23 @@
                         <div class="col-3 col-4-large col-12-xsmall">
                             <p>End Game:</p>
                         </div>
-                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 2em">
+                        <div class="col-3 col-4-large col-6-xsmall">
                             {{ form.teleop_hang }}
                             {{ form.teleop_hang.label }}
                         </div>
-                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 2em">
+                        <div class="col-6 col-4-large col-6-xsmall">
                             {{ form.teleop_full_park }}
                             {{ form.teleop_full_park.label }}
                         </div>
-                        <div class="col-12">
+
+                        <div class="col-12" style="padding-top: 2em;">
+                            <h2>Extra Notes</h2>
+                        </div>
+                        <div class="col-6 col-8-large col-12-small">
+                            {{ form.notes(placeholder="message", rows="1") }}
+                        </div>
+
+                        <div class="col-12" style="padding-top: 2em;">
                             <ul class="actions">
                                 <li><input type="submit" value="Submit" class="primary" style="width: 20em" /></li>
                                 <li><input type="reset" value="Reset" style="width: 10em" /></li>

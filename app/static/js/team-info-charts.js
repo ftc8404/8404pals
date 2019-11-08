@@ -22,6 +22,9 @@ var compInfo = teamData.compInfo;
 var matches = compInfo.matches;
 
 var allData = compData.allData;
+for (var attr in compData.allData2) {
+    allData[attr] = compData.allData2[attr];
+}
 var curTeamData = allData[teamNumber];
 
 var perfLabels = [
@@ -39,7 +42,7 @@ if (curTeamData[30] > curTeamData[29]) {
     offset = 1;
 }
 perfData.push(curTeamData[2 + offset] * 30);
-perfData.push(Math.max(curTeamData[4 + offset] * 25, curTeamData[6 + offset] * 50));
+perfData.push(curTeamData[4 + offset] * 25);
 perfData.push(curTeamData[8 + offset] * 15);
 perfData.push(curTeamData[10 + offset] * 10);
 var minerals = curTeamData[12];
@@ -174,7 +177,7 @@ for (let i = 0; i < matches.length; i++) {
         },
         options: {
             scales: {
-                yAxes: [{
+                xAxes: [{
                     ticks: {
                         beginAtZero: true
                     }
