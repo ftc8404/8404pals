@@ -291,6 +291,16 @@ def validatePreGameScoutingForm(form):
 
     if teleopStones < 0 or teleopStones > 30:
         return '"Stones Moved" must be a number from 0 - 30'
+
+    teleOpMaxLevel = 0
+    try:
+        teleOpMaxLevel = int(form['teleop_max_level'])
+    except ValueError:
+        return '"Max Level" must be a number from 0 - 30'
+
+    if teleOpMaxLevel < 0 or teleOpMaxLevel > 30:
+        return '"Max Level" must be a number from 0 - 30'
+
     notes = form['notes']
     if len(notes) > 800:
         return '"Notes must not exceed 800 characters"'
@@ -349,6 +359,15 @@ def validateMatchScoutingForm(form):
 
     if teleopStones < 0 or teleopStones > 30:
         return '"Stones Moved" must be a number from 0 - 30'
+
+    teleOpMaxLevel = 0
+    try:
+        teleOpMaxLevel = int(form['teleop_max_level'])
+    except ValueError:
+        return '"Max Level" must be a number from 0 - 30'
+
+    if teleOpMaxLevel < 0 or teleOpMaxLevel > 30:
+        return '"Max Level" must be a number from 0 - 30'
 
     notes = form['notes']
     if len(notes) > 800:
