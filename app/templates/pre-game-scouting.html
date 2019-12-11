@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/static/css/main.css" />
     <noscript>
         <link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+    {% include 'favicon.html' %}
 </head>
 
 <body class="is-preload">
@@ -36,72 +37,108 @@
                             {{ form.contact(placeholder=form.contact.label.text) }}
                         </div>
 
-                        <div class="col-12" style="padding-top: 2em; padding-bottom: 0.3em">
+                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
                             <h2>Autonomous</h2>
                         </div>
 
-                        {% for field_name in form.auton_field_names %}
-                        <div class="col-3 col-4-large">
-                            <p>{{ form.auton_field_names[field_name] }}:</p>
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('auton_stones'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.auton_stones(placeholder=form.auton_stones.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('auton_stones'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-3 col-4-large">
-                            {{ form["auton_crater_"+field_name] }}
-                            {{ form["auton_crater_"+field_name].label }}
-                        </div>
-                        <div class="col-6 col-4-large">
-                            {{ form["auton_depot_"+field_name] }}
-                            {{ form["auton_depot_"+field_name].label }}
-                        </div>
-                        {% endfor %}
 
-                        <div class="col-12" style="padding-top: 2em;">
+                        <div class="col-8 col-6-medium">
+                            {{ form.auton_skystone }}
+                            {{ form.auton_skystone.label }}
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            {{ form.auton_place_stones }}
+                            {{ form.auton_place_stones.label }}
+                        </div>
+                        <div class="col-8 col-6-medium">
+                            {{ form.auton_foundation }}
+                            {{ form.auton_foundation.label }}
+                        </div>
+
+                        <div class="col-8 col-6-medium">
+                            {{ form.auton_under_skybridge }}
+                            {{ form.auton_under_skybridge.label }}
+                        </div>
+
+                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
                             <h2>Tele-Op</h2>
                         </div>
-                        <div class="col-3 col-4-large col-12-xsmall">
-                            {{ form.teleop_minerals(placeholder=form.teleop_minerals.label.text) }}
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_stones'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_stones(placeholder=form.teleop_stones.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_stones'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
-                            {{ form.teleop_mineral_cubes }}
-                            {{ form.teleop_mineral_cubes.label }}
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_max_level'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-right: 0.5em; padding-left: 0.5em; font-size: 1.5em">
+                                        -</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_max_level(placeholder=form.teleop_max_level.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_max_level'))">
+                                    <p style="margin-bottom: 0; padding-left: 0.5em; font-size: 1.5em">+</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
-                            {{ form.teleop_mineral_balls }}
-                            {{ form.teleop_mineral_balls.label }}
+                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0.7em">
+                            <h2>End Game</h2>
                         </div>
-                        <div class="col-3 col-4-large col-12-xsmall">
-                            <p>Crater Entry:</p>
+                        <div class="col-4 col-6-medium">
+                            {{ form.teleop_cap }}
+                            {{ form.teleop_cap.label }}
                         </div>
-                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
-                            {{ form.teleop_crater_reach }}
-                            {{ form.teleop_crater_reach.label }}
+                        <div class="col-6 col-6-medium">
+                            {{ form.teleop_move_foundation }}
+                            {{ form.teleop_move_foundation.label }}
                         </div>
-                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
-                            {{ form.teleop_crater_enter }}
-                            {{ form.teleop_crater_enter.label }}
+                        <div class="col-8 col-6-small">
+                            {{ form.teleop_park }}
+                            {{ form.teleop_park.label }}
                         </div>
-                        <div class="col-3 col-4-large col-12-xsmall">
-                            <p>Mineral Scoring:</p>
+
+                        <div class="col-12" style="padding-top: 3em;">
+                            <h2>Extra Notes</h2>
                         </div>
-                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
-                            {{ form.teleop_score_lander }}
-                            {{ form.teleop_score_lander.label }}
+                        <div class="col-6 col-8-large col-12-small">
+                            {{ form.notes(placeholder="message", rows="1") }}
                         </div>
-                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 1.5em">
-                            {{ form.teleop_score_depot }}
-                            {{ form.teleop_score_depot.label }}
-                        </div>
-                        <div class="col-3 col-4-large col-12-xsmall">
-                            <p>End Game:</p>
-                        </div>
-                        <div class="col-3 col-4-large col-6-xsmall" style="padding-bottom: 2em">
-                            {{ form.teleop_hang }}
-                            {{ form.teleop_hang.label }}
-                        </div>
-                        <div class="col-6 col-4-large col-6-xsmall" style="padding-bottom: 2em">
-                            {{ form.teleop_full_park }}
-                            {{ form.teleop_full_park.label }}
-                        </div>
-                        <div class="col-12">
+
+                        <div class="col-12" style="padding-top: 2em;">
                             <ul class="actions">
                                 <li><input type="submit" value="Submit" class="primary" style="width: 20em" /></li>
                                 <li><input type="reset" value="Reset" style="width: 10em" /></li>
@@ -119,7 +156,25 @@
     <script src="/static/js/breakpoints.min.js"></script>
     <script src="/static/js/util.js"></script>
     <script src="/static/js/main.js"></script>
-    <!-- <script src="/static/js/pre-game-scouting.js"></script> -->
+    <script>
+        function increment(element) {
+            let num = parseInt(element.value);
+            if (isNaN(num)) num = 0;
+            num++;
+            if (num < 0) num = 0;
+            element.value = num;
+        }
+        function decrement(element) {
+            let num = parseInt(element.value);
+            if (isNaN(num)) num = 0;
+            num--;
+            if (num < 0) num = 0;
+            element.value = num;
+        }
+        document.getElementById('auton_stones').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_stones').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_max_level').setAttribute("style", "text-align:center");
+    </script>
 </body>
 
 </html>

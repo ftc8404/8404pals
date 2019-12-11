@@ -2,6 +2,7 @@ import wtforms
 import pyodbc
 import platform
 import os
+from unidecode import unidecode
 
 server = os.getenv('SQLCONNSTR_SERVER')
 database = os.getenv('SQLCONNSTR_DATABASE')
@@ -29,7 +30,7 @@ def getCurCompetitionCityName():
     return curCompetitionCityName
 
 
-curCompetitionId = 10
+curCompetitionId = 21
 curCompetitionCityName = getCurCompetitionCityName()
 
 
@@ -55,6 +56,38 @@ def getMatchScoutingFields():
 
 
 matchScoutingFields = getMatchScoutingFields()
+
+
+def addNoteEntry(teamNumber, tag, message):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+
+    message = unidecode(message)
+    message = message.replace("\r\n", "\n")
+    message = message.replace("'", "''")
+
+    tag = unidecode(tag)
+    tag = tag.replace("'", "''")
+
+    sqlCursor.execute("INSERT NoteEntries (team_number, tag, message, CompetitionId) VALUES (" +
+                      str(teamNumber) + ", "+"'"+str(tag)+"'"+","+"'"+str(message)+"'"+","+str(curCompetitionId)+")")
+    sqlConn.commit()
+    sqlConn.close()
+
+
+def getNoteEntries(teamNumber):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawNotes = sqlCursor.execute("SELECT tag, message FROM NoteEntries WHERE team_number="+str(
+        teamNumber)+" AND CompetitionId="+str(curCompetitionId)).fetchall()
+    sqlConn.close()
+    formattedNotes = []
+    for row in rawNotes:
+        formattedRow = {}
+        formattedRow['tag'] = row[0]
+        formattedRow['message'] = row[1]
+        formattedNotes.append(formattedRow)
+    return formattedNotes
 
 
 def addPreGameScoutingEntry(formValues):
@@ -97,6 +130,11 @@ def addPreGameScoutingEntry(formValues):
     sqlConn.commit()
     sqlConn.close()
 
+    notes = formValues["notes"]
+    if len(notes) > 0:
+        tag = "Pre-game observations"
+        addNoteEntry(teamNumber, tag, notes)
+
 
 def addMatchScoutingEntry(formValues):
     sqlConn = getSqlConn()
@@ -116,9 +154,7 @@ def addMatchScoutingEntry(formValues):
         nextformattedFormValues = ""
         if field in formValues:
             formValue = formValues[field]
-            if field == "teleop_endgame":
-                nextformattedFormValues = "'"+formValue+"'"
-            elif formValue == "y":
+            if formValue == "y":
                 nextformattedFormValues = "1"
             else:
                 nextformattedFormValues = str(formValue)
@@ -139,6 +175,11 @@ def addMatchScoutingEntry(formValues):
     sqlConn.commit()
     sqlConn.close()
 
+    notes = formValues["notes"]
+    if len(notes) > 0:
+        tag = "Match observations"
+        addNoteEntry(teamNumber, tag, notes)
+
 
 class PreGameScoutingForm(wtforms.Form):
     error = None
@@ -148,28 +189,22 @@ class PreGameScoutingForm(wtforms.Form):
     contact = wtforms.TextField("Contact / Web Page / Social Media", validators=[
         wtforms.validators.required()])
 
-    auton_field_names = {
-        "land": "Land", "sample": "Sample", "double_sample": "Double Sample",
-        "marker": "Marker", "park": "Park"
-    }
-
-    teleop_minerals = wtforms.IntegerField("Estimated Minerals", validators=[
+    auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.required()])
-    teleop_mineral_cubes = wtforms.BooleanField("Cubes")
-    teleop_mineral_balls = wtforms.BooleanField("Balls")
-    teleop_crater_reach = wtforms.BooleanField("Reach")
-    teleop_crater_enter = wtforms.BooleanField("Enter")
-    teleop_score_lander = wtforms.BooleanField("Lander")
-    teleop_score_depot = wtforms.BooleanField("Depot")
-    teleop_hang = wtforms.BooleanField("Hang")
-    teleop_full_park = wtforms.BooleanField("Full Park")
+    auton_skystone = wtforms.BooleanField("Detect Skystones")
+    auton_place_stones = wtforms.BooleanField("Stones on Foundation")
+    auton_foundation = wtforms.BooleanField("Reposition Foundation")
+    auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
 
+    teleop_stones = wtforms.IntegerField("Stones Moved", validators=[
+        wtforms.validators.required()])
+    teleop_max_level = wtforms.IntegerField("Max Level", validators=[
+        wtforms.validators.required()])
+    teleop_cap = wtforms.BooleanField("Cap Team Marker")
+    teleop_move_foundation = wtforms.BooleanField("Move Foundation")
+    teleop_park = wtforms.BooleanField("Park")
 
-for field_name in PreGameScoutingForm.auton_field_names:
-    setattr(PreGameScoutingForm, "auton_crater_" +
-            field_name, wtforms.BooleanField("Crater"))
-    setattr(PreGameScoutingForm, "auton_depot_" +
-            field_name, wtforms.BooleanField("Depot"))
+    notes = wtforms.TextAreaField()
 
 
 class MatchScoutingForm(wtforms.Form):
@@ -180,35 +215,49 @@ class MatchScoutingForm(wtforms.Form):
     team_number = wtforms.IntegerField("Team Number", validators=[
                                        wtforms.validators.required()])
 
-    auton_field_names = {
-        "auton_land": "Land", "auton_sample": "Sample", "auton_double_sample": "Double Sample",
-        "auton_marker": "Marker", "auton_park": "Park"
-    }
-
-    auton_field_names_row_1 = []
-    auton_field_names_row_2 = []
-
-    for item in auton_field_names:
-        if len(auton_field_names_row_1) < 3:
-            auton_field_names_row_1.append(item)
-        else:
-            auton_field_names_row_2.append(item)
-
-    teleop_minerals_lander = wtforms.IntegerField("Minerals: Lander", validators=[
+    auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.required()])
-    teleop_minerals_depot = wtforms.IntegerField("Minerals: Depot", validators=[
+    auton_skystone = wtforms.BooleanField("Detect Skystones")
+    auton_place_stones = wtforms.BooleanField("Stones on Foundation")
+    auton_foundation = wtforms.BooleanField("Reposition Foundation")
+    auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
+
+    teleop_stones = wtforms.IntegerField("Stones Moved", validators=[
         wtforms.validators.required()])
-    teleop_endgame = wtforms.SelectField("End", choices=[(
-        "none", "None"), ("partial", "Partial Park"), ("full", "Full Park"), ("hang", "Hang")])
+    teleop_max_level = wtforms.IntegerField("Max Level", validators=[
+        wtforms.validators.required()])
+    teleop_cap = wtforms.BooleanField("Cap Team Marker")
+    teleop_move_foundation = wtforms.BooleanField("Move Foundation")
+    teleop_park = wtforms.BooleanField("Park")
+
+    notes = wtforms.TextAreaField()
 
 
-for field_name, natural_name in MatchScoutingForm.auton_field_names.items():
-    setattr(MatchScoutingForm, field_name, wtforms.BooleanField(natural_name))
+def checkASCII(text):
+    return len(text) == len(text.encode())
+
+
+def validateNotesForm(form):
+    tag = form['tag']
+    if len(tag) == 0:
+        return '"Empty tag"'
+    if len(tag) > 60:
+        return '"Tag must not exceed 800 characters"'
+    # if not checkASCII(tag):
+    #     return '"Invalid characters in tag. Only ASCII characters are allowed."'
+
+    message = form['message']
+    if len(message) == 0:
+        return '"Empty message"'
+    if len(message) > 60:
+        return '"Message must not exceed 800 characters"'
+    # if not checkASCII(message):
+    #     return '"Invalid characters in message. Only ASCII characters are allowed."'
+    return ""
 
 
 def validatePreGameScoutingForm(form):
     teamNumber = 0
-    teleopMinerals = 0.0
     try:
         teamNumber = int(form['team_number'])
     except ValueError:
@@ -225,13 +274,39 @@ def validatePreGameScoutingForm(form):
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
 
+    autonStones = 0
     try:
-        teleopMinerals = float(form['teleop_minerals'])
+        autonStones = int(form['auton_stones'])
     except ValueError:
-        return '"Estimated Minerals" must be a number from 0 - 150'
+        return '"Stones Delivered" must be a number from 0 - 6'
 
-    if teleopMinerals < 0 or teleopMinerals > 150:
-        return '"Estimated Minerals" must be a number from 0 - 150'
+    if autonStones < 0 or autonStones > 6:
+        return '"Stones Delivered" must be a number from 0 - 6'
+
+    teleopStones = 0
+    try:
+        teleopStones = int(form['teleop_stones'])
+    except ValueError:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    if teleopStones < 0 or teleopStones > 30:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    teleOpMaxLevel = 0
+    try:
+        teleOpMaxLevel = int(form['teleop_max_level'])
+    except ValueError:
+        return '"Max Level" must be a number from 0 - 30'
+
+    if teleOpMaxLevel < 0 or teleOpMaxLevel > 30:
+        return '"Max Level" must be a number from 0 - 30'
+
+    notes = form['notes']
+    if len(notes) > 800:
+        return '"Notes must not exceed 800 characters"'
+    if not checkASCII(notes):
+        return '"Invalid characters in notes. Only ASCII characters are allowed."'
+
     return ""
 
 
@@ -262,23 +337,43 @@ def validateMatchScoutingForm(form):
     if matchNumber < 1 or matchNumber > 500:
         return '"Match Number" must be a number from 1 - 500'
 
-    landerMinerals = 0
+    matchList = getMatchList()
+    if matchNumber in matchList and "del" not in matchList[matchNumber]:
+        if teamNumber not in matchList[matchNumber]:
+            return "Team " + str(teamNumber) + " is not in match "+str(matchNumber)
+
+    autonStones = 0
     try:
-        landerMinerals = int(form['teleop_minerals_lander'])
+        autonStones = int(form['auton_stones'])
     except ValueError:
-        return '"Minerals: Lander" must be a number from 0 - 150'
+        return '"Stones Delivered" must be a number from 0 - 6'
 
-    if landerMinerals < 0 or landerMinerals > 150:
-        return '"Minerals: Lander" must be a number from 0 - 150'
+    if autonStones < 0 or autonStones > 6:
+        return '"Stones Delivered" must be a number from 0 - 6'
 
-    depotMinerals = 0
+    teleopStones = 0
     try:
-        depotMinerals = int(form['teleop_minerals_depot'])
+        teleopStones = int(form['teleop_stones'])
     except ValueError:
-        return '"Minerals: Depot" must be a number from 0 - 150'
+        return '"Stones Moved" must be a number from 0 - 30'
 
-    if depotMinerals < 0 or depotMinerals > 150:
-        return '"Minerals: Depot" must be a number from 0 - 150'
+    if teleopStones < 0 or teleopStones > 30:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    teleOpMaxLevel = 0
+    try:
+        teleOpMaxLevel = int(form['teleop_max_level'])
+    except ValueError:
+        return '"Max Level" must be a number from 0 - 30'
+
+    if teleOpMaxLevel < 0 or teleOpMaxLevel > 30:
+        return '"Max Level" must be a number from 0 - 30'
+
+    notes = form['notes']
+    if len(notes) > 800:
+        return '"Notes must not exceed 800 characters"'
+    if not checkASCII(notes):
+        return '"Invalid characters in notes. Only ASCII characters are allowed."'
 
     return ""
 
@@ -291,44 +386,59 @@ def validateMatchInfoForm(form):
     sqlConn.close()
 
     teamList = {}
-    curMatch = 1
-    curMatchCount = 0
+    matchesEntered = []
+    largestMatch = 0
+    for fieldName, value in form.items():
+        matchNumber, teamIndex = tuple(
+            [int(value2) for value2 in fieldName.split('_')])
+        if value != '':
+            largestMatch = max(largestMatch, matchNumber)
+
     for fieldName, value in form.items():
         matchNumber, teamIndex = tuple(
             [int(value2) for value2 in fieldName.split('_')])
         if value == '':
+            if matchNumber in matchesEntered:
+                return "Error: Incomplete data for match "+str(matchNumber), False, None, largestMatch
             continue
-        try:
-            teamNumber = int(value)
-        except ValueError:
-            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None
-        if teamNumber <= 0:
-            return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None
+        if str(value).lower() == "del":
+            teamNumber = "del"
+        else:
+            try:
+                teamNumber = int(value)
+            except ValueError:
+                return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
+            if teamNumber <= 0:
+                return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
 
-        if teamNumber not in allTeamNumbers:
-            return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None
+            if teamNumber not in allTeamNumbers:
+                return 'Error: Team {teamNumber} is not at this competition (match {match})'.format(teamNumber=str(teamNumber), match=str(matchNumber)), False, None, largestMatch
 
-        if matchNumber != curMatch or teamIndex != curMatchCount:
-            return "Error: missing data for match "+str(curMatch), False, None
+            for teamIndex2 in range(teamIndex):
+                if form[str(matchNumber)+'_'+str(teamIndex2)] == value:
+                    return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None, largestMatch
 
-        for teamIndex2 in range(teamIndex):
-            if form[str(matchNumber)+'_'+str(teamIndex2)] == value:
-                return "Error: duplicate team {team} (match {match})".format(team=value, match=str(matchNumber)), False, None
-
-        if curMatchCount == 0:
+        if matchNumber not in matchesEntered:
+            if teamIndex > 0:
+                return "Error: Incomplete data for match "+str(matchNumber), False, None, largestMatch
             teamList[str(matchNumber)] = []
+            matchesEntered.append(matchNumber)
         teamList[str(matchNumber)].append(teamNumber)
 
-        if curMatchCount == 3:
-            curMatch += 1
-            curMatchCount = 0
-        else:
-            curMatchCount += 1
+    return "", True, teamList, largestMatch
 
-    if curMatchCount != 0:
-        return "Error: missing data for match "+str(curMatch),  False, None
 
-    return "", True, teamList
+def getAllTeamNames():
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
+        "SELECT * FROM TEAMS").fetchall()
+    data = [row[:2] for row in data]
+    dictTeams = {}
+    for row in data:
+        dictTeams[row[0]] = row[1]
+    sqlConn.close()
+    return dictTeams
 
 
 def getTeamsAtCompetition(competitionId):
@@ -346,10 +456,17 @@ def queryAllFormData():
 
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
         "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
-    preGameScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
+    preGameScoutingFormData = [list(row[1:-1]) for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
-    matchScoutingFormData = [row[1:-1] for row in sqlCursor.execute(
+    matchScoutingFormData = [list(row[1:-1]) for row in sqlCursor.execute(
         "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
+
+    for i in range(len(preGameScoutingFormData)-1):
+        for j in range(len(preGameScoutingFormData[i])-1):
+            if preGameScoutingFormData[i][j] is True:
+                preGameScoutingFormData[i][j] = 1
+            elif preGameScoutingFormData[i][j] is False:
+                preGameScoutingFormData[i][j] = 0
 
     sqlConn.close()
     return allTeamNumbers, preGameScoutingFormData, matchScoutingFormData
@@ -401,8 +518,6 @@ def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
         teamNumber = entry[1]
         for i in range(len(fields)):
             n = entry[i+2]
-            if i == 7:
-                n = {'none': 0, 'partial': 15, 'full': 25, 'hang': 50}[n]
             if matchEntryCount[teamNumber] == 0:
                 data[teamNumber][i] = n
             else:
@@ -421,58 +536,69 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     data = {}
     matchEntryCount = {}
 
-    fields = ['Theoretical Auton Crater-Side Score', 'Theoretical Auton Depot-Side Score', 'Theoretical Auton Mean Score',
-              'Theoretical Tele-Op Score', 'Theoretical Total Score', 'Overall Match Auton Score', 'Overall Match Tele-Op Score', 'Overall Match Total Score']
+    fields = ['Theoretical Auton Score', 'Theoretical Tele-Op Score', 'Theoretical Total Score',
+              'Overall Match Auton Score', 'Overall Match Tele-Op Score', 'Overall Match Total Score']
 
     for teamNumber in allTeamNumbers:
         data[teamNumber] = ['N/A']*len(fields)
         matchEntryCount[teamNumber] = 0
-
     for entry in preGameScoutingFormData:
         teamNumber = entry[0]
 
-        preAutonCraterScore = entry[2]*30+(50 if entry[6] else (
-            25 if entry[4] else 0))+entry[8]*15+entry[10]*10
-        preAutonDepotScore = entry[3]*30+(50 if entry[7] else (
-            25 if entry[5] else 0))+entry[9]*15+entry[11]*10
-        preAutonMeanScore = int(
-            (preAutonCraterScore+preAutonDepotScore)/2)
-        data[teamNumber][0] = preAutonCraterScore
-        data[teamNumber][1] = preAutonDepotScore
-        data[teamNumber][2] = preAutonMeanScore
+        preAutonScore = entry[2]*(6 if entry[4] else 2) + \
+            entry[3]*min(entry[2], 2)*8+entry[5]*10+entry[6]*5
 
-        preTeleopScore = entry[12]*(5 if entry[17] else (2 if entry[18] else 0))+(
-            50 if entry[19] else (25 if entry[20] else 15))
-        data[teamNumber][3] = preTeleopScore
-        data[teamNumber][4] = preAutonMeanScore+preTeleopScore
+        data[teamNumber][0] = preAutonScore
+
+        preTeleopScore = entry[7]*1
+        if entry[8] > 0:
+            preTeleopScore += entry[7]*1
+        preTeleopScore += entry[8]*2
+        if entry[9]:
+            preTeleopScore += entry[8]*1+5
+        if entry[10]:
+            preTeleopScore += 15
+        if entry[11]:
+            preTeleopScore += 5
+
+        data[teamNumber][1] = preTeleopScore
+        data[teamNumber][2] = preAutonScore+preTeleopScore
 
     for entry in matchScoutingFormData:
         teamNumber = entry[1]
 
-        matchAutonScore = entry[2]*30+(50 if entry[4] else (
-            25 if entry[3] else 0))+entry[5]*15+entry[6]*10
-        matchTeleopScore = entry[7]*5+entry[8]*2 + \
-            ({'none': 0, 'partial': 15, 'full': 25, 'hang': 50}[entry[9]])
+        matchAutonScore = entry[2]*(6 if entry[4] else 2) + \
+            entry[3]*min(entry[2], 2)*8+entry[5]*10+entry[6]*5
+        matchTeleopScore = entry[7]*1
+        if entry[8] > 0:
+            matchTeleopScore += entry[7]*1
+        matchTeleopScore += entry[8]*2
+        if entry[9]:
+            matchTeleopScore += entry[8]*1+5
+        if entry[10]:
+            matchTeleopScore += 15
+        if entry[11]:
+            matchTeleopScore += 5
 
         if matchEntryCount[teamNumber] > 0:
-            data[teamNumber][5] += matchAutonScore
-            data[teamNumber][6] += matchTeleopScore
-            data[teamNumber][7] += matchAutonScore+matchTeleopScore
+            data[teamNumber][3] += matchAutonScore
+            data[teamNumber][4] += matchTeleopScore
+            data[teamNumber][5] += matchAutonScore+matchTeleopScore
         else:
-            data[teamNumber][5] = matchAutonScore
-            data[teamNumber][6] = matchTeleopScore
-            data[teamNumber][7] = matchAutonScore+matchTeleopScore
+            data[teamNumber][3] = matchAutonScore
+            data[teamNumber][4] = matchTeleopScore
+            data[teamNumber][5] = matchAutonScore+matchTeleopScore
 
         matchEntryCount[teamNumber] += 1
 
     for teamNumber, amount in matchEntryCount.items():
         if amount > 0:
+            data[teamNumber][3] = round(
+                data[teamNumber][3]/amount, 1)
+            data[teamNumber][4] = round(
+                data[teamNumber][4]/amount, 1)
             data[teamNumber][5] = round(
                 data[teamNumber][5]/amount, 1)
-            data[teamNumber][6] = round(
-                data[teamNumber][6]/amount, 1)
-            data[teamNumber][7] = round(
-                data[teamNumber][7]/amount, 1)
 
     return {'data': data, 'fields': fields}
 
@@ -507,11 +633,12 @@ def getCompetitionOverviewData():
 def setMatchList(data, competitionId=curCompetitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    sqlCursor.execute(
-        "DELETE FROM MatchListEntries WHERE CompetitionId="+str(competitionId))
     for match, matchData in data.items():
         sqlCursor.execute(
-            "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
+            "DELETE FROM MatchListEntries WHERE MatchNumber="+str(match)+" AND CompetitionId="+str(curCompetitionId))
+        if "del" not in [str(s).lower() for s in matchData]:
+            sqlCursor.execute(
+                "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
     sqlConn.commit()
     sqlConn.close()
 
@@ -526,6 +653,40 @@ def getMatchList(competitionId=curCompetitionId):
     for row in rawData:
         data[row[1]] = list(row[2:])
     return data
+
+
+def getMatchResults(competitionId=curCompetitionId, teamNumber=None):
+    matchList = getMatchList()
+
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawData = sqlCursor.execute(
+        "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(competitionId)).fetchall()
+    sqlConn.close()
+    matches = {}
+    fields = getMatchScoutingFields()
+    for row in rawData:
+        curTeamNumber = row[2]
+        curMatch = row[1]
+        alliance = "unknown"
+        if curMatch in matchList:
+            if curTeamNumber in matchList[curMatch][:2]:
+                alliance = "red"
+            elif curTeamNumber in matchList[curMatch][2:]:
+                alliance = "blue"
+
+        if teamNumber:
+            if curTeamNumber == teamNumber:
+                teamDataDict = dict(zip(fields[2:], row[3:-1]))
+                teamDataDict["alliance"] = alliance
+                matches[curMatch] = teamDataDict
+        else:
+            if curMatch not in matches:
+                matches[curMatch] = {}
+            teamDataDict = dict(zip(fields[2:], row[3:-1]))
+            teamDataDict["alliance"] = alliance
+            matches[curMatch][curTeamNumber] = teamDataDict
+    return matches
 
 
 def getTeamInfo(teamNumber):
@@ -558,8 +719,8 @@ def getTeamInfo(teamNumber):
     rawPerfData = getCompetitionOverviewData()['allData'][teamNumber]
 
     performanceInfo = {
-        'preGame': {'auton': max(rawPerfData[29], rawPerfData[30]), 'teleOp': rawPerfData[32]},
-        'match': {'auton': rawPerfData[34], 'teleOp': rawPerfData[35]}
+        'preGame': {'auton': rawPerfData[22], 'teleOp': rawPerfData[23]},
+        'match': {'auton': rawPerfData[25], 'teleOp': rawPerfData[26]}
     }
 
     compInfo = {}

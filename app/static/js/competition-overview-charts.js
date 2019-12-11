@@ -10,6 +10,7 @@ Chart.defaults.global.defaultFontColor.defaultFontSize = 16;
 var allData = compData.allData;
 var allTeamsPreGame = [];
 var allTeamsMatch = [];
+
 var preGameDatasets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ff6699', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }];
 var matchDatasets = [{ label: 'Match Autonomous', data: [], backgroundColor: '#cc99ff', stack: 'main' }, { label: 'Match Tele-Op', data: [], backgroundColor: '#6699ff', stack: 'main' }];
 
@@ -25,13 +26,13 @@ for (let teamNumber in allData) {
     if (teamDataRaw[32] == 'N/A') {
         missingPreGameTeams.push(teamNumber)
     } else {
-        preGameDataUnsorted.push([teamNumber, Math.max(teamDataRaw[29], teamDataRaw[30]), teamDataRaw[32]]);
+        preGameDataUnsorted.push([teamNumber, teamDataRaw[22], teamDataRaw[23]]);
     }
 
     if (teamDataRaw[35] == 'N/A') {
         missingMatchTeams.push(teamNumber)
     } else {
-        matchDataUnsorted.push([teamNumber, teamDataRaw[34], teamDataRaw[35]]);
+        matchDataUnsorted.push([teamNumber, teamDataRaw[25], teamDataRaw[26]]);
     }
 }
 
@@ -97,7 +98,6 @@ function chartDispAllScouting() {
 
 var ctx = document.getElementById("chart").getContext('2d');
 
-
 var chart = new Chart(ctx, {
     type: 'horizontalBar',
     data: {
@@ -107,13 +107,13 @@ var chart = new Chart(ctx, {
     options: {
         scales: {
             xAxes: [{
-                stacked: true
-            }],
-            yAxes: [{
                 stacked: true,
                 ticks: {
                     beginAtZero: true
                 }
+            }],
+            yAxes: [{
+                stacked: true
             }]
         },
         aspectRatio: null,

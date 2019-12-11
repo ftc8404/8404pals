@@ -25,40 +25,35 @@ var allData = compData.allData;
 var curTeamData = allData[teamNumber];
 
 var perfLabels = [
-    'Land', 'Sample', 'Marker', 'Park',
-    'Minerals', 'End-Game'
+    'Auton Stones', 'Auton Skystone', 'Auton Other',
+    'Tele-Op Stones', 'Tele-Op Bonuses', 'Tele-Op Other'
 ]
 var perfColors = [
-    '#00ff99', '#99ffcc', '#66ff66', '#ccff99',
-    '#ffcc66', '#ffcc99'
+    '#00ff99', '#66ff66', '#99ffcc',
+    '#ffcc66', '#ff9933', '#ffcc99'
 ];
 
 var perfData = []
-var offset = 0;
-if (curTeamData[30] > curTeamData[29]) {
-    offset = 1;
-}
-perfData.push(curTeamData[2 + offset] * 30);
-perfData.push(Math.max(curTeamData[4 + offset] * 25, curTeamData[6 + offset] * 50));
-perfData.push(curTeamData[8 + offset] * 15);
-perfData.push(curTeamData[10 + offset] * 10);
-var minerals = curTeamData[12];
-if (curTeamData[17]) {
-    minerals *= 5;
-} else if (curTeamData[18]) {
-    minerals *= 2;
+if (curTeamData[4] > 0) {
+    perfData.push(curTeamData[2] * 6);
 } else {
-    minerals = 0;
+    perfData.push(curTeamData[2] * 2);
 }
-perfData.push(minerals);
+perfData.push(curTeamData[3] * Math.min(curTeamData[2], 2) * 8);
+perfData.push(curTeamData[5] * 10 + curTeamData[6] * 5);
 
-var endGame = 15;
-if (curTeamData[19] != 'N/A' && curTeamData[19]) {
-    endGame = 50;
-} else if (curTeamData[20] != 'N/A' && curTeamData[20]) {
-    endGame = 25;
+if (curTeamData[8] > 0) {
+    perfData.push(curTeamData[7] * 2);
+} else {
+    perfData.push(curTeamData[7]);
 }
-perfData.push(endGame);
+var bonus = curTeamData[8] * 2;
+if (curTeamData[9] > 0) {
+    bonus += curTeamData[8] + 5;
+}
+perfData.push(bonus);
+perfData.push(curTeamData[10] * 15 + curTeamData[11] * 5);
+
 
 var ctx = document.getElementById("chart-perf-pre-game").getContext('2d');
 var perfChart = new Chart(ctx, {
@@ -79,22 +74,34 @@ var perfChart = new Chart(ctx, {
 });
 
 var perfLabels = [
-    'Land', 'Sample', 'Marker', 'Park',
-    'Minerals Lander', 'Minerals Depot', 'End-Game'
+    'Auton Stones', 'Auton Skystone', 'Auton Other',
+    'Tele-Op Stones', 'Tele-Op Bonuses', 'Tele-Op Other'
 ]
 var perfColors = [
-    '#00ff99', '#99ffcc', '#66ff66', '#ccff99',
+    '#00ff99', '#66ff66', '#99ffcc',
     '#ffcc66', '#ff9933', '#ffcc99'
 ];
 
 var perfData = []
-perfData.push(curTeamData[21] * 30);
-perfData.push(Math.max(curTeamData[22] * 25, curTeamData[23] * 50));
-perfData.push(curTeamData[24] * 15);
-perfData.push(curTeamData[25] * 10);
-perfData.push(curTeamData[26] * 5);
-perfData.push(curTeamData[27] * 2);
-perfData.push(curTeamData[28] * 1);
+if (curTeamData[14] > 0) {
+    perfData.push(curTeamData[12] * 6);
+} else {
+    perfData.push(curTeamData[12] * 2);
+}
+perfData.push(curTeamData[13] * Math.min(curTeamData[12], 2) * 8);
+perfData.push(curTeamData[15] * 10 + curTeamData[16] * 5);
+
+if (curTeamData[18] > 0) {
+    perfData.push(curTeamData[17] * 2);
+} else {
+    perfData.push(curTeamData[17]);
+}
+var bonus = curTeamData[18] * 2;
+if (curTeamData[19] > 0) {
+    bonus += curTeamData[18] + 5;
+}
+perfData.push(bonus);
+perfData.push(curTeamData[20] * 15 + curTeamData[21] * 5);
 
 var ctx = document.getElementById("chart-perf-match").getContext('2d');
 var perfChart = new Chart(ctx, {
@@ -125,8 +132,8 @@ for (let i = 0; i < matches.length; i++) {
     for (let j = 0; j < 4; j++) {
         rowTeamNumber = teamGraphOrder[j]
         let teamDataRaw = allData[rowTeamNumber];
-        preGameScores.push(Math.max(teamDataRaw[29], teamDataRaw[30]) + teamDataRaw[32]);
-        matchScores.push(teamDataRaw[34] + teamDataRaw[35]);
+        preGameScores.push(teamDataRaw[24]);
+        matchScores.push(teamDataRaw[27]);
     }
 
     let ctx = document.getElementById("chart-" + matchNumber).getContext('2d');
@@ -174,7 +181,7 @@ for (let i = 0; i < matches.length; i++) {
         },
         options: {
             scales: {
-                yAxes: [{
+                xAxes: [{
                     ticks: {
                         beginAtZero: true
                     }
