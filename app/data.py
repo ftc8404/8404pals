@@ -191,8 +191,10 @@ class PreGameScoutingForm(wtforms.Form):
 
     auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.required()])
-    auton_skystone = wtforms.BooleanField("Detect Skystones")
-    auton_place_stones = wtforms.BooleanField("Stones on Foundation")
+    auton_skystones = wtforms.IntegerField("Detect Skystones", validators=[
+        wtforms.validators.required()])
+    auton_stones_on_foundation = wtforms.IntegerField("Stones on Foundation", validators=[
+        wtforms.validators.required()])
     auton_foundation = wtforms.BooleanField("Reposition Foundation")
     auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
 
@@ -217,15 +219,30 @@ class MatchScoutingForm(wtforms.Form):
 
     auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.required()])
-    auton_skystone = wtforms.BooleanField("Detect Skystones")
-    auton_place_stones = wtforms.BooleanField("Stones on Foundation")
+    auton_skystones = wtforms.IntegerField("Detect Skystones", validators=[
+        wtforms.validators.required()])
+    auton_stones_on_foundation = wtforms.IntegerField("Stones on Foundation", validators=[
+        wtforms.validators.required()])
     auton_foundation = wtforms.BooleanField("Reposition Foundation")
     auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
 
-    teleop_stones = wtforms.IntegerField("Stones Moved", validators=[
+    teleop_stones_1 = wtforms.IntegerField("Stones Moved", validators=[
         wtforms.validators.required()])
-    teleop_max_level = wtforms.IntegerField("Max Level", validators=[
+    teleop_max_level_1 = wtforms.IntegerField("Max Level", validators=[
         wtforms.validators.required()])
+    teleop_stones_2 = wtforms.IntegerField("Stones Moved", validators=[
+        wtforms.validators.required()])
+    teleop_max_level_2 = wtforms.IntegerField("Max Level", validators=[
+        wtforms.validators.required()])
+    teleop_stones_3 = wtforms.IntegerField("Stones Moved", validators=[
+        wtforms.validators.required()])
+    teleop_max_level_3 = wtforms.IntegerField("Max Level", validators=[
+        wtforms.validators.required()])
+    teleop_stones_4 = wtforms.IntegerField("Stones Moved", validators=[
+        wtforms.validators.required()])
+    teleop_max_level_4 = wtforms.IntegerField("Max Level", validators=[
+        wtforms.validators.required()])
+
     teleop_cap = wtforms.BooleanField("Cap Team Marker")
     teleop_move_foundation = wtforms.BooleanField("Move Foundation")
     teleop_park = wtforms.BooleanField("Park")
@@ -350,24 +367,108 @@ def validateMatchScoutingForm(form):
 
     if autonStones < 0 or autonStones > 6:
         return '"Stones Delivered" must be a number from 0 - 6'
-
-    teleopStones = 0
+    
+    autonSkystones = 0
     try:
-        teleopStones = int(form['teleop_stones'])
+        autonSkystones = int(form['auton_skystones'])
+    except ValueError:
+        return '"Skystones Delivered" must be a number from 0 - 2'
+
+    if autonSkystones < 0 or autonSkystones > 2:
+        return '"Skystones Delivered" must be a number from 0 - 2'
+    if autonStones < autonSkystones:
+        return '"Skystones Delivered" cannot be greater than "Stones Delivered"'
+
+    autonStonesOnFoundation = 0
+    try:
+        autonStonesOnFoundation = int(form['auton_stones_on_foundation'])
+    except ValueError:
+        return '"Stones On Foundation" must be a number from 0 - 6'
+
+    if autonStonesOnFoundation < 0 or autonStonesOnFoundation > 6:
+        return '"Stones On Foundation" must be a number from 0 - 6'
+    if autonStonesOnFoundation > autonStones:
+        return '"Stones on Foundation" cannot be greater than "Stones Delivered"'
+
+    teleopStones1 = 0
+    try:
+        teleopStones1 = int(form['teleop_stones_1'])
     except ValueError:
         return '"Stones Moved" must be a number from 0 - 30'
 
-    if teleopStones < 0 or teleopStones > 30:
+    if teleopStones1 < 0 or teleopStones1 > 30:
         return '"Stones Moved" must be a number from 0 - 30'
 
-    teleOpMaxLevel = 0
+    teleOpMaxLevel1 = 0
     try:
-        teleOpMaxLevel = int(form['teleop_max_level'])
+        teleOpMaxLevel1 = int(form['teleop_max_level_1'])
     except ValueError:
         return '"Max Level" must be a number from 0 - 30'
 
-    if teleOpMaxLevel < 0 or teleOpMaxLevel > 30:
+    if teleOpMaxLevel1 < 0 or teleOpMaxLevel1 > 30:
         return '"Max Level" must be a number from 0 - 30'
+    if teleopStones1 < teleOpMaxLevel1:
+        return '"Max Level" cannot exceed "Stones Moved"'
+
+    teleopStones2 = 0
+    try:
+        teleopStones2 = int(form['teleop_stones_2'])
+    except ValueError:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    if teleopStones2 < 0 or teleopStones2 > 30:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    teleOpMaxLevel2 = 0
+    try:
+        teleOpMaxLevel2 = int(form['teleop_max_level_2'])
+    except ValueError:
+        return '"Max Level" must be a number from 0 - 30'
+
+    if teleOpMaxLevel2 < 0 or teleOpMaxLevel2 > 30:
+        return '"Max Level" must be a number from 0 - 30'
+    if teleopStones2 < teleOpMaxLevel2:
+        return '"Max Level" cannot exceed "Stones Moved"'
+
+    teleopStones3 = 0
+    try:
+        teleopStones3 = int(form['teleop_stones_3'])
+    except ValueError:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    if teleopStones3 < 0 or teleopStones3 > 30:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    teleOpMaxLevel3 = 0
+    try:
+        teleOpMaxLevel3 = int(form['teleop_max_level_3'])
+    except ValueError:
+        return '"Max Level" must be a number from 0 - 30'
+
+    if teleOpMaxLevel3 < 0 or teleOpMaxLevel3 > 30:
+        return '"Max Level" must be a number from 0 - 30'
+    if teleopStones3 < teleOpMaxLevel3:
+        return '"Max Level" cannot exceed "Stones Moved"'
+
+    teleopStones4 = 0
+    try:
+        teleopStones4 = int(form['teleop_stones_4'])
+    except ValueError:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    if teleopStones4 < 0 or teleopStones4 > 30:
+        return '"Stones Moved" must be a number from 0 - 30'
+
+    teleOpMaxLevel4 = 0
+    try:
+        teleOpMaxLevel4 = int(form['teleop_max_level_4'])
+    except ValueError:
+        return '"Max Level" must be a number from 0 - 30'
+
+    if teleOpMaxLevel4 < 0 or teleOpMaxLevel4 > 30:
+        return '"Max Level" must be a number from 0 - 30'
+    if teleopStones4 < teleOpMaxLevel4:
+        return '"Max Level" cannot exceed "Stones Moved"'
 
     notes = form['notes']
     if len(notes) > 800:
