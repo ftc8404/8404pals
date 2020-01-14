@@ -618,7 +618,7 @@ def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
     return {'data': data, 'fields': fields}
 
 
-def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormData):
+def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormData): #TODO
     data = {}
     matchEntryCount = {}
 
@@ -631,8 +631,8 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     for entry in preGameScoutingFormData:
         teamNumber = entry[0]
 
-        preAutonScore = entry[2]*(6 if entry[4] else 2) + \
-            entry[3]*min(entry[2], 2)*8+entry[5]*10+entry[6]*5
+        preAutonScore = entry[2]*2 + \
+            entry[3]*8 + entry[4]*4 + entry[5]*10 + entry[6]*5
 
         data[teamNumber][0] = preAutonScore
 
@@ -653,17 +653,24 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     for entry in matchScoutingFormData:
         teamNumber = entry[1]
 
-        matchAutonScore = entry[2]*(6 if entry[4] else 2) + \
-            entry[3]*min(entry[2], 2)*8+entry[5]*10+entry[6]*5
-        matchTeleopScore = entry[7]*1
-        if entry[8] > 0:
-            matchTeleopScore += entry[7]*1
-        matchTeleopScore += entry[8]*2
-        if entry[9]:
-            matchTeleopScore += entry[8]*1+5
-        if entry[10]:
+        matchAutonScore = entry[2]*2 + \
+            entry[3]*8 + entry[4]*4 + entry[5]*10 + entry[6]*5
+        matchTeleopScore = entry[7]*2
+        highestStack = 0
+        StackList = [entry[8], entry[9], entry[10], entry[11]]
+        for item in StackList:
+            if item > highestStack:
+                highestStack = item
+        matchTeleopScore += highestStack*2
+        CapList = [entry[12], entry[13], entry[14], entry[15]]
+        capIndex = 5
+        for item in CapList:
+            if item:
+                capIndex = CapList.index(item)
+        matchTeleopScore += StackList[capIndex]*1+5
+        if entry[16]:
             matchTeleopScore += 15
-        if entry[11]:
+        if entry[17]:
             matchTeleopScore += 5
 
         if matchEntryCount[teamNumber] > 0:
