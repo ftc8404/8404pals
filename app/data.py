@@ -228,14 +228,10 @@ class MatchScoutingForm(wtforms.Form):
 
     teleop_stones_total = wtforms.IntegerField("Total Stones Moved", validators=[
         wtforms.validators.required()])
-    teleop_stones_1 = wtforms.IntegerField("Stones in Stack", validators=[
-        wtforms.validators.required()])
-    teleop_stones_2 = wtforms.IntegerField("Stones in Stack", validators=[
-        wtforms.validators.required()])
-    teleop_stones_3 = wtforms.IntegerField("Stones in Stack", validators=[
-        wtforms.validators.required()])
-    teleop_stones_4 = wtforms.IntegerField("Stones in Stack", validators=[
-        wtforms.validators.required()])
+    teleop_stones_1 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_2 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_3 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_4 = wtforms.IntegerField("Stones in Stack")
 
     teleop_cap_1 = wtforms.BooleanField("Cap Team Marker")
     teleop_cap_2 = wtforms.BooleanField("Cap Team Marker")
