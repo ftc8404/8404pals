@@ -682,11 +682,12 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
                 highestStack = item
         matchTeleopScore += highestStack*2
         CapList = [entry[12], entry[13], entry[14], entry[15]]
-        capIndex = 5
+        capIndex = -1
         for item in CapList:
             if item:
                 capIndex = CapList.index(item)
-        matchTeleopScore += StackList[capIndex]*1+5
+        if(capIndex != -1):
+            matchTeleopScore += StackList[capIndex]*1+5
         if entry[16]:
             matchTeleopScore += 15
         if entry[17]:
