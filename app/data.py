@@ -191,7 +191,7 @@ class PreGameScoutingForm(wtforms.Form):
 
     auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.required()])
-    auton_skystones = wtforms.IntegerField("Detect Skystones", validators=[
+    auton_skystones = wtforms.IntegerField("Skystones Delivered", validators=[
         wtforms.validators.required()])
     auton_stones_on_foundation = wtforms.IntegerField("Stones on Foundation", validators=[
         wtforms.validators.required()])
@@ -228,14 +228,10 @@ class MatchScoutingForm(wtforms.Form):
 
     teleop_stones_total = wtforms.IntegerField("Total Stones Moved", validators=[
         wtforms.validators.required()])
-    teleop_stones_1 = wtforms.IntegerField("Stones in Stack", validators=[
-        wtforms.validators.required()])
-    teleop_stones_2 = wtforms.IntegerField("Stones in Stack", validators=[
-        wtforms.validators.required()])
-    teleop_stones_3 = wtforms.IntegerField("Stones in Stack", validators=[
-        wtforms.validators.required()])
-    teleop_stones_4 = wtforms.IntegerField("Stones in Stack", validators=[
-        wtforms.validators.required()])
+    teleop_stones_1 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_2 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_3 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_4 = wtforms.IntegerField("Stones in Stack")
 
     teleop_cap_1 = wtforms.BooleanField("Cap Team Marker")
     teleop_cap_2 = wtforms.BooleanField("Cap Team Marker")
@@ -288,14 +284,38 @@ def validatePreGameScoutingForm(form):
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
 
+    # check if number of stones delivered during auton is an integer between 1 - 6
     autonStones = 0
     try:
         autonStones = int(form['auton_stones'])
     except ValueError:
         return '"Stones Delivered" must be a number from 0 - 6'
-
     if autonStones < 0 or autonStones > 6:
         return '"Stones Delivered" must be a number from 0 - 6'
+
+    # check if number of skystones delivered during auton is an integer between 1 - 2
+    autonSkystones = 0
+    try:
+        autonSkystones = int(form['auton_skystones'])
+    except ValueError:
+        return '"Skystones Delivered" must be a number from 0 - 2'
+    if autonSkystones < 0 or autonSkystones > 2:
+        return '"Skystones Delivered" must be a number from 0 - 2'
+    # check if number of skystones delivered in auton is less than or equal to number of total stones delivered
+    if autonStones < autonSkystones:
+        return '"Skystones Delivered" cannot be greater than "Stones Delivered"'
+
+    # check if number of stones on the foundation is an integer 0-6
+    autonStonesOnFoundation = 0
+    try:
+        autonStonesOnFoundation = int(form['auton_stones_on_foundation'])
+    except ValueError:
+        return '"Stones On Foundation" must be a number from 0 - 6'
+    if autonStonesOnFoundation < 0 or autonStonesOnFoundation > 6:
+        return '"Stones On Foundation" must be a number from 0 - 6'
+    # check if number of stones on foundation is less than or equal to the number of stones delivered
+    if autonStonesOnFoundation > autonStones:
+        return '"Stones on Foundation" cannot be greater than "Stones Delivered"'
 
     teleopStones = 0
     try:
@@ -362,7 +382,7 @@ def validateMatchScoutingForm(form):
         if teamNumber not in matchList[matchNumber]:
             return "Team " + str(teamNumber) + " is not in match "+str(matchNumber)
 
-    #check if number of stones delivered during auton is an integer between 1 - 6
+    # check if number of stones delivered during auton is an integer between 1 - 6
     autonStones = 0
     try:
         autonStones = int(form['auton_stones'])
@@ -370,7 +390,7 @@ def validateMatchScoutingForm(form):
         return '"Stones Delivered" must be a number from 0 - 6'
     if autonStones < 0 or autonStones > 6:
         return '"Stones Delivered" must be a number from 0 - 6'
-    
+
     # check if number of skystones delivered during auton is an integer between 1 - 2
     autonSkystones = 0
     try:
@@ -405,7 +425,7 @@ def validateMatchScoutingForm(form):
         return '"Stones Moved" must be a number from 0 - 30'
 
     # check if the number of stones in stack 1 is an integer between 0 - 30
-    teleopStones1 = 0 
+    teleopStones1 = 0
     try:
         teleopStones1 = int(form['teleop_stones_1'])
     except ValueError:
@@ -414,7 +434,7 @@ def validateMatchScoutingForm(form):
         return '"Stones in Stack" must be a number 0 - 30'
 
     # check if the number of stones in stack 2 is an integer between 0 - 30
-    teleopStones2 = 0 
+    teleopStones2 = 0
     try:
         teleopStones2 = int(form['teleop_stones_2'])
     except ValueError:
@@ -423,7 +443,7 @@ def validateMatchScoutingForm(form):
         return '"Stones in Stack" must be a number 0 - 30'
 
     # check if the number of stones in stack 3 is an integer between 0 - 30
-    teleopStones3 = 0 
+    teleopStones3 = 0
     try:
         teleopStones3 = int(form['teleop_stones_3'])
     except ValueError:
@@ -432,7 +452,7 @@ def validateMatchScoutingForm(form):
         return '"Stones in Stack" must be a number 0 - 30'
 
     # check if the number of stones in stack 4 is an integer between 0 - 30
-    teleopStones4 = 0 
+    teleopStones4 = 0
     try:
         teleopStones4 = int(form['teleop_stones_4'])
     except ValueError:
@@ -440,15 +460,22 @@ def validateMatchScoutingForm(form):
     if teleopStones4 < 0 or teleopStones4 > 30:
         return '"Stones in Stack" must be a number 0 - 30'
 
+<<<<<<< HEAD
+=======
+    # check if Total Stones is greater or equal to all the stones in the stacks
+    StackTotal = teleopStones1 + teleopStones2 + teleopStones3 + teleopStones4
+    if teleopStonesTotal < StackTotal:
+        return '"Stones Moved" cannot be less than the total number of stones in all stacks'
+
+>>>>>>> 6af65f9f3c993476e527785ab39c5008efdcec91
     # check if there is less than or equal to one capstone placed
-    numberOfCaps=0
-    for i in range(1,5):
-        field_name='teleop_cap_'+str(i)
-        if field_name in form and form[field_name]=='y':
-            numberOfCaps+=1
+    numberOfCaps = 0
+    for i in range(1, 5):
+        field_name = 'teleop_cap_'+str(i)
+        if field_name in form and form[field_name] == 'y':
+            numberOfCaps += 1
     if numberOfCaps > 1:
         return 'Team can only place a Capstone once'
-
 
     notes = form['notes']
     if len(notes) > 800:
@@ -613,7 +640,7 @@ def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
     return {'data': data, 'fields': fields}
 
 
-def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormData): #TODO
+def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormData):  # TODO
     data = {}
     matchEntryCount = {}
 
@@ -658,11 +685,12 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
                 highestStack = item
         matchTeleopScore += highestStack*2
         CapList = [entry[12], entry[13], entry[14], entry[15]]
-        capIndex = 5
+        capIndex = -1
         for item in CapList:
             if item:
                 capIndex = CapList.index(item)
-        matchTeleopScore += StackList[capIndex]*1+5
+        if(capIndex != -1):
+            matchTeleopScore += StackList[capIndex]*1+5
         if entry[16]:
             matchTeleopScore += 15
         if entry[17]:
