@@ -119,7 +119,7 @@ perfData.push(bonus)
 // }
 // perfData.push(teleopOther);
 if (curTeamData[26] && curTeamData[27]) {
-    perfData.push(curTeamData[26] * 15 + curTeamData[27] * 5);
+    perfData.push(curTeamData[26]  * 15 + curTeamData[27] * 5);
 }
 
 var ctx = document.getElementById("chart-perf-match").getContext('2d');
