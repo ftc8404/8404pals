@@ -460,14 +460,6 @@ def validateMatchScoutingForm(form):
     if teleopStones4 < 0 or teleopStones4 > 30:
         return '"Stones in Stack" must be a number 0 - 30'
 
-<<<<<<< HEAD
-=======
-    # check if Total Stones is greater or equal to all the stones in the stacks
-    StackTotal = teleopStones1 + teleopStones2 + teleopStones3 + teleopStones4
-    if teleopStonesTotal < StackTotal:
-        return '"Stones Moved" cannot be less than the total number of stones in all stacks'
-
->>>>>>> 6af65f9f3c993476e527785ab39c5008efdcec91
     # check if there is less than or equal to one capstone placed
     numberOfCaps = 0
     for i in range(1, 5):
