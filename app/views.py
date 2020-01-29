@@ -16,6 +16,10 @@ def favicon():
 
 
 @app.route("/")
+def login():
+    return render_template("login.html")
+
+@app.route("/home")
 def hello():
     return render_template("home.html")
 
