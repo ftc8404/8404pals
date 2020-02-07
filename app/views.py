@@ -15,13 +15,13 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
-@app.route("/")
-def login():
-    return render_template("login.html")
+# @app.route("/")
+# def login():
+#     return render_template("login2.html")
 
-@app.route("/home")
+@app.route("/")
 def hello():
-    return render_template("home.html")
+    return render_template("team-info-search.html", data=data.getCompetitionOverviewData())
 
 
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])
@@ -76,7 +76,7 @@ def team(team_number):
 
 @app.route("/team-info")
 def team_info():
-    return render_template('team-info-search.html')
+    return render_template('team-info-search.html', data=data.getCompetitionOverviewData())
 
 
 @app.route("/match-info", methods=['GET', 'POST'])
@@ -115,6 +115,10 @@ def set_competition_id(competition_id):
 @app.route("/api/competition-overview/")
 def api_competition_overview():
     return json.dumps(data.getCompetitionOverviewData())
+
+@app.route("/api/categories-list/")
+def api_categories_list():
+    return json.dumps(data.getCategoriesList())
 
 
 @app.route("/api/team-info/")

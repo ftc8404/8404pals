@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Login - 8404 PALS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="/static/css/main.css" />
+    <noscript>
+        <link rel="stylesheet" href="/static/css/noscript.css" /></noscript>
+    {% include 'favicon.html' %}
+</head>
+
+<body class="is-preload">
+    <!-- Wrapper -->
+    <div id="wrapper">
+        <!-- Header -->
+        {% include 'header.html' %}
+
+        <!-- Menu -->
+        {% include 'menu.html' %}
+
+        <div id="main">
+            <div class="inner">
+                <h1>Login</h1>
+                <form class="login-container">
+                    <div class="row gtr-uniform">
+                        <div class="col-12">
+                            <h2>Username</h2>
+                        </div>
+                        <div class="col-6 col-12-medium">
+                            <input type="text" placeholder="Username" name="userid">
+                        </div>
+                        <div class="col-12">
+                            <h2>Password</h2>
+                        </div>
+                        <div class="col-6 col-12-medium">
+                            <input type="password" placeholder="Password" name="pwd">
+                        </div>
+                        <div class="col-12">
+                            <input type="button" onclick="check(this.form)" value="Login">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/browser.min.js"></script>
+    <script src="/static/js/breakpoints.min.js"></script>
+    <script src="/static/js/util.js"></script>
+    <script src="/static/js/main.js"></script>
+    <script>
+        function check(form) {
+            if (form.userid.value == "yoshi" && form.pwd.value == "testing") {
+                window.open("/home")
+            }
+            else {
+                alert("The username and password you entered are not valid")
+            }
+        }
+    </script>
+</body>
+
+</html>

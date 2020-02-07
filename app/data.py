@@ -9,6 +9,8 @@ database = os.getenv('SQLCONNSTR_DATABASE')
 username = os.getenv('SQLCONNSTR_USERNAME')
 password = os.getenv('SQLCONNSTR_PASSWORD')
 
+
+
 driver = ''
 if platform.system() == 'Windows':
     driver = '{ODBC Driver 17 for SQL Server}'
@@ -239,7 +241,16 @@ class MatchScoutingForm(wtforms.Form):
     teleop_cap_4 = wtforms.BooleanField("Cap Team Marker")
     teleop_move_foundation = wtforms.BooleanField("Move Foundation")
     teleop_park = wtforms.BooleanField("Park")
-
+    under_bridge = wtforms.BooleanField("Under Alliance Bridge")
+    not_under_bridge = wtforms.BooleanField("Taller than 14 in")
+    feeder = wtforms.BooleanField("Feeder Bot")
+    stacker = wtforms.BooleanField("Stacking Bot")
+    very_gp = wtforms.BooleanField("GP :)")
+    not_gp = wtforms.BooleanField("Not GP :(")
+    steps_over_bridge = wtforms.BooleanField("Steps over bridge")
+    tall_lift = wtforms.BooleanField("Tall lift")
+    DC = wtforms.BooleanField("DC :(")
+    speedy = wtforms.BooleanField("Speedy")
     notes = wtforms.TextAreaField()
 
 
@@ -469,6 +480,57 @@ def validateMatchScoutingForm(form):
     if numberOfCaps > 1:
         return 'Team can only place a Capstone once'
 
+    # # #Categories lists
+
+    catValue1 = 0
+    catValue2 = 0
+    catValue3 = 0
+    catValue4 = 0
+    catValue5 = 0
+    catValue6 = 0
+    catValue7 = 0
+    catValue8 = 0
+    catValue9 = 0
+    catValue10 = 0
+    field_name = 'under_bridge'
+    if field_name in form and form[field_name] == 'y':
+        catValue1 = 1
+    field_name = 'not_under_bridge'
+    if field_name in form and form[field_name] == 'y':
+        catValue2 = 1
+    field_name = 'feeder'
+    if field_name in form and form[field_name] == 'y':
+        catValue3 = 1
+    field_name = 'stacker'
+    if field_name in form and form[field_name] == 'y':
+        catValue4 = 1
+    field_name = 'very_gp'
+    if field_name in form and form[field_name] == 'y':
+        catValue5 = 1
+    field_name = 'not_gp'
+    if field_name in form and form[field_name] == 'y':
+        catValue6 = 1
+    field_name = 'steps_over_bridge'
+    if field_name in form and form[field_name] == 'y':
+        catValue7 = 1
+    field_name = 'tall_lift'
+    if field_name in form and form[field_name] == 'y':
+        catValue8 = 1
+    field_name = 'DC'
+    if field_name in form and form[field_name] == 'y':
+        catValue9 = 1
+    field_name = 'speedy'
+    if field_name in form and form[field_name] == 'y':
+        catValue10 = 1
+    
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    sqlCursor.execute("UPDATE Categories SET under_bridge="+str(catValue1)+", not_under_bridge="+str(catValue2)+", feeder="+str(catValue3)+", stacker="+str(catValue4)+", very_gp="+str(catValue5)+", not_gp="+str(catValue6)+", steps_over_bridge="+str(catValue7)+", tall_lift="+str(catValue8)+", DC="+str(catValue9)+", speedy="+str(catValue10)+" WHERE TeamNumber = "+str(teamNumber))
+    sqlConn.commit()
+    sqlConn.close()
+    
+    
+
     notes = form['notes']
     if len(notes) > 800:
         return '"Notes must not exceed 800 characters"'
@@ -476,6 +538,50 @@ def validateMatchScoutingForm(form):
         return '"Invalid characters in notes. Only ASCII characters are allowed."'
 
     return ""
+
+def getCategoriesList():
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
+        "SELECT * FROM Categories").fetchall()
+    sqlConn.close()
+
+    under_bridge_list = []
+    not_under_bridge_list = []
+    feeder_list = []
+    stacker_list = []
+    very_gp_list = []
+    not_gp_list = []
+    steps_over_bridge_list = []
+    tall_lift_list = []
+    DC_list = []
+    speedy_list = []
+    
+    for team in data:
+        teamNumber = team[0]
+        #Category Variables List
+        if team[1]:
+            under_bridge_list.append(teamNumber)
+        if team[2]:
+            not_under_bridge_list.append(teamNumber)
+        if team[3]:
+            feeder_list.append(teamNumber)
+        if team[4]:
+            stacker_list.append(teamNumber)
+        if team[5]:
+            very_gp_list.append(teamNumber)
+        if team[6]:
+            not_gp_list.append(teamNumber)
+        if team[7]:
+            steps_over_bridge_list.append(teamNumber)
+        if team[8]:
+            tall_lift_list.append(teamNumber)
+        if team[9]:
+            DC_list.append(teamNumber)
+        if team[10]:
+            speedy_list.append(teamNumber)
+
+    return under_bridge_list, not_under_bridge_list, feeder_list, stacker_list, very_gp_list, not_gp_list, steps_over_bridge_list, tall_lift_list, DC_list, speedy_list
 
 
 def validateMatchInfoForm(form):

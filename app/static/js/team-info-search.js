@@ -1,7 +1,133 @@
 var Httpreq = new XMLHttpRequest(); // a new request
 Httpreq.open("GET", "/api/team-info/", false);
 Httpreq.send(null);
-var teams = JSON.parse(Httpreq.responseText);
+var teamsUnprocessed = JSON.parse(Httpreq.responseText);
+
+var Httpreq = new XMLHttpRequest(); // a new request
+Httpreq.open("GET", "/api/competition-overview/", false);
+Httpreq.send(null);
+var compData = JSON.parse(Httpreq.responseText);
+var allData = compData.allData;
+
+var Httpreq = new XMLHttpRequest(); // a new request
+Httpreq.open("GET", "/api/categories-list/", false);
+Httpreq.send(null);
+var lists = JSON.parse(Httpreq.responseText);
+
+// Category Variables List
+var under_bridge_list = lists[0];
+var not_under_bridge_list = lists[1];
+var feeder_list = lists[2];
+var stacker_list = lists[3];
+var very_gp_list = lists[4];
+var not_gp_list = lists[5];
+var steps_over_bridge_list = lists[6];
+var tall_lift_list = lists[7];
+var DC_list = [8];
+var speedy_list = [9];
+
+var match_under_bridge = false;
+var match_not_under_bridge = false;
+var match_feeder = false;
+var match_stacker = false;
+var match_very_gp = false;
+var match_not_gp = false;
+var match_steps_over_bridge = false;
+var match_tall_lift = false;
+var match_DC = false;
+var match_speedy = false;
+
+function changeFilter(checkboxElem) {
+    if (checkboxElem.id == "Match Under Bridge") {
+        match_under_bridge = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Not Under Bridge") {
+        match_not_under_bridge = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Feeder") {
+        match_feeder = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Stacker") {
+        match_stacker = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Very Gp") {
+        match_very_gp = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Not Gp") {
+        match_not_gp = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Steps Over Bridge") {
+        match_steps_over_bridge = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Tall Lift") {
+        match_tall_lift = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match $C") {
+        match_DC = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Speedy") {
+        match_speedy = checkboxElem.checked;
+    }
+    searchChange();
+}
+
+function getTeams() {
+    if (!(match_under_bridge || match_not_under_bridge || match_feeder || match_stacker || match_very_gp || match_not_gp || match_steps_over_bridge || match_tall_lift || match_DC || match_speedy)) {
+        return teamsUnprocessed;
+    }
+    let teams = {};
+    if (match_under_bridge) {
+       under_bridge_list.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    if (match_not_under_bridge) {
+        not_under_bridge_list.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    if (match_feeder) {
+        feeder_list.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    if (match_stacker) {
+        stacker_list.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    if (match_very_gp) {
+        very_gp_list.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    if (match_not_gp) {
+       not_gp_list.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    if (match_steps_over_bridge) {
+        match_steps_over_bridge.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    if (match_tall_lift) {
+        tall_lift_list.forEach(element => {
+            teams[element]=teamsUnprocessed[element];
+        });
+    }
+    if (match_DC) {
+        DC_list.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    if (match_speedy) {
+        speedy_list.forEach(element => {
+            teams[element] = teamsUnprocessed[element];
+        });
+    }
+    return teams;
+}
 
 function search() {
     let text = document.getElementById("search").value;
@@ -19,11 +145,13 @@ function searchChange() {
 }
 
 function match(text) {
+    var teams = getTeams();
     matches1 = {};
     matches2 = {};
     let count = 0;
     for (let teamNumber in teams) {
         teamName = teams[teamNumber];
+
         if (teamNumber.startsWith(text)) {
             matches1[teamNumber] = teamName;
             count++;
@@ -57,5 +185,27 @@ function populateResults(matches) {
         resultsElement.innerHTML += "<br>";
     }
 }
+
+
+$(document).ready(function () {
+    $('#all-filters-toggle').click(toggleAllFilterVisibility);
+    $('#all-filters-toggle').mousedown(function () {
+        $('#all-filters-toggle').css('color', '#84aaf2');
+    });
+    $('#all-filters-toggle').mouseup(function () {
+        $('#all-filters-toggle').css('color', '');
+    });
+});
+
+function toggleAllFilterVisibility() {
+    if ($('#all-filters').css("display") == "none") {
+        $('#all-filters').css("display", "")
+        $('#all-filters-toggle').text("\u25BC All Filters \u25BC")
+    } else {
+        $('#all-filters').css("display", "none")
+        $('#all-filters-toggle').text("\u25B2 All Filters \u25B2")
+    }
+}
+
 
 searchChange();
