@@ -23,8 +23,8 @@ var very_gp_list = lists[4];
 var not_gp_list = lists[5];
 var steps_over_bridge_list = lists[6];
 var tall_lift_list = lists[7];
-var DC_list = [8];
-var speedy_list = [9];
+var DC_list = lists[8];
+var speedy_list = lists[9];
 
 var match_under_bridge = false;
 var match_not_under_bridge = false;
@@ -62,7 +62,7 @@ function changeFilter(checkboxElem) {
     if (checkboxElem.id == "Match Tall Lift") {
         match_tall_lift = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match $C") {
+    if (checkboxElem.id == "Match Dc") {
         match_DC = checkboxElem.checked;
     }
     if (checkboxElem.id == "Match Speedy") {

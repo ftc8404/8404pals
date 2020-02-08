@@ -106,7 +106,7 @@ function changeFilter(checkboxElem) {
     if(checkboxElem.id=="Match Tall Lift" && !checkboxElem.checked){
         match_under_bridge = false;
     }
-    if(checkboxElem.id=="Match $C" && !checkboxElem.checked){
+    if(checkboxElem.id=="Match Dc" && !checkboxElem.checked){
         match_under_bridge = false;
     }
     if(checkboxElem.id=="Match Speedy" && !checkboxElem.checked){
