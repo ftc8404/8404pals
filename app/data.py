@@ -525,7 +525,26 @@ def validateMatchScoutingForm(form):
     
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    sqlCursor.execute("UPDATE Categories SET under_bridge="+str(catValue1)+", not_under_bridge="+str(catValue2)+", feeder="+str(catValue3)+", stacker="+str(catValue4)+", very_gp="+str(catValue5)+", not_gp="+str(catValue6)+", steps_over_bridge="+str(catValue7)+", tall_lift="+str(catValue8)+", DC="+str(catValue9)+", speedy="+str(catValue10)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue1==1):
+        sqlCursor.execute("UPDATE Categories SET under_bridge="+str(catValue1)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue2==1):
+        sqlCursor.execute("UPDATE Categories SET not_under_bridge="+str(catValue2)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue3==1):
+        sqlCursor.execute("UPDATE Categories SET feeder="+str(catValue3)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue4==1):
+        sqlCursor.execute("UPDATE Categories SET stacker="+str(catValue4)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue5==1):
+        sqlCursor.execute("UPDATE Categories SET very_gp="+str(catValue5)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue6==1):
+        sqlCursor.execute("UPDATE Categories SET not_gp="+str(catValue6)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue7==1):
+        sqlCursor.execute("UPDATE Categories SET steps_over_bridge="+str(catValue7)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue8==1):
+        sqlCursor.execute("UPDATE Categories SET tall_lift="+str(catValue8)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue9==1):
+        sqlCursor.execute("UPDATE Categories SET DC="+str(catValue9)+" WHERE TeamNumber = "+str(teamNumber))
+    if (catValue10==1):
+        sqlCursor.execute("UPDATE Categories SET speedy="+str(catValue10)+" WHERE TeamNumber = "+str(teamNumber))
     sqlConn.commit()
     sqlConn.close()
     

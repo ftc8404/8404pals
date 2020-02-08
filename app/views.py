@@ -21,7 +21,7 @@ def favicon():
 
 @app.route("/")
 def hello():
-    return render_template("team-info-search.html", data=data.getCompetitionOverviewData())
+    return render_template("home.html", data=data.getCompetitionOverviewData())
 
 
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])

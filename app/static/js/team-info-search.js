@@ -75,58 +75,43 @@ function getTeams() {
     if (!(match_under_bridge || match_not_under_bridge || match_feeder || match_stacker || match_very_gp || match_not_gp || match_steps_over_bridge || match_tall_lift || match_DC || match_speedy)) {
         return teamsUnprocessed;
     }
-    let teams = {};
+    let teams = Object.keys(teamsUnprocessed);
+    teams=teams.map(Number);
     if (match_under_bridge) {
-       under_bridge_list.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => under_bridge_list.includes(element));
     }
     if (match_not_under_bridge) {
-        not_under_bridge_list.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => not_under_bridge_list.includes(element));
     }
     if (match_feeder) {
-        feeder_list.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => feeder_list.includes(element));
     }
     if (match_stacker) {
-        stacker_list.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => stacker_list.includes(element));
     }
     if (match_very_gp) {
-        very_gp_list.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => very_gp_list.includes(element));
     }
     if (match_not_gp) {
-       not_gp_list.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => not_gp_list.includes(element));
     }
     if (match_steps_over_bridge) {
-        match_steps_over_bridge.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => steps_over_bridge_list.includes(element));
     }
     if (match_tall_lift) {
-        tall_lift_list.forEach(element => {
-            teams[element]=teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => tall_lift_list.includes(element));
     }
     if (match_DC) {
-        DC_list.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => DC_list.includes(element));
     }
     if (match_speedy) {
-        speedy_list.forEach(element => {
-            teams[element] = teamsUnprocessed[element];
-        });
+        teams = teams.filter(element => speedy_list.includes(element));
     }
-    return teams;
+    let teamPairs = {}
+    for (let element of teams) {
+        teamPairs[element] = teamsUnprocessed[element];
+    }
+    return teamPairs;
 }
 
 function search() {

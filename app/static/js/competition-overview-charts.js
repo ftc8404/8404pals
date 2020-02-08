@@ -26,13 +26,13 @@ for (let teamNumber in allData) {
     if (teamDataRaw[30] == 'N/A') {
         missingPreGameTeams.push(teamNumber)
     } else {
-        preGameDataUnsorted.push([teamNumber, teamDataRaw[28], teamDataRaw[29]]); // TODO
+        preGameDataUnsorted.push([teamNumber, teamDataRaw[38], teamDataRaw[39]]); // TODO
     }
 
     if (teamDataRaw[33] == 'N/A') {
         missingMatchTeams.push(teamNumber)
     } else {
-        matchDataUnsorted.push([teamNumber, teamDataRaw[31], teamDataRaw[32]]); // TODO
+        matchDataUnsorted.push([teamNumber, teamDataRaw[41], teamDataRaw[42]]); // TODO
     }
 }
 
