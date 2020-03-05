@@ -267,21 +267,21 @@ class PreGameScoutingForm(wtforms.Form):
     team_number=wtforms.IntegerField("Team Number", validators=[
         wtforms.validators.required()])
     contact=wtforms.TextField("Contact / Web Page / Social Media", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
 
     auton_stones=wtforms.IntegerField("Stones Delivered", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     auton_skystones=wtforms.IntegerField("Skystones Delivered", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     auton_stones_on_foundation=wtforms.IntegerField("Stones on Foundation", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     auton_foundation=wtforms.BooleanField("Reposition Foundation")
     auton_under_skybridge=wtforms.BooleanField("Move Under Skybridge")
 
     teleop_stones=wtforms.IntegerField("Stones Moved", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     teleop_max_level=wtforms.IntegerField("Max Level", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     teleop_cap=wtforms.BooleanField("Cap Team Marker")
     teleop_move_foundation=wtforms.BooleanField("Move Foundation")
     teleop_park=wtforms.BooleanField("Park")
@@ -298,16 +298,16 @@ class MatchScoutingForm(wtforms.Form):
                                        wtforms.validators.required()])
 
     auton_stones=wtforms.IntegerField("Stones Delivered", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     auton_skystones=wtforms.IntegerField("Skystones Delivered", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     auton_stones_on_foundation=wtforms.IntegerField("Stones on Foundation", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     auton_foundation=wtforms.BooleanField("Reposition Foundation")
     auton_under_skybridge=wtforms.BooleanField("Move Under Skybridge")
 
     teleop_stones_total=wtforms.IntegerField("Total Stones Moved", validators=[
-        wtforms.validators.required()])
+        wtforms.validators.optional()])
     teleop_stones_1=wtforms.IntegerField("Stones in Stack")
     teleop_stones_2=wtforms.IntegerField("Stones in Stack")
     teleop_stones_3=wtforms.IntegerField("Stones in Stack")
