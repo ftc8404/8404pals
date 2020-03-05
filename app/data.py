@@ -31,7 +31,7 @@ def getCurCompetitionCityName():
     return curCompetitionCityName
 
 
-curCompetitionId = 26
+curCompetitionId = 27
 curCompetitionCityName = getCurCompetitionCityName()
 
 
@@ -268,6 +268,8 @@ class PreGameScoutingForm(wtforms.Form):
         wtforms.validators.required()])
     contact=wtforms.TextField("Contact / Web Page / Social Media", validators=[
         wtforms.validators.optional()])
+    gold_division=wtforms.BooleanField("Gold Division")
+    silicon_division=wtforms.BooleanField("Silicon Division")
 
     auton_stones=wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.optional()])
@@ -372,6 +374,14 @@ def validatePreGameScoutingForm(form):
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
+
+    division = False
+    field_name='gold_division'
+    if field_name in form and form[field_name] == 'y':
+        division = True
+    field_name = 'silicon_division'
+    if division and field_name in form and form[field_name] == 'y':
+        return 'Team can only be in either Gold or Silicon Division, not both'
 
     # check if number of stones delivered during auton is an integer between 1 - 6
     autonStones=0
