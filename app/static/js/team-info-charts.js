@@ -55,7 +55,7 @@ perfData.push(curTeamData[10] * 15 + curTeamData[11] * 5);
 
 var ctx = document.getElementById("chart-perf-pre-game").getContext('2d');
 var perfChart = new Chart(ctx, {
-    type: 'doughnut',
+    type: 'horizontalBar',
     data: {
         datasets: [{
             data: perfData,
@@ -124,7 +124,7 @@ if (curTeamData[26] && curTeamData[27]) {
 
 var ctx = document.getElementById("chart-perf-match").getContext('2d');
 var perfChart = new Chart(ctx, {
-    type: 'doughnut',
+    type: 'horizontalBar',
     data: {
         datasets: [{
             data: perfData,
