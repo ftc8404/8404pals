@@ -241,16 +241,9 @@
                             {{ form.notes(placeholder="message", rows="1") }}
                         </div>
 
-                        <div class="col-6">
-                            {{ form.under_bridge }}
-                            {{ form.under_bridge.label }}
+                        <div class="col-12" style="padding-top: 3em;">
+                            <h2>Categories</h2>
                         </div>
-
-                        <div class="col-6">
-                            {{ form.not_under_bridge }}
-                            {{ form.not_under_bridge.label }}
-                        </div>
-
                         <div class="col-6">
                             {{ form.feeder }}
                             {{ form.feeder.label }}
@@ -262,23 +255,28 @@
                         </div>
 
                         <div class="col-6">
-                            {{ form.very_gp }}
-                            {{ form.very_gp.label }}
-                        </div>
-
-                        <div class="col-6">
-                            {{ form.not_gp }}
-                            {{ form.not_gp.label }}
-                        </div>
-
-                        <div class="col-6">
-                            {{ form.steps_over_bridge }}
-                            {{ form.steps_over_bridge.label }}
+                            {{ form.speedy }}
+                            {{ form.speedy.label }}
                         </div>
 
                         <div class="col-6">
                             {{ form.tall_lift }}
                             {{ form.tall_lift.label }}
+                        </div>
+                        
+                        <div class="col-6">
+                            {{ form.under_bridge }}
+                            {{ form.under_bridge.label }}
+                        </div>
+
+                        <div class="col-6">
+                            {{ form.not_under_bridge }}
+                            {{ form.not_under_bridge.label }}
+                        </div>
+
+                        <div class="col-6">
+                            {{ form.knocked_tower }}
+                            {{ form.knocked_tower.label }}
                         </div>
 
                         <div class="col-6">
@@ -287,9 +285,25 @@
                         </div>
 
                         <div class="col-6">
-                            {{ form.speedy }}
-                            {{ form.speedy.label }}
+                            {{ form.dangerous_driving }}
+                            {{ form.dangerous_driving.label }}
                         </div>
+
+                        <div class="col-6">
+                            {{ form.steps_over_bridge }}
+                            {{ form.steps_over_bridge.label }}
+                        </div>
+
+                        <div class="col-6">
+                            {{ form.very_gp }}
+                            {{ form.very_gp.label }}
+                        </div>
+
+                        <div class="col-6">
+                            {{ form.not_gp }}
+                            {{ form.not_gp.label }}
+                        </div>
+                        
 
                         <div class="col-12" style="padding-top: 2em;">
                             <ul class="actions">

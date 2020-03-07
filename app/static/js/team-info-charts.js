@@ -59,13 +59,16 @@ var perfChart = new Chart(ctx, {
     data: {
         datasets: [{
             data: perfData,
-            backgroundColor: perfColors
+            backgroundColor: perfColors,
         }],
 
         // These labels appear in the legend and in the tooltips when hovering different arcs
         labels: perfLabels
     },
     options: {
+        legend: {
+            display: false
+        },
         aspectRatio: 1.5,
         maintainAspectRatio: true
     }
@@ -135,6 +138,9 @@ var perfChart = new Chart(ctx, {
         labels: perfLabels
     },
     options: {
+        legend: {
+            display: false
+        },
         aspectRatio: 1.5,
         maintainAspectRatio: true
     }

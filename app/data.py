@@ -185,71 +185,86 @@ def addMatchScoutingEntry(formValues):
     catValue8 = 0
     catValue9 = 0
     catValue10 = 0
-    field_name = 'under_bridge'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue1 = 1
-    field_name = 'not_under_bridge'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue2 = 1
+    catValue11 = 0
+    catValue12 = 0
+
     field_name = 'feeder'
     if field_name in formValues and formValues[field_name] == 'y':
-        catValue3 = 1
+        catValue1 = 1
     field_name = 'stacker'
     if field_name in formValues and formValues[field_name] == 'y':
-        catValue4 = 1
-    field_name = 'very_gp'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue5 = 1
-    field_name = 'not_gp'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue6 = 1
-    field_name = 'steps_over_bridge'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue7 = 1
-    field_name = 'tall_lift'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue8 = 1
-    field_name = 'DC'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue9 = 1
+        catValue2 = 1
     field_name = 'speedy'
     if field_name in formValues and formValues[field_name] == 'y':
+        catValue3 = 1
+    field_name = 'tall_lift'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue4 = 1
+    field_name = 'under_bridge'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue5 = 1
+    field_name = 'not_under_bridge'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue6 = 1
+    field_name = 'knocked_tower'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue7 = 1
+    field_name = 'DC'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue8 = 1
+    field_name = 'dangerous_driving'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue9 = 1
+    field_name = 'steps_over_bridge'
+    if field_name in formValues and formValues[field_name] == 'y':
         catValue10 = 1
+    field_name = 'very_gp'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue11 = 1
+    field_name = 'not_gp'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue12 = 1
 
     if(len(sqlCursor.execute("SELECT * FROM Categories WHERE team_number="+str(teamNumber)).fetchall()) == 0):
         sqlCursor.execute("INSERT Categories (team_number) VALUES ("+str(teamNumber)+")")
 
 
     if (catValue1 == 1):
-        sqlCursor.execute("UPDATE Categories SET under_bridge=" +
+        sqlCursor.execute("UPDATE Categories SET feeder=" +
                           str(catValue1)+" WHERE team_number = "+str(teamNumber))
     if (catValue2 == 1):
-        sqlCursor.execute("UPDATE Categories SET not_under_bridge=" +
+        sqlCursor.execute("UPDATE Categories SET stacker=" +
                           str(catValue2)+" WHERE team_number = "+str(teamNumber))
     if (catValue3 == 1):
-        sqlCursor.execute("UPDATE Categories SET feeder=" +
+        sqlCursor.execute("UPDATE Categories SET speedy=" +
                           str(catValue3)+" WHERE team_number = "+str(teamNumber))
     if (catValue4 == 1):
-        sqlCursor.execute("UPDATE Categories SET stacker=" +
+        sqlCursor.execute("UPDATE Categories SET tall_lift=" +
                           str(catValue4)+" WHERE team_number = "+str(teamNumber))
     if (catValue5 == 1):
-        sqlCursor.execute("UPDATE Categories SET very_gp=" +
+        sqlCursor.execute("UPDATE Categories SET under_bridge=" +
                           str(catValue5)+" WHERE team_number = "+str(teamNumber))
     if (catValue6 == 1):
-        sqlCursor.execute("UPDATE Categories SET not_gp=" +
+        sqlCursor.execute("UPDATE Categories SET not_under_bridge=" +
                           str(catValue6)+" WHERE team_number = "+str(teamNumber))
     if (catValue7 == 1):
-        sqlCursor.execute("UPDATE Categories SET steps_over_bridge=" +
+        sqlCursor.execute("UPDATE Categories SET knocked_tower=" +
                           str(catValue7)+" WHERE team_number = "+str(teamNumber))
     if (catValue8 == 1):
-        sqlCursor.execute("UPDATE Categories SET tall_lift=" +
+        sqlCursor.execute("UPDATE Categories SET dc=" +
                           str(catValue8)+" WHERE team_number = "+str(teamNumber))
     if (catValue9 == 1):
-        sqlCursor.execute("UPDATE Categories SET dc=" +
+        sqlCursor.execute("UPDATE Categories SET dangerous_driving=" +
                           str(catValue9)+" WHERE team_number = "+str(teamNumber))
     if (catValue10 == 1):
-        sqlCursor.execute("UPDATE Categories SET speedy=" +
+        sqlCursor.execute("UPDATE Categories SET steps_over_bridge=" +
                           str(catValue10)+" WHERE team_number = "+str(teamNumber))
+    if (catValue11 == 1):
+        sqlCursor.execute("UPDATE Categories SET very_gp=" +
+                          str(catValue11)+" WHERE team_number = "+str(teamNumber))
+    if (catValue12 == 1):
+        sqlCursor.execute("UPDATE Categories SET not_gp=" +
+                          str(catValue12)+" WHERE team_number = "+str(teamNumber))
 
     sqlConn.commit()
     sqlConn.close()
@@ -320,16 +335,18 @@ class MatchScoutingForm(wtforms.Form):
     teleop_cap_4=wtforms.BooleanField("Cap Team Marker")
     teleop_move_foundation=wtforms.BooleanField("Move Foundation")
     teleop_park=wtforms.BooleanField("Park")
-    under_bridge=wtforms.BooleanField("Under Alliance Bridge")
-    not_under_bridge=wtforms.BooleanField("Taller than 14 in")
     feeder=wtforms.BooleanField("Feeder Bot")
     stacker=wtforms.BooleanField("Stacking Bot")
+    speedy=wtforms.BooleanField("Speedy")
+    tall_lift=wtforms.BooleanField("Tall Lift")
+    under_bridge=wtforms.BooleanField("Fits Under Bridge")
+    not_under_bridge=wtforms.BooleanField("Doesn't Fit Under Bridge")
+    knocked_tower=wtforms.BooleanField("Toppled Own Tower")
+    DC=wtforms.BooleanField("DC :(")
+    dangerous_driving=wtforms.BooleanField("Dangerous Driving")
+    steps_over_bridge=wtforms.BooleanField("Steps Over Bridge")
     very_gp=wtforms.BooleanField("GP :)")
     not_gp=wtforms.BooleanField("Not GP :(")
-    steps_over_bridge=wtforms.BooleanField("Steps over bridge")
-    tall_lift=wtforms.BooleanField("Tall lift")
-    DC=wtforms.BooleanField("DC :(")
-    speedy=wtforms.BooleanField("Speedy")
     notes=wtforms.TextAreaField()
 
 
@@ -575,42 +592,48 @@ def getCategoriesList():
         "SELECT * FROM Categories").fetchall()
     sqlConn.close()
 
-    under_bridge_list=[]
-    not_under_bridge_list=[]
     feeder_list=[]
     stacker_list=[]
+    speedy_list=[]
+    tall_lift_list=[]
+    under_bridge_list=[]
+    not_under_bridge_list=[]
+    knocked_tower_list=[]
+    DC_list=[]
+    dangerous_driving_list=[]
+    steps_over_bridge_list=[]
     very_gp_list=[]
     not_gp_list=[]
-    steps_over_bridge_list=[]
-    tall_lift_list=[]
-    DC_list=[]
-    speedy_list=[]
 
     for team in data:
         teamNumber=team[0]
         # Category Variables List
         if team[1]:
-            under_bridge_list.append(teamNumber)
-        if team[2]:
-            not_under_bridge_list.append(teamNumber)
-        if team[3]:
             feeder_list.append(teamNumber)
-        if team[4]:
+        if team[2]:
             stacker_list.append(teamNumber)
-        if team[5]:
-            very_gp_list.append(teamNumber)
-        if team[6]:
-            not_gp_list.append(teamNumber)
-        if team[7]:
-            steps_over_bridge_list.append(teamNumber)
-        if team[8]:
-            tall_lift_list.append(teamNumber)
-        if team[9]:
-            DC_list.append(teamNumber)
-        if team[10]:
+        if team[3]:
             speedy_list.append(teamNumber)
+        if team[4]:
+            tall_lift_list.append(teamNumber)
+        if team[5]:
+            under_bridge_list.append(teamNumber)
+        if team[6]:
+            not_under_bridge_list.append(teamNumber)
+        if team[7]:
+            knocked_tower_list.append(teamNumber)
+        if team[8]:
+            DC_list.append(teamNumber)
+        if team[9]:
+            dangerous_driving_list.append(teamNumber)
+        if team[10]:
+            steps_over_bridge_list.append(teamNumber)
+        if team[11]:
+            very_gp_list.append(teamNumber)
+        if team[12]:
+            not_gp_list.append(teamNumber)
 
-    return under_bridge_list, not_under_bridge_list, feeder_list, stacker_list, very_gp_list, not_gp_list, steps_over_bridge_list, tall_lift_list, DC_list, speedy_list
+    return feeder_list, stacker_list, speedy_list, tall_lift_list, under_bridge_list, not_under_bridge_list, knocked_tower_list, DC_list, dangerous_driving_list, steps_over_bridge_list, very_gp_list, not_gp_list
 
 
 def validateMatchInfoForm(form):
@@ -989,8 +1012,8 @@ def getTeamInfo(teamNumber):
 
 
     performanceInfo={
-        'preGame': {'auton': rawPerfData[22], 'teleOp': rawPerfData[23]},
-        'match': {'auton': rawPerfData[25], 'teleOp': rawPerfData[26]}
+        'preGame': {'auton': rawPerfData[40], 'teleOp': rawPerfData[41]},
+        'match': {'auton': rawPerfData[43], 'teleOp': rawPerfData[44]}
     }
 
     compInfo={}

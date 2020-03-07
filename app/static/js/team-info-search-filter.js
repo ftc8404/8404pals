@@ -1,14 +1,15 @@
-var match_under_bridge = true;
-var match_not_under_bridge = true;
 var match_feeder = true;
 var match_stacker = true;
+var match_speedy = true;
+var match_tall_lift = true;
+var match_under_bridge = true;
+var match_not_under_bridge = true;
+var match_knocked_tower = true;
+var match_DC = true;
+var match_dangerous_driving = true;
+var match_steps_over_bridge = true;
 var match_very_gp = true;
 var match_not_gp = true;
-var match_steps_over_bridge = true;
-var match_tall_lift = true;
-var match_DC = true;
-var match_speedy = true;
-
 
 
 $(document).ready(function () {
@@ -80,39 +81,45 @@ function toggleTableVisibility() {
     }
 }
 
-function changeFilter(checkboxElem) {
-    changeVisibility(checkboxElem.id, checkboxElem.checked)
-    if(checkboxElem.id=="Match Under Bridge" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Not Under Bridge" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Feeder" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Stacker" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Very Gp" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Not Gp" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Steps Over Bridge" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Tall Lift" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Dc" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-    if(checkboxElem.id=="Match Speedy" && !checkboxElem.checked){
-        match_under_bridge = false;
-    }
-}
+// function changeFilter(checkboxElem) {
+//     changeVisibility(checkboxElem.id, checkboxElem.checked)
+//     if(checkboxElem.id=="Match Feeder Bot" && !checkboxElem.checked){
+//         match_feeder = false;
+//     }
+//     if(checkboxElem.id=="Match Stacking Bot" && !checkboxElem.checked){
+//         match_stacker = false;
+//     }
+//     if(checkboxElem.id=="Match Speedy" && !checkboxElem.checked){
+//         match_speedy = false;
+//     }
+//     if(checkboxElem.id=="Match Tall Lift" && !checkboxElem.checked){
+//         match_tall_lift = false;
+//     }
+//     if(checkboxElem.id=="Match Fits Under Bridge" && !checkboxElem.checked){
+//         match_under_bridge = false;
+//     }
+//     if(checkboxElem.id=="Match Doesn't Fit Under Bridge" && !checkboxElem.checked){
+//         match_not_under_bridge = false;
+//     }
+//     if(checkboxElem.id=="Match Toppled Own Tower" && !checkboxElem.checked){
+//         match_knocked_tower = false;
+//     }
+//     if(checkboxElem.id=="Match DC :(" && !checkboxElem.checked){
+//         match_DC = false;
+//     }
+//     if(checkboxElem.id=="Match Dangerous Driving" && !checkboxElem.checked){
+//         match_dangerous_driving = false;
+//     }
+//     if(checkboxElem.id=="Match Steps Over Bridge" && !checkboxElem.checked){
+//         match_steps_over_bridge = false;
+//     }
+//     if(checkboxElem.id=="Match GP :)" && !checkboxElem.checked){
+//         match_very_gp = false;
+//     }
+//     if(checkboxElem.id=="Match Not GP :(" && !checkboxElem.checked){
+//         match_not_gp = false;
+//     }
+// }
 
 function changeVisibility(columnName, isVisible) {
     var filterElems = document.getElementsByClassName('filter-' + columnName)

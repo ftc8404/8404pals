@@ -38,13 +38,66 @@
 						&#x25B2; All Filters &#x25B2;</h2>
 					<div id="all-filters" style="display: none">
 						<div class="row gtr-uniform">
-							{% for key in data.tableKeys[28:38] %}
 							<div class="col-3 col-4-large col-6-small">
-								<input name="{{ key }}" id="{{ key }}" type="checkbox" onchange="changeFilter(this)"
+								<input name="Match Feeder Bot" id="Match Feeder Bot" type="checkbox" onchange="changeFilter(this)"
 									unchecked>
-								<label for="{{ key }}">{{ key }}</label>
+								<label for="Match Feeder Bot">Match Feeder Bot</label>
 							</div>
-							{% endfor %}
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Stacking Bot" id="Match Stacking Bot" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Stacking Bot">Match Stacking Bot</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Speedy" id="Match Speedy" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Speedy">Match Speedy</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Tall Lift" id="Match Tall Lift" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Tall Lift">Match Tall Lift</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Fits Under Bridge" id="Match Fits Under Bridge" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Fits Under Bridge">Match Fits Under Bridge</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Doesn't Fit Under Bridge" id="Match Doesn't Fit Under Bridge" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Doesn't Fit Under Bridge">Match Doesn't Fit Under Bridge</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Toppled Own Tower" id="Match Toppled Own Tower" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Toppled Own Tower">Match Toppled Own Tower</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match DC :(" id="Match DC :(" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match DC :(">Match DC :(</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Dangerous Driving" id="Match Dangerous Driving" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Dangerous Driving">Match Dangerous Driving</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Steps Over Bridge" id="Match Steps Over Bridge" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Steps Over Bridge">Match Steps Over Bridge</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match GP :)" id="Match GP :)" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match GP :)">Match GP :)</label>
+							</div>
+							<div class="col-3 col-4-large col-6-small">
+								<input name="Match Not GP :(" id="Match Not GP :(" type="checkbox" onchange="changeFilter(this)"
+									unchecked>
+								<label for="Match Not GP :(">Match Not GP :(</label>
+							</div>
 						</div>
 					</div>
 				</section>

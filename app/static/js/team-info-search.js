@@ -15,97 +15,114 @@ Httpreq.send(null);
 var lists = JSON.parse(Httpreq.responseText);
 
 // Category Variables List
-var under_bridge_list = lists[0];
-var not_under_bridge_list = lists[1];
-var feeder_list = lists[2];
-var stacker_list = lists[3];
-var very_gp_list = lists[4];
-var not_gp_list = lists[5];
-var steps_over_bridge_list = lists[6];
-var tall_lift_list = lists[7];
-var DC_list = lists[8];
-var speedy_list = lists[9];
+var feeder_list = lists[0];
+var stacker_list = lists[1];
+var speedy_list = lists[2];
+var tall_lift_list = lists[3];
+var under_bridge_list = lists[4];
+var not_under_bridge_list = lists[5];
+var knocked_tower_list = lists[6];
+var DC_list = lists[7];
+var dangerous_driving_list = lists[8];
+var steps_over_bridge_list = lists[9];
+var very_gp_list = lists[10];
+var not_gp_list = lists[11];
 
-var match_under_bridge = false;
-var match_not_under_bridge = false;
+
 var match_feeder = false;
 var match_stacker = false;
+var match_speedy = false;
+var match_tall_lift = false;
+var match_under_bridge = false;
+var match_not_under_bridge = false;
+var match_knocked_tower = false;
+var match_DC = false;
+var match_dangerous_driving = false;
+var match_steps_over_bridge = false;
 var match_very_gp = false;
 var match_not_gp = false;
-var match_steps_over_bridge = false;
-var match_tall_lift = false;
-var match_DC = false;
-var match_speedy = false;
 
 function changeFilter(checkboxElem) {
-    if (checkboxElem.id == "Match Under Bridge") {
-        match_under_bridge = checkboxElem.checked;
-    }
-    if (checkboxElem.id == "Match Not Under Bridge") {
-        match_not_under_bridge = checkboxElem.checked;
-    }
-    if (checkboxElem.id == "Match Feeder") {
+    if (checkboxElem.id == "Match Feeder Bot") {
         match_feeder = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Stacker") {
+    if (checkboxElem.id == "Match Stacking Bot") {
         match_stacker = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Very Gp") {
-        match_very_gp = checkboxElem.checked;
-    }
-    if (checkboxElem.id == "Match Not Gp") {
-        match_not_gp = checkboxElem.checked;
-    }
-    if (checkboxElem.id == "Match Steps Over Bridge") {
-        match_steps_over_bridge = checkboxElem.checked;
+    if (checkboxElem.id == "Match Speedy") {
+        match_speedy = checkboxElem.checked;
     }
     if (checkboxElem.id == "Match Tall Lift") {
         match_tall_lift = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Dc") {
+    if (checkboxElem.id == "Match Fits Under Bridge") {
+        match_under_bridge = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Doesn't Fit Under Bridge") {
+        match_not_under_bridge = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Toppled Own Tower") {
+        match_knocked_tower = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match DC :(") {
         match_DC = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Speedy") {
-        match_speedy = checkboxElem.checked;
+    if (checkboxElem.id == "Match Dangerous Driving") {
+        match_dangerous_driving = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Steps Over Bridge") {
+        match_steps_over_bridge = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match GP :)") {
+        match_very_gp = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Not GP :(") {
+        match_not_gp = checkboxElem.checked;
     }
     searchChange();
 }
 
 function getTeams() {
-    if (!(match_under_bridge || match_not_under_bridge || match_feeder || match_stacker || match_very_gp || match_not_gp || match_steps_over_bridge || match_tall_lift || match_DC || match_speedy)) {
+    if (!(match_feeder || match_stacker || match_speedy || match_tall_lift || match_under_bridge || match_not_under_bridge || match_knocked_tower || match_DC || match_dangerous_driving || match_steps_over_bridge || match_very_gp || match_not_gp)) {
         return teamsUnprocessed;
     }
     let teams = Object.keys(teamsUnprocessed);
     teams=teams.map(Number);
-    if (match_under_bridge) {
-        teams = teams.filter(element => under_bridge_list.includes(element));
-    }
-    if (match_not_under_bridge) {
-        teams = teams.filter(element => not_under_bridge_list.includes(element));
-    }
     if (match_feeder) {
         teams = teams.filter(element => feeder_list.includes(element));
     }
     if (match_stacker) {
         teams = teams.filter(element => stacker_list.includes(element));
     }
+    if (match_speedy) {
+        teams = teams.filter(element => speedy_list.includes(element));
+    }
+    if (match_tall_lift) {
+        teams = teams.filter(element => tall_lift_list.includes(element));
+    }
+    if (match_under_bridge) {
+        teams = teams.filter(element => under_bridge_list.includes(element));
+    }
+    if (match_not_under_bridge) {
+        teams = teams.filter(element => not_under_bridge_list.includes(element));
+    }
+    if (match_knocked_tower) {
+        teams = teams.filter(element => knocked_tower_list.includes(element));
+    }
+    if (match_DC) {
+        teams = teams.filter(element => DC_list.includes(element));
+    }
+    if (match_dangerous_driving) {
+        teams = teams.filter(element => dangerous_driving_list.includes(element));
+    }
+    if (match_steps_over_bridge) {
+        teams = teams.filter(element => steps_over_bridge_list.includes(element));
+    }
     if (match_very_gp) {
         teams = teams.filter(element => very_gp_list.includes(element));
     }
     if (match_not_gp) {
         teams = teams.filter(element => not_gp_list.includes(element));
-    }
-    if (match_steps_over_bridge) {
-        teams = teams.filter(element => steps_over_bridge_list.includes(element));
-    }
-    if (match_tall_lift) {
-        teams = teams.filter(element => tall_lift_list.includes(element));
-    }
-    if (match_DC) {
-        teams = teams.filter(element => DC_list.includes(element));
-    }
-    if (match_speedy) {
-        teams = teams.filter(element => speedy_list.includes(element));
     }
     let teamPairs = {}
     for (let element of teams) {

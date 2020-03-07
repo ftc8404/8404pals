@@ -30,15 +30,15 @@ var siliconDivisionTeams = compData.siliconDiv;
 
 for (let teamNumber in allData) { 
     let teamDataRaw = allData[teamNumber]; 
-    if (teamDataRaw[39] == 'N/A') { 
+    if (teamDataRaw[40] == 'N/A') { 
         missingPreGameTeams.push(teamNumber) 
     } 
     else { 
-        preGameDataUnsorted.push([teamNumber, teamDataRaw[38], teamDataRaw[39]]); // TODO 
-    } if (teamDataRaw[42] == 'N/A') { 
+        preGameDataUnsorted.push([teamNumber, teamDataRaw[40], teamDataRaw[41]]); // TODO 
+    } if (teamDataRaw[43] == 'N/A') { 
         missingMatchTeams.push(teamNumber) 
     } else { 
-        matchDataUnsorted.push([teamNumber, teamDataRaw[41], teamDataRaw[42]]); // TODO 
+        matchDataUnsorted.push([teamNumber, teamDataRaw[43], teamDataRaw[44]]); // TODO 
     } 
 } 
 
