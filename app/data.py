@@ -75,7 +75,6 @@ def addNoteEntry(teamNumber, tag, message):
     sqlConn.commit()
     sqlConn.close()
 
-
 def getNoteEntries(teamNumber):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
@@ -374,14 +373,6 @@ def validatePreGameScoutingForm(form):
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
-
-    division = False
-    field_name='gold_division'
-    if field_name in form and form[field_name] == 'y':
-        division = True
-    field_name = 'silicon_division'
-    if division and field_name in form and form[field_name] == 'y':
-        return 'Team can only be in either Gold or Silicon Division, not both'
 
     # check if number of stones delivered during auton is an integer between 1 - 6
     autonStones=0
@@ -868,6 +859,32 @@ def getCompetitionOverviewData():
                                  matchScoutingFormData)
 
     allData={}
+    
+    sqlConn=getSqlConn()
+    sqlCursor=sqlConn.cursor()
+
+    goldDivisionRaw = [sqlCursor.execute("SELECT gold_division FROM Divisions").fetchall()]
+    goldDivision = goldDivisionRaw[0]
+    siliconDivisionRaw = [sqlCursor.execute("SELECT silicon_division FROM Divisions").fetchall()]
+    siliconDivision = siliconDivisionRaw[0]
+    goldTeams = []
+    siliconTeams = []
+    
+    index = 0
+    for team in goldDivision:
+        for item in team:
+            if item == True:
+                goldTeams.append(allTeamNumbers[index])
+        index += 1
+
+    index = 0
+    for team in siliconDivision:
+        for item in team:
+            if item == True:
+                siliconTeams.append(allTeamNumbers[index])
+        index += 1
+    
+
     for teamNumber in allTeamNumbers:
         allData[teamNumber]=[teamNumber]+preGameScoutingData['data'][teamNumber] + \
             matchScoutingData['data'][teamNumber] + \
@@ -877,7 +894,7 @@ def getCompetitionOverviewData():
         matchScoutingData['fields']+summaryData['fields']
 
     competitionData={
-        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys}
+        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys, "goldDiv": goldTeams, "siliconDiv": siliconTeams}
 
     return competitionData
 
@@ -969,6 +986,7 @@ def getTeamInfo(teamNumber):
     generalInfo['qualifiers']=quals
 
     rawPerfData=getCompetitionOverviewData()['allData'][teamNumber]
+
 
     performanceInfo={
         'preGame': {'auton': rawPerfData[22], 'teleOp': rawPerfData[23]},

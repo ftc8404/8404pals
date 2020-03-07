@@ -38,12 +38,18 @@
 						&#x25B2; Chart &#x25B2;</h2>
 					<div id="chart-parent" style="display: none">
 						<div>
-							<input type="radio" name="chart-scope" id="chart-scope-pre-game" value="pre-game"
+							<input type="radio" name="chart-scope" id="chart-scope-pre-game-gold" value="pre-game-gold"
 								onchange="updateChartScope()" checked>
-							<label for="chart-scope-pre-game">Pre-Game</label>
-							<input type="radio" name="chart-scope" id="chart-scope-match" value="match"
+							<label for="chart-scope-pre-game-gold">Pre-Game Gold</label>
+							<input type="radio" name="chart-scope" id="chart-scope-pre-game-silicon" value="pre-game-silicon"
+								onchange="updateChartScope()" checked>
+							<label for="chart-scope-pre-game-silicon">Pre-Game Silicon</label>
+							<input type="radio" name="chart-scope" id="chart-scope-match-gold" value="match-gold"
 								onchange="updateChartScope()">
-							<label for="chart-scope-match">Match</label>
+							<label for="chart-scope-match-gold">Match Gold</label>
+							<input type="radio" name="chart-scope" id="chart-scope-match-silicon" value="match-silicon"
+								onchange="updateChartScope()">
+							<label for="chart-scope-match-silicon">Match Silicon</label>
 						</div>
 						<div class="chart-container"
 							style="padding-bottom: 3em; height:{{ (data.allData|length)*2+4 }}em; width:100%">
