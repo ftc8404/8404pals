@@ -3,6 +3,11 @@ var Httpreq = new XMLHttpRequest();
 Httpreq.open("GET", "/api/competition-overview/", false); 
 Httpreq.send(null); var compData = JSON.parse(Httpreq.responseText); 
 
+var Httpreq = new XMLHttpRequest(); // a new request
+Httpreq.open("GET", "/api/team-info/", false);
+Httpreq.send(null);
+var teamsUnprocessed = JSON.parse(Httpreq.responseText);
+
 Chart.defaults.global.defaultFontColor = '#585858'; 
 Chart.defaults.global.defaultFontColor.defaultFontFamily = "'Source Sans Pro', 'Helvetica', 'sans-serif'"; 
 Chart.defaults.global.defaultFontColor.defaultFontSize = 16; 
@@ -30,6 +35,7 @@ var siliconDivisionTeams = compData.siliconDiv;
 
 for (let teamNumber in allData) { 
     let teamDataRaw = allData[teamNumber]; 
+
     if (teamDataRaw[40] == 'N/A') { 
         missingPreGameTeams.push(teamNumber) 
     } 
@@ -60,14 +66,14 @@ for (let i = 0; i < preGameDataUnsorted.length; i++) {
     let entry = preGameDataUnsorted[i]; 
     teamNumber = parseInt(entry[0])
     if (teamNumber == goldDivisionTeams[goldIndex]) {
-        goldTeamsPreGame.push(entry[0]); 
+        goldTeamsPreGame.push(entry[0] + " " + teamsUnprocessed[teamNumber]); 
         goldPreGameDatasets[0].data.push(entry[1]); 
         goldPreGameDatasets[1].data.push(entry[2]); 
         goldIndex ++;
     }
     
     if (teamNumber == siliconDivisionTeams[siliconIndex]) {
-        siliconTeamsPreGame.push(entry[0]); 
+        siliconTeamsPreGame.push(entry[0] + " " + teamsUnprocessed[teamNumber]); 
         siliconPreGameDatasets[0].data.push(entry[1]); 
         siliconPreGameDatasets[1].data.push(entry[2]); 
         siliconIndex ++;
@@ -81,18 +87,16 @@ for (let i = 0; i < matchDataUnsorted.length; i++) {
     let entry = matchDataUnsorted[i]; 
     teamNumber = parseInt(entry[0])
     if (teamNumber == goldDivisionTeams[goldIndex]) {
-        goldTeamsMatch.push(entry[0]); 
         goldMatchDatasets[0].data.push(entry[1]); 
         goldMatchDatasets[1].data.push(entry[2]); 
         goldIndex ++;
     }
     
     if (teamNumber == siliconDivisionTeams[siliconIndex]) {
-        siliconTeamsMatch.push(entry[0]); 
         siliconMatchDatasets[0].data.push(entry[1]); 
         siliconMatchDatasets[1].data.push(entry[2]); 
         siliconIndex ++;
-    } 
+    }
 } 
 
 function updateChartScope() { 
@@ -123,11 +127,11 @@ function chartDispPreGameScouting(division) {
 
 function chartDispMatchScouting(division) { 
     if (division == "gold") {
-        chart.data.labels = goldTeamsMatch; 
+        chart.data.labels = goldTeamsPreGame; 
         chart.data.datasets = goldMatchDatasets; 
     }
     if (division == "silicon") {
-        chart.data.labels = siliconTeamsMatch; 
+        chart.data.labels = siliconTeamsPreGame; 
         chart.data.datasets = siliconMatchDatasets; 
     }
     chart.options.scales.xAxes[0].stacked = true; 
