@@ -881,6 +881,7 @@ def getCompetitionOverviewData():
     summaryData=getDataSummary(allTeamNumbers, preGameScoutingFormData,
                                  matchScoutingFormData)
 
+                    
     allData={}
     
     sqlConn=getSqlConn()

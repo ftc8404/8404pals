@@ -27,6 +27,8 @@ var dangerous_driving_list = lists[8];
 var steps_over_bridge_list = lists[9];
 var very_gp_list = lists[10];
 var not_gp_list = lists[11];
+var gold_list = compData.goldDiv;
+var silicon_list = compData.siliconDiv;
 
 
 var match_feeder = false;
@@ -41,6 +43,8 @@ var match_dangerous_driving = false;
 var match_steps_over_bridge = false;
 var match_very_gp = false;
 var match_not_gp = false;
+var match_gold = false;
+var match_silicon = false;
 
 function changeFilter(checkboxElem) {
     if (checkboxElem.id == "Match Feeder Bot") {
@@ -79,11 +83,17 @@ function changeFilter(checkboxElem) {
     if (checkboxElem.id == "Match Not GP :(") {
         match_not_gp = checkboxElem.checked;
     }
+    if (checkboxElem.id == "Match Gold Division") {
+        match_gold = checkboxElem.checked;
+    }
+    if (checkboxElem.id == "Match Silicon Division") {
+        match_silicon = checkboxElem.checked;
+    }
     searchChange();
 }
 
 function getTeams() {
-    if (!(match_feeder || match_stacker || match_speedy || match_tall_lift || match_under_bridge || match_not_under_bridge || match_knocked_tower || match_DC || match_dangerous_driving || match_steps_over_bridge || match_very_gp || match_not_gp)) {
+    if (!(match_gold || match_silicon || match_feeder || match_stacker || match_speedy || match_tall_lift || match_under_bridge || match_not_under_bridge || match_knocked_tower || match_DC || match_dangerous_driving || match_steps_over_bridge || match_very_gp || match_not_gp)) {
         return teamsUnprocessed;
     }
     let teams = Object.keys(teamsUnprocessed);
@@ -123,6 +133,12 @@ function getTeams() {
     }
     if (match_not_gp) {
         teams = teams.filter(element => not_gp_list.includes(element));
+    }
+    if (match_gold) {
+        teams = teams.filter(element => gold_list.includes(element));
+    }
+    if (match_silicon) {
+        teams = teams.filter(element => silicon_list.includes(element));
     }
     let teamPairs = {}
     for (let element of teams) {
