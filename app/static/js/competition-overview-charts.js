@@ -73,22 +73,16 @@ for (let i = 0; i < preGameDataUnsorted.length; i++) {
     }
 }
 
-goldIndex = 0;
-siliconIndex = 0;
 
 for (let i = 0; i < matchDataUnsorted.length; i++) {
     let entry = matchDataUnsorted[i];
     teamNumber = parseInt(entry[0])
-    if (teamNumber == goldDivisionTeams[goldIndex]) {
+    if (goldDivisionTeams.indexOf(teamNumber) > -1) {
         goldMatchDatasets[0].data.push(entry[1]);
         goldMatchDatasets[1].data.push(entry[2]);
-        goldIndex++;
-    }
-
-    if (teamNumber == siliconDivisionTeams[siliconIndex]) {
+    } else {
         siliconMatchDatasets[0].data.push(entry[1]);
         siliconMatchDatasets[1].data.push(entry[2]);
-        siliconIndex++;
     }
 }
 
