@@ -1,18 +1,2 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.7
-
-LABEL Name=quixilver8404data Version=0.0.1
-ENV LISTEN_PORT 5000
-EXPOSE 5000
-
-#Copy ODBC config
-COPY odbcinst.ini /etc/odbcinst.ini
-
-#Install FreeTDS and dependencies for PyODBC
-RUN apt-get update && apt-get install -y tdsodbc unixodbc-dev \
-    && apt install unixodbc-bin -y  \
-    && apt-get clean -y
-
-COPY ./app /app
-
-RUN pip install --no-cache-dir -U pip
-RUN pip install --no-cache-dir -r /app/requirements.txt
+docker network create — subnet=172.18.0.0/16 hadoopnet
+docker run -d --net hadoopnet --ip 192.168.1.1 — hostname nodemaster --add-host node2:192.168.1.2 — add-host node3:192.168.1.3 --name nodemaster -it hadoopbase
