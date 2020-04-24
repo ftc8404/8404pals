@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>
+		ADMIN
+	</title>
+</head>
+<body>
+
+	<script type="text/javascript" src="../static/js/admin.js"></script>
+	<script type="text/javascript">
+		let tables = document.body.getElementByID("li");
+		for(int i = 0; i < actions.length; i++ ) {
+			tables.append(`<ol> ${email} </ol>
+						   <ol> ${action} </ol>`)
+		}
+	</script>
+	<li  id="li">
+		<ol>
+			Content
+		</ol>
+	</li>
+	<p onclick="accepts()">Accept</p>
+	<p onclick="deletes()">Delete</p>
+	<p onclick="promote()">Promote</p>
+	<p onclick="demote()">Demote</p>
+	<p onclick="ban()">Ban</p>
+</body>
+</html>
