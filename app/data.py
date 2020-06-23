@@ -11,7 +11,7 @@ password = os.getenv('SQLCONNSTR_PASSWORD')
 
 
 driver = ''
-if platform.system() == 'Windows':
+if platform.system() == 'Windows' or platform.system() == 'Darwin':
     driver = '{ODBC Driver 17 for SQL Server}'
 else:
     driver = '{FreeTDS}'
