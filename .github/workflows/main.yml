@@ -24,6 +24,7 @@ jobs:
     - uses: mr-smithers-excellent/docker-build-push@v3
       with:
         image: 8404pals/docker-image
+        tag: latest
         registry: docker.pkg.github.com
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
