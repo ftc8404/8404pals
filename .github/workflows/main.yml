@@ -21,9 +21,9 @@ jobs:
     - uses: actions/checkout@v2
 
     # Does docker stuff
-    uses: mr-smithers-excellent/docker-build-push@v3
-    with:
-      image: 8404pals/docker-image
-      registry: docker.pkg.github.com
-      username: ${{ github.actor }}
-      password: ${{ secrets.GITHUB_TOKEN }}
+    - uses: mr-smithers-excellent/docker-build-push@v3
+      with:
+        image: 8404pals/docker-image
+        registry: docker.pkg.github.com
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
