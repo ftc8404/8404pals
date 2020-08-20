@@ -9,3 +9,4 @@ pyodbc==4.0.30
 Unidecode==1.0.23
 python-dotenv==0.14.0
 Authlib==0.14.3
+requests==2.24.0
