@@ -1,5 +1,8 @@
 <nav id="menu">
     <h2>Menu</h2>
+    {% if session['logged_in'] %}
+    <h3>Hello {{session.jwt_payload.given_name}} {{session.jwt_payload.family_name}}!</h3>
+    {% endif %}
     <ul>
         <li><a href="/">Home</a></li>
         <li><a href="/competition-overview">Competition overview</a></li>
@@ -7,5 +10,10 @@
         <li><a href="/match-info">Match Info</a></li>
         <li><a href="/pre-game-scouting">Pre-game scouting</a></li>
         <li><a href="/match-scouting">Match scouting</a></li>
+        {% if session['logged_in'] %}
+        <li><a href="/logout">Sign Out</a></li>   
+        {% else %}
+        <li><a href="/login">Sign In</a></li>
+        {% endif %}
     </ul>
 </nav>
