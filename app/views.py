@@ -54,6 +54,15 @@ def requires_auth(f):
 
     return decorated
 
+def requires_auth_api(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if constants.PROFILE_KEY not in session:
+            return "403 FORBIDDEN"
+        return f(*args, **kwargs)
+
+    return decorated
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(os.path.join(app.root_path, 'static'), 'favicon'),
@@ -70,6 +79,7 @@ def hello():
 
 
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])
+@requires_auth
 def pre_game_scouting():
     form = data.PreGameScoutingForm(request.form)
     print(form.errors)
@@ -106,6 +116,7 @@ def match_scouting():
 
 
 @app.route("/team-info/<int:team_number>/", methods=['GET', 'POST'])
+@requires_auth
 def team(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     error = ""
@@ -120,11 +131,13 @@ def team(team_number):
 
 
 @app.route("/team-info")
+@requires_auth
 def team_info():
     return render_template('team-info-search.html', data=data.getCompetitionOverviewData())
 
 
 @app.route("/match-info", methods=['GET', 'POST'])
+@requires_auth
 def match_info():
     message = ''
     formValues = None
@@ -146,11 +159,13 @@ def match_info():
 
 
 @app.route("/competition-overview")
+@requires_auth
 def competition_overview():
     return render_template('competition-overview.html', data=data.getCompetitionOverviewData())
 
 
 @app.route("/set-competition-id/<int:competition_id>/")
+@requires_auth
 def set_competition_id(competition_id):
     data.curCompetitionId = competition_id
     data.curCompetitionCityName = data.getCurCompetitionCityName()
@@ -158,16 +173,19 @@ def set_competition_id(competition_id):
 
 
 @app.route("/api/competition-overview/")
+@requires_auth_api
 def api_competition_overview():
     return json.dumps(data.getCompetitionOverviewData())
 
 @app.route("/api/categories-list/")
+@requires_auth_api
 def api_categories_list():
     return json.dumps(data.getCategoriesList())
 
 
 @app.route("/api/team-info/")
 @app.route("/api/team-info/<int:team_number>/")
+@requires_auth_api
 def api_team_info(team_number=None):
     if team_number:
         generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
@@ -182,18 +200,21 @@ def api_team_info(team_number=None):
 
 
 @app.route("/api/team-info/<int:team_number>/general/")
+@requires_auth_api
 def api_team_info_general(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return json.dumps(generalInfo)
 
 
 @app.route("/api/team-info/<int:team_number>/performance/")
+@requires_auth_api
 def api_team_info_perf(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return json.dumps(performanceInfo)
 
 
 @app.route("/api/team-info/<int:team_number>/matches/")
+@requires_auth_api
 def api_team_info_matches(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return json.dumps(compInfo['matches'])
@@ -201,12 +222,14 @@ def api_team_info_matches(team_number):
 
 @app.route("/api/match-results/")
 @app.route("/api/match-results/<int:team_number>/")
+@requires_auth_api
 def api_match_results(team_number=None):
     matches = data.getMatchResults(teamNumber=team_number)
     return json.dumps(matches)
 
 
 @app.route("/api/notes/<int:team_number>/")
+@requires_auth_api
 def api_notes(team_number):
     allNotes = data.getNoteEntries(team_number)
     allNotesFormatted = {}
