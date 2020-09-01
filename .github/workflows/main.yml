@@ -28,3 +28,10 @@ jobs:
         registry: docker.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # Webhook to get Azure to redeploy
+    - name: Invoke deployment hook
+      uses: distributhor/workflow-webhook@v1
+      env:
+        webhook_url: ${{ secrets.AZURE_WEBHOOK_URL }}
+        webhook_secret: ${{ secrets.AZURE_WEBHOOK_SECRET }}
