@@ -23,8 +23,8 @@ jobs:
     # Does docker stuff
     - uses: mr-smithers-excellent/docker-build-push@v3
       with:
-        image: 8404pals/docker-image
+        image: axchen7/8404pals
         tag: latest
-        registry: docker.pkg.github.com
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.io
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
