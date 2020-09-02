@@ -244,8 +244,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.clear()
     session.pop('session')
+    session.clear()
     session['logged_in'] = False
     params = {'returnTo': url_for('hello', _external=True), 'client_id': AUTH0_CLIENT_ID}
     session.set_cookie('session', '', expires=0)
