@@ -98,6 +98,7 @@ def pre_game_scouting():
 
 
 @app.route("/match-scouting", methods=['GET', 'POST'])
+@requires_auth
 def match_scouting():
     form = data.MatchScoutingForm(request.form)
     print(form.errors)
