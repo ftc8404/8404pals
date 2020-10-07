@@ -239,16 +239,12 @@ def api_notes(team_number):
 
 @app.route('/login')
 def login():
-    session['logged_in'] = True
     return auth0.authorize_redirect(redirect_uri=AUTH0_CALLBACK_URL, audience=AUTH0_AUDIENCE)
 
 @app.route('/logout')
 def logout():
-    session.pop('session')
     session.clear()
-    session['logged_in'] = False
     params = {'returnTo': url_for('hello', _external=True), 'client_id': AUTH0_CLIENT_ID}
-    session.set_cookie('session', '', expires=0)
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
 @app.route('/callback')
@@ -256,6 +252,7 @@ def callback_handling():
     auth0.authorize_access_token()
     resp = auth0.get('userinfo')
     userinfo = resp.json()
+    session['logged_in'] = True
     session[constants.JWT_PAYLOAD] = userinfo
     session[constants.PROFILE_KEY] = {
         'user_id': userinfo['sub'],
