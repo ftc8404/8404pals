@@ -75,6 +75,7 @@ def addNoteEntry(teamNumber, tag, message):
     sqlConn.commit()
     sqlConn.close()
 
+
 def getNoteEntries(teamNumber):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
@@ -226,8 +227,8 @@ def addMatchScoutingEntry(formValues):
         catValue12 = 1
 
     if(len(sqlCursor.execute("SELECT * FROM Categories WHERE team_number="+str(teamNumber)).fetchall()) == 0):
-        sqlCursor.execute("INSERT Categories (team_number) VALUES ("+str(teamNumber)+")")
-
+        sqlCursor.execute(
+            "INSERT Categories (team_number) VALUES ("+str(teamNumber)+")")
 
     if (catValue1 == 1):
         sqlCursor.execute("UPDATE Categories SET feeder=" +
@@ -269,85 +270,85 @@ def addMatchScoutingEntry(formValues):
     sqlConn.commit()
     sqlConn.close()
 
-    notes=formValues["notes"]
+    notes = formValues["notes"]
     if len(notes) > 0:
-        tag="Match observations"
+        tag = "Match observations"
         addNoteEntry(teamNumber, tag, notes)
 
 
 class PreGameScoutingForm(wtforms.Form):
-    error=None
+    error = None
 
-    team_number=wtforms.IntegerField("Team Number", validators=[
+    team_number = wtforms.IntegerField("Team Number", validators=[
         wtforms.validators.required()])
-    contact=wtforms.TextField("Contact / Web Page / Social Media", validators=[
+    contact = wtforms.TextField("Contact / Web Page / Social Media", validators=[
         wtforms.validators.optional()])
-    gold_division=wtforms.BooleanField("Gold Division")
-    silicon_division=wtforms.BooleanField("Silicon Division")
+    gold_division = wtforms.BooleanField("Gold Division")
+    silicon_division = wtforms.BooleanField("Silicon Division")
 
-    auton_stones=wtforms.IntegerField("Stones Delivered", validators=[
+    auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.optional()])
-    auton_skystones=wtforms.IntegerField("Skystones Delivered", validators=[
+    auton_skystones = wtforms.IntegerField("Skystones Delivered", validators=[
         wtforms.validators.optional()])
-    auton_stones_on_foundation=wtforms.IntegerField("Stones on Foundation", validators=[
+    auton_stones_on_foundation = wtforms.IntegerField("Stones on Foundation", validators=[
         wtforms.validators.optional()])
-    auton_foundation=wtforms.BooleanField("Reposition Foundation")
-    auton_under_skybridge=wtforms.BooleanField("Move Under Skybridge")
+    auton_foundation = wtforms.BooleanField("Reposition Foundation")
+    auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
 
-    teleop_stones=wtforms.IntegerField("Stones Moved", validators=[
+    teleop_stones = wtforms.IntegerField("Stones Moved", validators=[
         wtforms.validators.optional()])
-    teleop_max_level=wtforms.IntegerField("Max Level", validators=[
+    teleop_max_level = wtforms.IntegerField("Max Level", validators=[
         wtforms.validators.optional()])
-    teleop_cap=wtforms.BooleanField("Cap Team Marker")
-    teleop_move_foundation=wtforms.BooleanField("Move Foundation")
-    teleop_park=wtforms.BooleanField("Park")
+    teleop_cap = wtforms.BooleanField("Cap Team Marker")
+    teleop_move_foundation = wtforms.BooleanField("Move Foundation")
+    teleop_park = wtforms.BooleanField("Park")
 
-    notes=wtforms.TextAreaField()
+    notes = wtforms.TextAreaField()
 
 
 class MatchScoutingForm(wtforms.Form):
-    error=None
+    error = None
 
-    match_number=wtforms.IntegerField("Match Number", validators=[
-                                        wtforms.validators.required()])
-    team_number=wtforms.IntegerField("Team Number", validators=[
-                                       wtforms.validators.required()])
+    match_number = wtforms.IntegerField("Match Number", validators=[
+        wtforms.validators.required()])
+    team_number = wtforms.IntegerField("Team Number", validators=[
+        wtforms.validators.required()])
 
-    auton_stones=wtforms.IntegerField("Stones Delivered", validators=[
+    auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
         wtforms.validators.optional()])
-    auton_skystones=wtforms.IntegerField("Skystones Delivered", validators=[
+    auton_skystones = wtforms.IntegerField("Skystones Delivered", validators=[
         wtforms.validators.optional()])
-    auton_stones_on_foundation=wtforms.IntegerField("Stones on Foundation", validators=[
+    auton_stones_on_foundation = wtforms.IntegerField("Stones on Foundation", validators=[
         wtforms.validators.optional()])
-    auton_foundation=wtforms.BooleanField("Reposition Foundation")
-    auton_under_skybridge=wtforms.BooleanField("Move Under Skybridge")
+    auton_foundation = wtforms.BooleanField("Reposition Foundation")
+    auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
 
-    teleop_stones_total=wtforms.IntegerField("Total Stones Moved", validators=[
+    teleop_stones_total = wtforms.IntegerField("Total Stones Moved", validators=[
         wtforms.validators.optional()])
-    teleop_stones_1=wtforms.IntegerField("Stones in Stack")
-    teleop_stones_2=wtforms.IntegerField("Stones in Stack")
-    teleop_stones_3=wtforms.IntegerField("Stones in Stack")
-    teleop_stones_4=wtforms.IntegerField("Stones in Stack")
+    teleop_stones_1 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_2 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_3 = wtforms.IntegerField("Stones in Stack")
+    teleop_stones_4 = wtforms.IntegerField("Stones in Stack")
 
-    teleop_cap_1=wtforms.BooleanField("Cap Team Marker")
-    teleop_cap_2=wtforms.BooleanField("Cap Team Marker")
-    teleop_cap_3=wtforms.BooleanField("Cap Team Marker")
-    teleop_cap_4=wtforms.BooleanField("Cap Team Marker")
-    teleop_move_foundation=wtforms.BooleanField("Move Foundation")
-    teleop_park=wtforms.BooleanField("Park")
-    feeder=wtforms.BooleanField("Feeder Bot")
-    stacker=wtforms.BooleanField("Stacking Bot")
-    speedy=wtforms.BooleanField("Speedy")
-    tall_lift=wtforms.BooleanField("Tall Lift")
-    under_bridge=wtforms.BooleanField("Fits Under Bridge")
-    not_under_bridge=wtforms.BooleanField("Doesn't Fit Under Bridge")
-    knocked_tower=wtforms.BooleanField("Toppled Own Tower")
-    DC=wtforms.BooleanField("DC :(")
-    dangerous_driving=wtforms.BooleanField("Dangerous Driving")
-    steps_over_bridge=wtforms.BooleanField("Steps Over Bridge")
-    very_gp=wtforms.BooleanField("GP :)")
-    not_gp=wtforms.BooleanField("Not GP :(")
-    notes=wtforms.TextAreaField()
+    teleop_cap_1 = wtforms.BooleanField("Cap Team Marker")
+    teleop_cap_2 = wtforms.BooleanField("Cap Team Marker")
+    teleop_cap_3 = wtforms.BooleanField("Cap Team Marker")
+    teleop_cap_4 = wtforms.BooleanField("Cap Team Marker")
+    teleop_move_foundation = wtforms.BooleanField("Move Foundation")
+    teleop_park = wtforms.BooleanField("Park")
+    feeder = wtforms.BooleanField("Feeder Bot")
+    stacker = wtforms.BooleanField("Stacking Bot")
+    speedy = wtforms.BooleanField("Speedy")
+    tall_lift = wtforms.BooleanField("Tall Lift")
+    under_bridge = wtforms.BooleanField("Fits Under Bridge")
+    not_under_bridge = wtforms.BooleanField("Doesn't Fit Under Bridge")
+    knocked_tower = wtforms.BooleanField("Toppled Own Tower")
+    DC = wtforms.BooleanField("DC :(")
+    dangerous_driving = wtforms.BooleanField("Dangerous Driving")
+    steps_over_bridge = wtforms.BooleanField("Steps Over Bridge")
+    very_gp = wtforms.BooleanField("GP :)")
+    not_gp = wtforms.BooleanField("Not GP :(")
+    notes = wtforms.TextAreaField()
 
 
 def checkASCII(text):
@@ -355,7 +356,7 @@ def checkASCII(text):
 
 
 def validateNotesForm(form):
-    tag=form['tag']
+    tag = form['tag']
     if len(tag) == 0:
         return '"Empty tag"'
     if len(tag) > 60:
@@ -363,7 +364,7 @@ def validateNotesForm(form):
     # if not checkASCII(tag):
     #     return '"Invalid characters in tag. Only ASCII characters are allowed."'
 
-    message=form['message']
+    message = form['message']
     if len(message) == 0:
         return '"Empty message"'
     if len(message) > 60:
@@ -374,36 +375,36 @@ def validateNotesForm(form):
 
 
 def validatePreGameScoutingForm(form):
-    teamNumber=0
+    teamNumber = 0
     try:
-        teamNumber=int(form['team_number'])
+        teamNumber = int(form['team_number'])
     except ValueError:
         return '"Team Number" must be a positive integer'
 
     if teamNumber <= 0:
         return '"Team Number" must be a positive integer'
 
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    teamMatchAmount=len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
                                             str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
 
     # check if number of stones delivered during auton is an integer between 1 - 6
-    autonStones=0
+    autonStones = 0
     try:
-        autonStones=int(form['auton_stones'])
+        autonStones = int(form['auton_stones'])
     except ValueError:
         return '"Stones Delivered" must be a number from 0 - 6'
     if autonStones < 0 or autonStones > 6:
         return '"Stones Delivered" must be a number from 0 - 6'
 
     # check if number of skystones delivered during auton is an integer between 1 - 2
-    autonSkystones=0
+    autonSkystones = 0
     try:
-        autonSkystones=int(form['auton_skystones'])
+        autonSkystones = int(form['auton_skystones'])
     except ValueError:
         return '"Skystones Delivered" must be a number from 0 - 2'
     if autonSkystones < 0 or autonSkystones > 2:
@@ -413,9 +414,9 @@ def validatePreGameScoutingForm(form):
         return '"Skystones Delivered" cannot be greater than "Stones Delivered"'
 
     # check if number of stones on the foundation is an integer 0-6
-    autonStonesOnFoundation=0
+    autonStonesOnFoundation = 0
     try:
-        autonStonesOnFoundation=int(form['auton_stones_on_foundation'])
+        autonStonesOnFoundation = int(form['auton_stones_on_foundation'])
     except ValueError:
         return '"Stones On Foundation" must be a number from 0 - 6'
     if autonStonesOnFoundation < 0 or autonStonesOnFoundation > 6:
@@ -424,25 +425,25 @@ def validatePreGameScoutingForm(form):
     if autonStonesOnFoundation > autonStones:
         return '"Stones on Foundation" cannot be greater than "Stones Delivered"'
 
-    teleopStones=0
+    teleopStones = 0
     try:
-        teleopStones=int(form['teleop_stones'])
+        teleopStones = int(form['teleop_stones'])
     except ValueError:
         return '"Stones Moved" must be a number from 0 - 30'
 
     if teleopStones < 0 or teleopStones > 30:
         return '"Stones Moved" must be a number from 0 - 30'
 
-    teleOpMaxLevel=0
+    teleOpMaxLevel = 0
     try:
-        teleOpMaxLevel=int(form['teleop_max_level'])
+        teleOpMaxLevel = int(form['teleop_max_level'])
     except ValueError:
         return '"Max Level" must be a number from 0 - 30'
 
     if teleOpMaxLevel < 0 or teleOpMaxLevel > 30:
         return '"Max Level" must be a number from 0 - 30'
 
-    notes=form['notes']
+    notes = form['notes']
     if len(notes) > 800:
         return '"Notes must not exceed 800 characters"'
     if not checkASCII(notes):
@@ -455,9 +456,9 @@ def validateMatchScoutingForm(form):
     # validate all the data inputted to ensure bad data won't go into the database
 
     # check if team number is a positive integer
-    teamNumber=0
+    teamNumber = 0
     try:
-        teamNumber=int(form['team_number'])
+        teamNumber = int(form['team_number'])
     except ValueError:
         return '"Team Number" must be a positive integer'
 
@@ -465,18 +466,18 @@ def validateMatchScoutingForm(form):
         return '"Team Number" must be a positive integer'
 
     # check if the team number is a team at the competition
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    teamMatchAmount=len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
                                             str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
 
     # check if match number is a positive integer 1 - 500
-    matchNumber=0
+    matchNumber = 0
     try:
-        matchNumber=int(form['match_number'])
+        matchNumber = int(form['match_number'])
     except ValueError:
         return '"Match Number" must be a number from 1 - 500'
 
@@ -484,24 +485,24 @@ def validateMatchScoutingForm(form):
         return '"Match Number" must be a number from 1 - 500'
 
     # check if the team number in in the match
-    matchList=getMatchList()
+    matchList = getMatchList()
     if matchNumber in matchList and "del" not in matchList[matchNumber]:
         if teamNumber not in matchList[matchNumber]:
             return "Team " + str(teamNumber) + " is not in match "+str(matchNumber)
 
     # check if number of stones delivered during auton is an integer between 1 - 6
-    autonStones=0
+    autonStones = 0
     try:
-        autonStones=int(form['auton_stones'])
+        autonStones = int(form['auton_stones'])
     except ValueError:
         return '"Stones Delivered" must be a number from 0 - 6'
     if autonStones < 0 or autonStones > 6:
         return '"Stones Delivered" must be a number from 0 - 6'
 
     # check if number of skystones delivered during auton is an integer between 1 - 2
-    autonSkystones=0
+    autonSkystones = 0
     try:
-        autonSkystones=int(form['auton_skystones'])
+        autonSkystones = int(form['auton_skystones'])
     except ValueError:
         return '"Skystones Delivered" must be a number from 0 - 2'
     if autonSkystones < 0 or autonSkystones > 2:
@@ -511,9 +512,9 @@ def validateMatchScoutingForm(form):
         return '"Skystones Delivered" cannot be greater than "Stones Delivered"'
 
     # check if number of stones on the foundation is an integer 0-6
-    autonStonesOnFoundation=0
+    autonStonesOnFoundation = 0
     try:
-        autonStonesOnFoundation=int(form['auton_stones_on_foundation'])
+        autonStonesOnFoundation = int(form['auton_stones_on_foundation'])
     except ValueError:
         return '"Stones On Foundation" must be a number from 0 - 6'
     if autonStonesOnFoundation < 0 or autonStonesOnFoundation > 6:
@@ -523,60 +524,60 @@ def validateMatchScoutingForm(form):
         return '"Stones on Foundation" cannot be greater than "Stones Delivered"'
 
     # check if total stones moved in teleop is an integer between 0 - 30
-    teleopStonesTotal=0
+    teleopStonesTotal = 0
     try:
-        teleopStonesTotal=int(form['teleop_stones_total'])
+        teleopStonesTotal = int(form['teleop_stones_total'])
     except ValueError:
         return '"Stones Moved" must be a number from 0 - 30'
     if teleopStonesTotal < 0 or teleopStonesTotal > 30:
         return '"Stones Moved" must be a number from 0 - 30'
 
     # check if the number of stones in stack 1 is an integer between 0 - 30
-    teleopStones1=0
+    teleopStones1 = 0
     try:
-        teleopStones1=int(form['teleop_stones_1'])
+        teleopStones1 = int(form['teleop_stones_1'])
     except ValueError:
         return '"Stones in Stack" must be a number 0 - 30'
     if teleopStones1 < 0 or teleopStones1 > 30:
         return '"Stones in Stack" must be a number 0 - 30'
 
     # check if the number of stones in stack 2 is an integer between 0 - 30
-    teleopStones2=0
+    teleopStones2 = 0
     try:
-        teleopStones2=int(form['teleop_stones_2'])
+        teleopStones2 = int(form['teleop_stones_2'])
     except ValueError:
         return '"Stones in Stack" must be a number 0 - 30'
     if teleopStones2 < 0 or teleopStones2 > 30:
         return '"Stones in Stack" must be a number 0 - 30'
 
     # check if the number of stones in stack 3 is an integer between 0 - 30
-    teleopStones3=0
+    teleopStones3 = 0
     try:
-        teleopStones3=int(form['teleop_stones_3'])
+        teleopStones3 = int(form['teleop_stones_3'])
     except ValueError:
         return '"Stones in Stack" must be a number 0 - 30'
     if teleopStones3 < 0 or teleopStones3 > 30:
         return '"Stones in Stack" must be a number 0 - 30'
 
     # check if the number of stones in stack 4 is an integer between 0 - 30
-    teleopStones4=0
+    teleopStones4 = 0
     try:
-        teleopStones4=int(form['teleop_stones_4'])
+        teleopStones4 = int(form['teleop_stones_4'])
     except ValueError:
         return '"Stones in Stack" must be a number 0 - 30'
     if teleopStones4 < 0 or teleopStones4 > 30:
         return '"Stones in Stack" must be a number 0 - 30'
 
     # check if there is less than or equal to one capstone placed
-    numberOfCaps=0
+    numberOfCaps = 0
     for i in range(1, 5):
-        field_name='teleop_cap_'+str(i)
+        field_name = 'teleop_cap_'+str(i)
         if field_name in form and form[field_name] == 'y':
             numberOfCaps += 1
     if numberOfCaps > 1:
         return 'Team can only place a Capstone once'
 
-    notes=form['notes']
+    notes = form['notes']
     if len(notes) > 800:
         return '"Notes must not exceed 800 characters"'
     if not checkASCII(notes):
@@ -586,27 +587,27 @@ def validateMatchScoutingForm(form):
 
 
 def getCategoriesList():
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    data=sqlCursor.execute(
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
         "SELECT * FROM Categories").fetchall()
     sqlConn.close()
 
-    feeder_list=[]
-    stacker_list=[]
-    speedy_list=[]
-    tall_lift_list=[]
-    under_bridge_list=[]
-    not_under_bridge_list=[]
-    knocked_tower_list=[]
-    DC_list=[]
-    dangerous_driving_list=[]
-    steps_over_bridge_list=[]
-    very_gp_list=[]
-    not_gp_list=[]
+    feeder_list = []
+    stacker_list = []
+    speedy_list = []
+    tall_lift_list = []
+    under_bridge_list = []
+    not_under_bridge_list = []
+    knocked_tower_list = []
+    DC_list = []
+    dangerous_driving_list = []
+    steps_over_bridge_list = []
+    very_gp_list = []
+    not_gp_list = []
 
     for team in data:
-        teamNumber=team[0]
+        teamNumber = team[0]
         # Category Variables List
         if team[1]:
             feeder_list.append(teamNumber)
@@ -637,33 +638,33 @@ def getCategoriesList():
 
 
 def validateMatchInfoForm(form):
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    allTeamNumbers=[row[0] for row in sqlCursor.execute(
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    allTeamNumbers = [row[0] for row in sqlCursor.execute(
         "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
     sqlConn.close()
 
-    teamList={}
-    matchesEntered=[]
-    largestMatch=0
+    teamList = {}
+    matchesEntered = []
+    largestMatch = 0
     for fieldName, value in form.items():
-        matchNumber, teamIndex=tuple(
+        matchNumber, teamIndex = tuple(
             [int(value2) for value2 in fieldName.split('_')])
         if value != '':
-            largestMatch=max(largestMatch, matchNumber)
+            largestMatch = max(largestMatch, matchNumber)
 
     for fieldName, value in form.items():
-        matchNumber, teamIndex=tuple(
+        matchNumber, teamIndex = tuple(
             [int(value2) for value2 in fieldName.split('_')])
         if value == '':
             if matchNumber in matchesEntered:
                 return "Error: Incomplete data for match "+str(matchNumber), False, None, largestMatch
             continue
         if str(value).lower() == "del":
-            teamNumber="del"
+            teamNumber = "del"
         else:
             try:
-                teamNumber=int(value)
+                teamNumber = int(value)
             except ValueError:
                 return 'Error: Team Number must be a positive integer (match {match})'.format(match=str(matchNumber)), False, None, largestMatch
             if teamNumber <= 0:
@@ -679,7 +680,7 @@ def validateMatchInfoForm(form):
         if matchNumber not in matchesEntered:
             if teamIndex > 0:
                 return "Error: Incomplete data for match "+str(matchNumber), False, None, largestMatch
-            teamList[str(matchNumber)]=[]
+            teamList[str(matchNumber)] = []
             matchesEntered.append(matchNumber)
         teamList[str(matchNumber)].append(teamNumber)
 
@@ -687,97 +688,97 @@ def validateMatchInfoForm(form):
 
 
 def getAllTeamNames():
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    data=sqlCursor.execute(
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
         "SELECT * FROM TEAMS").fetchall()
-    data=[row[:2] for row in data]
-    dictTeams={}
+    data = [row[:2] for row in data]
+    dictTeams = {}
     for row in data:
-        dictTeams[row[0]]=row[1]
+        dictTeams[row[0]] = row[1]
     sqlConn.close()
     return dictTeams
 
 
 def getTeamsAtCompetition(competitionId):
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    data=sqlCursor.execute(
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    data = sqlCursor.execute(
         "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()
     sqlConn.close()
     return data
 
 
 def queryAllFormData():
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
 
-    allTeamNumbers=[row[0] for row in sqlCursor.execute(
+    allTeamNumbers = [row[0] for row in sqlCursor.execute(
         "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
-    preGameScoutingFormData=[list(row[1:-1]) for row in sqlCursor.execute(
+    preGameScoutingFormData = [list(row[1:-1]) for row in sqlCursor.execute(
         "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
-    matchScoutingFormData=[list(row[1:-1]) for row in sqlCursor.execute(
+    matchScoutingFormData = [list(row[1:-1]) for row in sqlCursor.execute(
         "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
 
     for i in range(len(preGameScoutingFormData)-1):
         for j in range(len(preGameScoutingFormData[i])-1):
             if preGameScoutingFormData[i][j] is True:
-                preGameScoutingFormData[i][j]=1
+                preGameScoutingFormData[i][j] = 1
             elif preGameScoutingFormData[i][j] is False:
-                preGameScoutingFormData[i][j]=0
+                preGameScoutingFormData[i][j] = 0
 
     sqlConn.close()
     return allTeamNumbers, preGameScoutingFormData, matchScoutingFormData
 
 
 def getPreGameScoutingData(allTeamNumbers, preGameScoutingFormData):
-    data={}
-    fields=[]
+    data = {}
+    fields = []
     for field in preGameScoutingFields[1:]:
-        fieldChars=list(field)
-        uppercaseDist=ord('A')-ord('a')
-        fieldChars[0]=chr(ord(fieldChars[0])+uppercaseDist)
+        fieldChars = list(field)
+        uppercaseDist = ord('A')-ord('a')
+        fieldChars[0] = chr(ord(fieldChars[0])+uppercaseDist)
         for i in range(len(fieldChars)):
             if(fieldChars[i] == '_' and i < len(fieldChars)-1):
-                fieldChars[i]=' '
-                fieldChars[i+1]=chr(ord(fieldChars[i+1])+uppercaseDist)
+                fieldChars[i] = ' '
+                fieldChars[i+1] = chr(ord(fieldChars[i+1])+uppercaseDist)
         fields.append('Pre-Game '+''.join(fieldChars))
 
     for teamNumber in allTeamNumbers:
-        data[teamNumber]=["N/A"] * (len(fields))
+        data[teamNumber] = ["N/A"] * (len(fields))
 
     for entry in preGameScoutingFormData:
-        teamNumber=entry[0]
+        teamNumber = entry[0]
         for i in range(len(entry)-1):
-            data[teamNumber][i]=entry[i+1]
+            data[teamNumber][i] = entry[i+1]
 
     return {'data': data, 'fields': fields}
 
 
 def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
-    data={}
-    matchEntryCount={}
-    fields=[]
+    data = {}
+    matchEntryCount = {}
+    fields = []
     for field in matchScoutingFields[2:]:
-        fieldChars=list(field)
-        uppercaseDist=ord('A')-ord('a')
-        fieldChars[0]=chr(ord(fieldChars[0])+uppercaseDist)
+        fieldChars = list(field)
+        uppercaseDist = ord('A')-ord('a')
+        fieldChars[0] = chr(ord(fieldChars[0])+uppercaseDist)
         for i in range(len(fieldChars)):
             if(fieldChars[i] == '_' and i < len(fieldChars)-1):
-                fieldChars[i]=' '
-                fieldChars[i+1]=chr(ord(fieldChars[i+1])+uppercaseDist)
+                fieldChars[i] = ' '
+                fieldChars[i+1] = chr(ord(fieldChars[i+1])+uppercaseDist)
         fields.append('Match '+''.join(fieldChars))
 
     for teamNumber in allTeamNumbers:
-        data[teamNumber]=['N/A']*len(fields)
-        matchEntryCount[teamNumber]=0
+        data[teamNumber] = ['N/A']*len(fields)
+        matchEntryCount[teamNumber] = 0
 
     for entry in matchScoutingFormData:
-        teamNumber=entry[1]
+        teamNumber = entry[1]
         for i in range(len(fields)):
-            n=entry[i+2]
+            n = entry[i+2]
             if matchEntryCount[teamNumber] == 0:
-                data[teamNumber][i]=n
+                data[teamNumber][i] = n
             else:
                 data[teamNumber][i] += n
         matchEntryCount[teamNumber] += 1
@@ -791,24 +792,24 @@ def getMatchScoutingData(allTeamNumbers, matchScoutingFormData):
 
 
 def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormData):  # TODO
-    data={}
-    matchEntryCount={}
+    data = {}
+    matchEntryCount = {}
 
-    fields=['Theoretical Auton Score', 'Theoretical Tele-Op Score', 'Theoretical Total Score',
+    fields = ['Theoretical Auton Score', 'Theoretical Tele-Op Score', 'Theoretical Total Score',
               'Overall Match Auton Score', 'Overall Match Tele-Op Score', 'Overall Match Total Score']
 
     for teamNumber in allTeamNumbers:
-        data[teamNumber]=['N/A']*len(fields)
-        matchEntryCount[teamNumber]=0
+        data[teamNumber] = ['N/A']*len(fields)
+        matchEntryCount[teamNumber] = 0
     for entry in preGameScoutingFormData:
-        teamNumber=entry[0]
+        teamNumber = entry[0]
 
-        preAutonScore=entry[2]*2 + \
+        preAutonScore = entry[2]*2 + \
             entry[3]*8 + entry[4]*4 + entry[5]*10 + entry[6]*5
 
-        data[teamNumber][0]=preAutonScore
+        data[teamNumber][0] = preAutonScore
 
-        preTeleopScore=entry[7]*1
+        preTeleopScore = entry[7]*1
         if entry[8] > 0:
             preTeleopScore += entry[7]*1
         preTeleopScore += entry[8]*2
@@ -819,26 +820,26 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
         if entry[11]:
             preTeleopScore += 5
 
-        data[teamNumber][1]=preTeleopScore
-        data[teamNumber][2]=preAutonScore+preTeleopScore
+        data[teamNumber][1] = preTeleopScore
+        data[teamNumber][2] = preAutonScore+preTeleopScore
 
     for entry in matchScoutingFormData:
-        teamNumber=entry[1]
+        teamNumber = entry[1]
 
-        matchAutonScore=entry[2]*2 + \
+        matchAutonScore = entry[2]*2 + \
             entry[3]*8 + entry[4]*4 + entry[5]*10 + entry[6]*5
-        matchTeleopScore=entry[7]*2
-        highestStack=0
-        StackList=[entry[8], entry[9], entry[10], entry[11]]
+        matchTeleopScore = entry[7]*2
+        highestStack = 0
+        StackList = [entry[8], entry[9], entry[10], entry[11]]
         for item in StackList:
             if item > highestStack:
-                highestStack=item
+                highestStack = item
         matchTeleopScore += highestStack*2
-        CapList=[entry[12], entry[13], entry[14], entry[15]]
-        capIndex=-1
+        CapList = [entry[12], entry[13], entry[14], entry[15]]
+        capIndex = -1
         for item in CapList:
             if item:
-                capIndex=CapList.index(item)
+                capIndex = CapList.index(item)
         if(capIndex != -1):
             matchTeleopScore += StackList[capIndex]*1+5
         if entry[16]:
@@ -851,49 +852,50 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
             data[teamNumber][4] += matchTeleopScore
             data[teamNumber][5] += matchAutonScore+matchTeleopScore
         else:
-            data[teamNumber][3]=matchAutonScore
-            data[teamNumber][4]=matchTeleopScore
-            data[teamNumber][5]=matchAutonScore+matchTeleopScore
+            data[teamNumber][3] = matchAutonScore
+            data[teamNumber][4] = matchTeleopScore
+            data[teamNumber][5] = matchAutonScore+matchTeleopScore
 
         matchEntryCount[teamNumber] += 1
 
     for teamNumber, amount in matchEntryCount.items():
         if amount > 0:
-            data[teamNumber][3]=round(
+            data[teamNumber][3] = round(
                 data[teamNumber][3]/amount, 1)
-            data[teamNumber][4]=round(
+            data[teamNumber][4] = round(
                 data[teamNumber][4]/amount, 1)
-            data[teamNumber][5]=round(
+            data[teamNumber][5] = round(
                 data[teamNumber][5]/amount, 1)
 
     return {'data': data, 'fields': fields}
 
 
 def getCompetitionOverviewData():
-    allTeamNumbers, preGameScoutingFormData, matchScoutingFormData=queryAllFormData()
+    allTeamNumbers, preGameScoutingFormData, matchScoutingFormData = queryAllFormData()
 
-    preGameScoutingData=getPreGameScoutingData(
+    preGameScoutingData = getPreGameScoutingData(
         allTeamNumbers, preGameScoutingFormData)
 
-    matchScoutingData=getMatchScoutingData(
+    matchScoutingData = getMatchScoutingData(
         allTeamNumbers, matchScoutingFormData)
 
-    summaryData=getDataSummary(allTeamNumbers, preGameScoutingFormData,
+    summaryData = getDataSummary(allTeamNumbers, preGameScoutingFormData,
                                  matchScoutingFormData)
 
-                    
-    allData={}
-    
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
+    allData = {}
 
-    goldDivisionRaw = [sqlCursor.execute("SELECT gold_division FROM Divisions").fetchall()]
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+
+    goldDivisionRaw = [sqlCursor.execute(
+        "SELECT gold_division FROM Divisions").fetchall()]
     goldDivision = goldDivisionRaw[0]
-    siliconDivisionRaw = [sqlCursor.execute("SELECT silicon_division FROM Divisions").fetchall()]
+    siliconDivisionRaw = [sqlCursor.execute(
+        "SELECT silicon_division FROM Divisions").fetchall()]
     siliconDivision = siliconDivisionRaw[0]
     goldTeams = []
     siliconTeams = []
-    
+
     index = 0
     for team in goldDivision:
         for item in team:
@@ -907,25 +909,24 @@ def getCompetitionOverviewData():
             if item == True:
                 siliconTeams.append(allTeamNumbers[index])
         index += 1
-    
 
     for teamNumber in allTeamNumbers:
-        allData[teamNumber]=[teamNumber]+preGameScoutingData['data'][teamNumber] + \
+        allData[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
             matchScoutingData['data'][teamNumber] + \
             (summaryData['data'][teamNumber])
 
-    allTableKeys=['Team Number']+preGameScoutingData['fields'] + \
+    allTableKeys = ['Team Number']+preGameScoutingData['fields'] + \
         matchScoutingData['fields']+summaryData['fields']
 
-    competitionData={
+    competitionData = {
         "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys, "goldDiv": goldTeams, "siliconDiv": siliconTeams}
 
     return competitionData
 
 
 def setMatchList(data, competitionId=curCompetitionId):
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
     for match, matchData in data.items():
         sqlCursor.execute(
             "DELETE FROM MatchListEntries WHERE MatchNumber="+str(match)+" AND CompetitionId="+str(curCompetitionId))
@@ -937,107 +938,106 @@ def setMatchList(data, competitionId=curCompetitionId):
 
 
 def getMatchList(competitionId=curCompetitionId):
-    data={}
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    rawData=sqlCursor.execute("SELECT * FROM MatchListEntries WHERE CompetitionId=" +
+    data = {}
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawData = sqlCursor.execute("SELECT * FROM MatchListEntries WHERE CompetitionId=" +
                                 str(competitionId)).fetchall()
     sqlConn.close()
     for row in rawData:
-        data[row[1]]=list(row[2:])
+        data[row[1]] = list(row[2:])
     return data
 
 
 def getMatchResults(competitionId=curCompetitionId, teamNumber=None):
-    matchList=getMatchList()
+    matchList = getMatchList()
 
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    rawData=sqlCursor.execute(
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawData = sqlCursor.execute(
         "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(competitionId)).fetchall()
     sqlConn.close()
-    matches={}
-    fields=getMatchScoutingFields()
+    matches = {}
+    fields = getMatchScoutingFields()
     for row in rawData:
-        curTeamNumber=row[2]
-        curMatch=row[1]
-        alliance="unknown"
+        curTeamNumber = row[2]
+        curMatch = row[1]
+        alliance = "unknown"
         if curMatch in matchList:
             if curTeamNumber in matchList[curMatch][:2]:
-                alliance="red"
+                alliance = "red"
             elif curTeamNumber in matchList[curMatch][2:]:
-                alliance="blue"
+                alliance = "blue"
 
         if teamNumber:
             if curTeamNumber == teamNumber:
-                teamDataDict=dict(zip(fields[2:], row[3:-1]))
-                teamDataDict["alliance"]=alliance
-                matches[curMatch]=teamDataDict
+                teamDataDict = dict(zip(fields[2:], row[3:-1]))
+                teamDataDict["alliance"] = alliance
+                matches[curMatch] = teamDataDict
         else:
             if curMatch not in matches:
-                matches[curMatch]={}
-            teamDataDict=dict(zip(fields[2:], row[3:-1]))
-            teamDataDict["alliance"]=alliance
-            matches[curMatch][curTeamNumber]=teamDataDict
+                matches[curMatch] = {}
+            teamDataDict = dict(zip(fields[2:], row[3:-1]))
+            teamDataDict["alliance"] = alliance
+            matches[curMatch][curTeamNumber] = teamDataDict
     return matches
 
 
 def getTeamInfo(teamNumber):
-    generalInfo={}
-    sqlConn=getSqlConn()
-    sqlCursor=sqlConn.cursor()
-    rawTeamData=sqlCursor.execute("SELECT * FROM Teams WHERE TeamNumber=" +
+    generalInfo = {}
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    rawTeamData = sqlCursor.execute("SELECT * FROM Teams WHERE TeamNumber=" +
                                     str(teamNumber)).fetchall()
-    generalInfo['teamNumber']=teamNumber
-    generalInfo['teamName']=rawTeamData[0][1]
-    quals=[]
+    generalInfo['teamNumber'] = teamNumber
+    generalInfo['teamName'] = rawTeamData[0][1]
+    quals = []
     for i in range(3):
         try:
-            compId=int(rawTeamData[0][2+i])
+            compId = int(rawTeamData[0][2+i])
         except TypeError:
             continue
-        compDataRaw=sqlCursor.execute("SELECT * FROM Competitions WHERE CompetitionId=" +
+        compDataRaw = sqlCursor.execute("SELECT * FROM Competitions WHERE CompetitionId=" +
                                         str(compId)).fetchall()[0]
-        compName=compDataRaw[5]
-        compCity=compDataRaw[1]
-        compRegion=compDataRaw[2]
-        compCountry=compDataRaw[3]
-        compDate=compDataRaw[4]
+        compName = compDataRaw[5]
+        compCity = compDataRaw[1]
+        compRegion = compDataRaw[2]
+        compCountry = compDataRaw[3]
+        compDate = compDataRaw[4]
         quals.append("{name} on {date} ({city}, {region}, {country})".format(
             name=compName, date=compDate, city=compCity, region=compRegion, country=compCountry))
 
     sqlConn.close()
-    generalInfo['qualifiers']=quals
+    generalInfo['qualifiers'] = quals
 
-    rawPerfData=getCompetitionOverviewData()['allData'][teamNumber]
+    rawPerfData = getCompetitionOverviewData()['allData'][teamNumber]
 
-
-    performanceInfo={
+    performanceInfo = {
         'preGame': {'auton': rawPerfData[40], 'teleOp': rawPerfData[41]},
         'match': {'auton': rawPerfData[43], 'teleOp': rawPerfData[44]}
     }
 
-    compInfo={}
+    compInfo = {}
 
-    matchList=getMatchList()
-    teamMatches=[]
+    matchList = getMatchList()
+    teamMatches = []
     for matchNumber, match in matchList.items():
         if teamNumber in match:
-            curMatchEntry={}
-            opponents={}
-            curMatchEntry['number']=matchNumber
+            curMatchEntry = {}
+            opponents = {}
+            curMatchEntry['number'] = matchNumber
             if teamNumber in match[0:2]:
-                curMatchEntry['color']='Red'
-                opponents=match[2:4]
-                alliance=match[1] if match[0] == teamNumber else match[0]
+                curMatchEntry['color'] = 'Red'
+                opponents = match[2:4]
+                alliance = match[1] if match[0] == teamNumber else match[0]
             else:
-                curMatchEntry['color']='Blue'
-                opponents=match[0:2]
-                alliance=match[3] if match[2] == teamNumber else match[2]
-            curMatchEntry['opponent1']=opponents[0]
-            curMatchEntry['opponent2']=opponents[1]
-            curMatchEntry['alliance']=alliance
+                curMatchEntry['color'] = 'Blue'
+                opponents = match[0:2]
+                alliance = match[3] if match[2] == teamNumber else match[2]
+            curMatchEntry['opponent1'] = opponents[0]
+            curMatchEntry['opponent2'] = opponents[1]
+            curMatchEntry['alliance'] = alliance
             teamMatches.append(curMatchEntry)
-    compInfo['matches']=teamMatches
+    compInfo['matches'] = teamMatches
 
     return generalInfo, performanceInfo, compInfo
