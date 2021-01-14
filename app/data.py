@@ -26,7 +26,7 @@ def getCurCompetitionCityName():
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     curCompetitionCityName = str(sqlCursor.execute(
-        "SELECT * FROM Competitions WHERE CompetitionId="+str(curCompetitionId)).fetchall()[0][1])
+        "SELECT * FROM Competitions WHERE CompetitionId=?", str(curCompetitionId)).fetchall()[0][1])
     sqlConn.close()
     return curCompetitionCityName
 
@@ -70,8 +70,8 @@ def addNoteEntry(teamNumber, tag, message):
     tag = unidecode(tag)
     tag = tag.replace("'", "''")
 
-    sqlCursor.execute("INSERT NoteEntries (team_number, tag, message, CompetitionId) VALUES (" +
-                      str(teamNumber) + ", "+"'"+str(tag)+"'"+","+"'"+str(message)+"'"+","+str(curCompetitionId)+")")
+    sqlCursor.execute("INSERT NoteEntries (team_number, tag, message, CompetitionId) VALUES (?, ?, ?, ?)", str(
+        teamNumber), str(tag), str(message), str(curCompetitionId))
     sqlConn.commit()
     sqlConn.close()
 
@@ -79,8 +79,8 @@ def addNoteEntry(teamNumber, tag, message):
 def getNoteEntries(teamNumber):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    rawNotes = sqlCursor.execute("SELECT tag, message FROM NoteEntries WHERE team_number="+str(
-        teamNumber)+" AND CompetitionId="+str(curCompetitionId)).fetchall()
+    rawNotes = sqlCursor.execute("SELECT tag, message FROM NoteEntries WHERE team_number=? AND CompetitionId=?", str(
+        teamNumber), str(curCompetitionId)).fetchall()
     sqlConn.close()
     formattedNotes = []
     for row in rawNotes:
@@ -97,7 +97,7 @@ def addPreGameScoutingEntry(formValues):
 
     teamNumber = formValues["team_number"]
     exists = False
-    if(len(sqlCursor.execute("SELECT * FROM PreGameScoutingEntries WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId)).fetchall()) > 0):
+    if(len(sqlCursor.execute("SELECT * FROM PreGameScoutingEntries WHERE team_number=? AND CompetitionId=?", str(teamNumber), str(curCompetitionId)).fetchall()) > 0):
         exists = True
 
     tableFieldOrder = str(preGameScoutingFields).replace(
@@ -122,6 +122,7 @@ def addPreGameScoutingEntry(formValues):
     formattedFormValues = formattedFormValues[:-1]
     updateSet = updateSet[:-1]
 
+    # TODO fix SQL injection
     if(exists):
         sqlCursor.execute("UPDATE PreGameScoutingEntries SET "+updateSet +
                           " WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId))
@@ -144,7 +145,7 @@ def addMatchScoutingEntry(formValues):
     teamNumber = formValues["team_number"]
     matchNumber = formValues["match_number"]
     exists = False
-    if(len(sqlCursor.execute("SELECT * FROM MatchScoutingEntries WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId)+" AND match_number="+str(matchNumber)).fetchall()) > 0):
+    if(len(sqlCursor.execute("SELECT * FROM MatchScoutingEntries WHERE team_number=? AND CompetitionId=? AND match_number=?", str(teamNumber), str(curCompetitionId), str(matchNumber)).fetchall()) > 0):
         exists = True
 
     tableFieldOrder = str(matchScoutingFields).replace(
@@ -167,6 +168,7 @@ def addMatchScoutingEntry(formValues):
     formattedFormValues = formattedFormValues[:-1]
     updateSet = updateSet[:-1]
 
+    # TODO fix SQL injection
     if(exists):
         sqlCursor.execute("UPDATE MatchScoutingEntries SET "+updateSet +
                           " WHERE team_number="+str(teamNumber)+" AND CompetitionId="+str(curCompetitionId)+" AND match_number="+str(matchNumber))
@@ -226,46 +228,46 @@ def addMatchScoutingEntry(formValues):
     if field_name in formValues and formValues[field_name] == 'y':
         catValue12 = 1
 
-    if(len(sqlCursor.execute("SELECT * FROM Categories WHERE team_number="+str(teamNumber)).fetchall()) == 0):
+    if(len(sqlCursor.execute("SELECT * FROM Categories WHERE team_number=?", str(teamNumber)).fetchall()) == 0):
         sqlCursor.execute(
-            "INSERT Categories (team_number) VALUES ("+str(teamNumber)+")")
+            "INSERT Categories (team_number) VALUES (?)", str(teamNumber))
 
     if (catValue1 == 1):
-        sqlCursor.execute("UPDATE Categories SET feeder=" +
-                          str(catValue1)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET feeder=? WHERE team_number=?", str(
+            catValue1), str(teamNumber))
     if (catValue2 == 1):
-        sqlCursor.execute("UPDATE Categories SET stacker=" +
-                          str(catValue2)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET stacker=? WHERE team_number=?", str(
+            catValue2), str(teamNumber))
     if (catValue3 == 1):
-        sqlCursor.execute("UPDATE Categories SET speedy=" +
-                          str(catValue3)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET speedy=? WHERE team_number=?", str(
+            catValue3), str(teamNumber))
     if (catValue4 == 1):
-        sqlCursor.execute("UPDATE Categories SET tall_lift=" +
-                          str(catValue4)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET tall_lift=? WHERE team_number=?", str(
+            catValue4), str(teamNumber))
     if (catValue5 == 1):
-        sqlCursor.execute("UPDATE Categories SET under_bridge=" +
-                          str(catValue5)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET under_bridge=? WHERE team_number=?", str(
+            catValue5), str(teamNumber))
     if (catValue6 == 1):
-        sqlCursor.execute("UPDATE Categories SET not_under_bridge=" +
-                          str(catValue6)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET not_under_bridge=? WHERE team_number=?", str(
+            catValue6), str(teamNumber))
     if (catValue7 == 1):
-        sqlCursor.execute("UPDATE Categories SET knocked_tower=" +
-                          str(catValue7)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET knocked_tower=? WHERE team_number=?", str(
+            catValue7), str(teamNumber))
     if (catValue8 == 1):
-        sqlCursor.execute("UPDATE Categories SET dc=" +
-                          str(catValue8)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET dc=? WHERE team_number=?", str(
+            catValue8), str(teamNumber))
     if (catValue9 == 1):
-        sqlCursor.execute("UPDATE Categories SET dangerous_driving=" +
-                          str(catValue9)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET dangerous_driving=? WHERE team_number=?", str(
+            catValue9), str(teamNumber))
     if (catValue10 == 1):
-        sqlCursor.execute("UPDATE Categories SET steps_over_bridge=" +
-                          str(catValue10)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET steps_over_bridge=? WHERE team_number=?", str(
+            catValue10), str(teamNumber))
     if (catValue11 == 1):
-        sqlCursor.execute("UPDATE Categories SET very_gp=" +
-                          str(catValue11)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET very_gp=? WHERE team_number=?", str(
+            catValue11), str(teamNumber))
     if (catValue12 == 1):
-        sqlCursor.execute("UPDATE Categories SET not_gp=" +
-                          str(catValue12)+" WHERE team_number = "+str(teamNumber))
+        sqlCursor.execute("UPDATE Categories SET not_gp=? WHERE team_number=?", str(
+            catValue12), str(teamNumber))
 
     sqlConn.commit()
     sqlConn.close()
@@ -386,8 +388,8 @@ def validatePreGameScoutingForm(form):
 
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
-                                            str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
+    teamMatchAmount = len(sqlCursor.execute(
+        "SELECT * FROM TeamsAtCompetition(?) WHERE TeamNumber=?", str(curCompetitionId), str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
@@ -468,8 +470,8 @@ def validateMatchScoutingForm(form):
     # check if the team number is a team at the competition
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    teamMatchAmount = len(sqlCursor.execute("SELECT * FROM TeamsAtCompetition(" +
-                                            str(curCompetitionId)+") WHERE TeamNumber="+str(teamNumber)).fetchall())
+    teamMatchAmount = len(sqlCursor.execute(
+        "SELECT * FROM TeamsAtCompetition(?) WHERE TeamNumber=?", str(curCompetitionId), str(teamNumber)).fetchall())
     sqlConn.close()
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
@@ -641,7 +643,7 @@ def validateMatchInfoForm(form):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
+        "SELECT * FROM TeamsAtCompetition(?)", str(curCompetitionId)).fetchall()]
     sqlConn.close()
 
     teamList = {}
@@ -704,7 +706,7 @@ def getTeamsAtCompetition(competitionId):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     data = sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()
+        "SELECT * FROM TeamsAtCompetition(?)", str(curCompetitionId)).fetchall()
     sqlConn.close()
     return data
 
@@ -714,11 +716,11 @@ def queryAllFormData():
     sqlCursor = sqlConn.cursor()
 
     allTeamNumbers = [row[0] for row in sqlCursor.execute(
-        "SELECT * FROM TeamsAtCompetition("+str(curCompetitionId)+")").fetchall()]
+        "SELECT * FROM TeamsAtCompetition(?)", str(curCompetitionId)).fetchall()]
     preGameScoutingFormData = [list(row[1:-1]) for row in sqlCursor.execute(
-        "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
+        "SELECT * FROM PreGameScoutingEntries WHERE CompetitionId=?", str(curCompetitionId)).fetchall()]
     matchScoutingFormData = [list(row[1:-1]) for row in sqlCursor.execute(
-        "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(curCompetitionId)).fetchall()]
+        "SELECT * FROM MatchScoutingEntries WHERE CompetitionId=?", str(curCompetitionId)).fetchall()]
 
     for i in range(len(preGameScoutingFormData)-1):
         for j in range(len(preGameScoutingFormData[i])-1):
@@ -929,8 +931,9 @@ def setMatchList(data, competitionId=curCompetitionId):
     sqlCursor = sqlConn.cursor()
     for match, matchData in data.items():
         sqlCursor.execute(
-            "DELETE FROM MatchListEntries WHERE MatchNumber="+str(match)+" AND CompetitionId="+str(curCompetitionId))
+            "DELETE FROM MatchListEntries WHERE MatchNumber=? AND CompetitionId=?", str(match), str(curCompetitionId))
         if "del" not in [str(s).lower() for s in matchData]:
+            # TODO fix SQL injection
             sqlCursor.execute(
                 "INSERT MatchListEntries (CompetitionId, MatchNumber, Red1, Red2, Blue1, Blue2) VALUES ("+str(competitionId)+","+str(match)+","+str(matchData)[1:-1].replace('"', '').replace("'", '')+")")
     sqlConn.commit()
@@ -941,8 +944,8 @@ def getMatchList(competitionId=curCompetitionId):
     data = {}
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    rawData = sqlCursor.execute("SELECT * FROM MatchListEntries WHERE CompetitionId=" +
-                                str(competitionId)).fetchall()
+    rawData = sqlCursor.execute(
+        "SELECT * FROM MatchListEntries WHERE CompetitionId=?", str(competitionId)).fetchall()
     sqlConn.close()
     for row in rawData:
         data[row[1]] = list(row[2:])
@@ -955,7 +958,7 @@ def getMatchResults(competitionId=curCompetitionId, teamNumber=None):
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
     rawData = sqlCursor.execute(
-        "SELECT * FROM MatchScoutingEntries WHERE CompetitionId="+str(competitionId)).fetchall()
+        "SELECT * FROM MatchScoutingEntries WHERE CompetitionId=?", str(competitionId)).fetchall()
     sqlConn.close()
     matches = {}
     fields = getMatchScoutingFields()
@@ -987,8 +990,8 @@ def getTeamInfo(teamNumber):
     generalInfo = {}
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
-    rawTeamData = sqlCursor.execute("SELECT * FROM Teams WHERE TeamNumber=" +
-                                    str(teamNumber)).fetchall()
+    rawTeamData = sqlCursor.execute(
+        "SELECT * FROM Teams WHERE TeamNumber=?", str(teamNumber)).fetchall()
     generalInfo['teamNumber'] = teamNumber
     generalInfo['teamName'] = rawTeamData[0][1]
     quals = []
@@ -997,8 +1000,8 @@ def getTeamInfo(teamNumber):
             compId = int(rawTeamData[0][2+i])
         except TypeError:
             continue
-        compDataRaw = sqlCursor.execute("SELECT * FROM Competitions WHERE CompetitionId=" +
-                                        str(compId)).fetchall()[0]
+        compDataRaw = sqlCursor.execute(
+            "SELECT * FROM Competitions WHERE CompetitionId=?", str(compId)).fetchall()[0]
         compName = compDataRaw[5]
         compCity = compDataRaw[1]
         compRegion = compDataRaw[2]
