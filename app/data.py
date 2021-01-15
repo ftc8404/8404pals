@@ -382,7 +382,7 @@ def authenticateUser(email, password):
     sqlConn.close()
 
     if(len(potentialUser) == 0):
-        raise ValidationError("Email and password combination not valid")
+        raise ValueError("Email and password combination not valid")
 
     salt = potentialUser[0][2]
     curPasswordHash = hashlib.pbkdf2_hmac(
