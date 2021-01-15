@@ -1,5 +1,4 @@
 from flask.helpers import make_response
-from app.data import SECRET_KEY
 from flask import Flask, render_template, request, redirect, send_from_directory
 import json
 import os
@@ -8,9 +7,11 @@ import jwt
 
 import data
 
+SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
+
 app = Flask(__name__)
 app.config.from_object(__name__)
-app.config['SECRET_KEY'] = os.getenv('FLASK_SECRET_KEY')
+app.config['SECRET_KEY'] = SECRET_KEY
 
 
 @app.route('/favicon.ico')
