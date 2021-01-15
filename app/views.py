@@ -1,6 +1,10 @@
+from flask.helpers import make_response
+from app.data import SECRET_KEY
 from flask import Flask, render_template, request, redirect, send_from_directory
 import json
 import os
+from functools import wraps
+import jwt
 
 import data
 
@@ -15,16 +19,64 @@ def favicon():
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'x-access-token' in request.cookies:
+            token = request.cookies['x-access-token']
+        if not token:
+            return redirect("/login?redirect=" + request.path)
+
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        except:
+            return redirect("/login?redirect=" + request.path)
+        return f(*args, **kwargs)
+
+    return decorated
+
 # @app.route("/")
 # def login():
 #     return render_template("login2.html")
+
 
 @app.route("/")
 def hello():
     return render_template("home.html", data=data.getCompetitionOverviewData())
 
 
+@app.route("/login", methods=['GET', 'POST'])
+def login():
+    form = data.LoginForm(request.form)
+    print(form.errors)
+    response = make_response(render_template("login.html", form=form))
+    if request.method == 'POST':
+        try:
+            token = data.authenticateUser(
+                request.form["email"], request.form["password"])
+            print(token)
+            redirect_path = request.args.get("redirect")
+            if(redirect_path == None):
+                redirect_path = "/"
+            response = make_response(redirect(redirect_path))
+            response.set_cookie("x-access-token", token,
+                                86400, httponly=True)
+        except ValueError:
+            print("bad email/password")
+            form.error = "Invalid email or password"
+    return response
+
+
+@app.route("/logout")
+def logout():
+    response = make_response(redirect("/"))
+    response.set_cookie("x-access-token", "", 0)
+    return response
+
+
 @app.route("/pre-game-scouting", methods=['GET', 'POST'])
+@token_required
 def pre_game_scouting():
     form = data.PreGameScoutingForm(request.form)
     print(form.errors)
@@ -43,6 +95,7 @@ def pre_game_scouting():
 
 
 @app.route("/match-scouting", methods=['GET', 'POST'])
+@token_required
 def match_scouting():
     form = data.MatchScoutingForm(request.form)
     print(form.errors)
@@ -61,6 +114,7 @@ def match_scouting():
 
 
 @app.route("/team-info/<int:team_number>/", methods=['GET', 'POST'])
+@token_required
 def team(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     error = ""
@@ -75,11 +129,13 @@ def team(team_number):
 
 
 @app.route("/team-info")
+@token_required
 def team_info():
     return render_template('team-info-search.html', data=data.getCompetitionOverviewData())
 
 
 @app.route("/match-info", methods=['GET', 'POST'])
+@token_required
 def match_info():
     message = ''
     formValues = None
@@ -101,11 +157,13 @@ def match_info():
 
 
 @app.route("/competition-overview")
+@token_required
 def competition_overview():
     return render_template('competition-overview.html', data=data.getCompetitionOverviewData())
 
 
 @app.route("/set-competition-id/<int:competition_id>/")
+@token_required
 def set_competition_id(competition_id):
     data.curCompetitionId = competition_id
     data.curCompetitionCityName = data.getCurCompetitionCityName()
@@ -113,16 +171,20 @@ def set_competition_id(competition_id):
 
 
 @app.route("/api/competition-overview/")
+@token_required
 def api_competition_overview():
     return json.dumps(data.getCompetitionOverviewData())
 
+
 @app.route("/api/categories-list/")
+@token_required
 def api_categories_list():
     return json.dumps(data.getCategoriesList())
 
 
 @app.route("/api/team-info/")
 @app.route("/api/team-info/<int:team_number>/")
+@token_required
 def api_team_info(team_number=None):
     if team_number:
         generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
@@ -137,18 +199,21 @@ def api_team_info(team_number=None):
 
 
 @app.route("/api/team-info/<int:team_number>/general/")
+@token_required
 def api_team_info_general(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return json.dumps(generalInfo)
 
 
 @app.route("/api/team-info/<int:team_number>/performance/")
+@token_required
 def api_team_info_perf(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return json.dumps(performanceInfo)
 
 
 @app.route("/api/team-info/<int:team_number>/matches/")
+@token_required
 def api_team_info_matches(team_number):
     generalInfo, performanceInfo, compInfo = data.getTeamInfo(team_number)
     return json.dumps(compInfo['matches'])
@@ -156,12 +221,14 @@ def api_team_info_matches(team_number):
 
 @app.route("/api/match-results/")
 @app.route("/api/match-results/<int:team_number>/")
+@token_required
 def api_match_results(team_number=None):
     matches = data.getMatchResults(teamNumber=team_number)
     return json.dumps(matches)
 
 
 @app.route("/api/notes/<int:team_number>/")
+@token_required
 def api_notes(team_number):
     allNotes = data.getNoteEntries(team_number)
     allNotesFormatted = {}

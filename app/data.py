@@ -1,8 +1,15 @@
 import wtforms
+import wtforms.fields.html5
 import pyodbc
 import platform
 import os
 from unidecode import unidecode
+import hashlib
+import jwt
+
+from wtforms.validators import ValidationError
+
+SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 
 server = os.getenv('SQLCONNSTR_SERVER')
 database = os.getenv('SQLCONNSTR_DATABASE')
@@ -278,6 +285,16 @@ def addMatchScoutingEntry(formValues):
         addNoteEntry(teamNumber, tag, notes)
 
 
+class LoginForm(wtforms.Form):
+    error = None
+
+    email = wtforms.fields.html5.EmailField(
+        "Email", validators=[wtforms.validators.required()])
+
+    password = wtforms.PasswordField(
+        "Password", validators=[wtforms.validators.required()])
+
+
 class PreGameScoutingForm(wtforms.Form):
     error = None
 
@@ -355,6 +372,30 @@ class MatchScoutingForm(wtforms.Form):
 
 def checkASCII(text):
     return len(text) == len(text.encode())
+
+
+def authenticateUser(email, password):
+    sqlConn = getSqlConn()
+    sqlCursor = sqlConn.cursor()
+    potentialUser = sqlCursor.execute(
+        "SELECT Name, PasswordHash, Salt, Id FROM Users WHERE Email=?", email).fetchall()
+    sqlConn.close()
+
+    if(len(potentialUser) == 0):
+        raise ValidationError("Email and password combination not valid")
+
+    salt = potentialUser[0][2]
+    curPasswordHash = hashlib.pbkdf2_hmac(
+        "sha256", password.encode('utf-8'), salt, 100000, dklen=64)
+
+    if(curPasswordHash == potentialUser[0][1]):
+        id = potentialUser[0][3], "name"
+        name = potentialUser[0][0]
+        token = jwt.encode(
+            {"id": id, "name": name}, SECRET_KEY, algorithm="HS256")
+        return token
+    else:
+        raise ValueError("Email and password combination not valid")
 
 
 def validateNotesForm(form):
