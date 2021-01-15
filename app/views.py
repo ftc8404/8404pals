@@ -51,7 +51,6 @@ def hello():
 def login():
     form = data.LoginForm(request.form)
     print(form.errors)
-    response = make_response(render_template("login.html", form=form))
     if request.method == 'POST':
         try:
             token = data.authenticateUser(
@@ -63,11 +62,13 @@ def login():
             response = make_response(redirect(redirect_path))
             response.set_cookie("x-access-token", token,
                                 86400, httponly=True)
+            return response
         except ValueError:
             print("bad email/password")
             form.error = "Invalid email or password"
-    return response
-
+            return render_template("login.html", form=form)
+    else:
+        return render_template("login.html", form=form)
 
 @app.route("/logout")
 def logout():
