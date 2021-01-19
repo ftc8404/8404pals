@@ -307,29 +307,29 @@ class PreGameScoutingForm(wtforms.Form):
     #Auton Labels
     auton_wobble = wtforms.IntegerField("Wobble Goal Delivered", validators=[
         wtforms.validators.optional()])
+    auton_rings = wtforms.IntegerField("Rings Scored", validators=[
+        wtforms.validators.optional()])
     auton_power = wtforms.BooleanField("Power Shots")
+    auton_park = wtforms.BooleanField("Park")
     auton_high = wtforms.BooleanField("Rings in High Goal")
     auton_mid = wtforms.BooleanField("Rings in Mid Goal")
     auton_low = wtforms.BooleanField("Rings in Low Goal")
-    auton_rings = wtforms.IntegerField("Rings Scored", validators=[
-        wtforms.validators.optional()])
-    auton_park = wtforms.BooleanField("Park")
         
     #Teleop Labels
+    teleop_rings = wtforms.IntegerField("Rings Scored", validators=[
+        wtforms.validators.optional()])
     teleop_high = wtforms.BooleanField("Rings in High Goal")
     teleop_mid = wtforms.BooleanField("Rings in Mid Goal")
     teleop_low = wtforms.BooleanField("Rings in Low Goal")
-    teleop_rings = wtforms.IntegerField("Rings Scored", validators=[
-        wtforms.validators.optional()])
 
     #End-Game Labels
-    teleop_wobble_start = wtforms.BooleanField("Wobble on Start")
-    teleop_wobble_drop = wtforms.BooleanField("Wobble in Drop")
     teleop_wobble = wtforms.IntegerField("Wobble Delivered", validators=[
         wtforms.validators.optional()])
     teleop_wobble_rings = wtforms.IntegerField("Wobble Rings", validators=[
         wtforms.validators.optional()])
     teleop_power = wtforms.BooleanField("Power Shots")
+    teleop_wobble_start = wtforms.BooleanField("Wobble on Start")
+    teleop_wobble_drop = wtforms.BooleanField("Wobble in Drop")
    
     notes = wtforms.TextAreaField()
 
@@ -444,56 +444,54 @@ def validatePreGameScoutingForm(form):
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
 
-    # check if number of stones delivered during auton is an integer between 1 - 6
-    autonStones = 0
+    # check if number of wobble goals delivered during auton is an integer between 0 - 2
+    autonWobble = 0
     try:
-        autonStones = int(form['auton_stones'])
+        autonWobble = int(form['autonWobble'])
     except ValueError:
-        return '"Stones Delivered" must be a number from 0 - 6'
-    if autonStones < 0 or autonStones > 6:
-        return '"Stones Delivered" must be a number from 0 - 6'
+        return '"Wobble Goals Delivered in Auton" must be a number from 0 - 2'
+    if autonWobble < 0 or autonWobble > 2:
+        return '"Wobble Goals Delivered in Auton" must be a number from 0 - 2'
 
-    # check if number of skystones delivered during auton is an integer between 1 - 2
-    autonSkystones = 0
+    # check if number of rings scored during auton is an integer between 0 - 7
+    autonRings = 0
     try:
-        autonSkystones = int(form['auton_skystones'])
+        autonRings = int(form['auton_rings'])
     except ValueError:
-        return '"Skystones Delivered" must be a number from 0 - 2'
-    if autonSkystones < 0 or autonSkystones > 2:
-        return '"Skystones Delivered" must be a number from 0 - 2'
-    # check if number of skystones delivered in auton is less than or equal to number of total stones delivered
-    if autonStones < autonSkystones:
-        return '"Skystones Delivered" cannot be greater than "Stones Delivered"'
+        return '"Rings Scored in Auton" must be a number from 0 - 7'
+    if autonRings < 0 or autonRings > 7:
+        return '"Rings Scored in Auton" must be a number from 0 - 7'
 
-    # check if number of stones on the foundation is an integer 0-6
-    autonStonesOnFoundation = 0
+    
+    # check if number of rings scored in teleop is an integer between 0 - 40
+    teleopRings = 0
     try:
-        autonStonesOnFoundation = int(form['auton_stones_on_foundation'])
+        teleopRings = int(form['teleop_rings'])
     except ValueError:
-        return '"Stones On Foundation" must be a number from 0 - 6'
-    if autonStonesOnFoundation < 0 or autonStonesOnFoundation > 6:
-        return '"Stones On Foundation" must be a number from 0 - 6'
-    # check if number of stones on foundation is less than or equal to the number of stones delivered
-    if autonStonesOnFoundation > autonStones:
-        return '"Stones on Foundation" cannot be greater than "Stones Delivered"'
+        return '"Rings Scored in Teleop" must be a number from 0 - 40'
 
-    teleopStones = 0
+    if teleopRings < 0 or teleopRings > 40:
+        return '"Rings Scored in Teleop" must be a number from 0 - 40'
+
+    # check if number of wobble goals delivered is an integer between 0 - 2
+    teleopWobble = 0
     try:
-        teleopStones = int(form['teleop_stones'])
+        teleopWobble = int(form['teleop_wobble'])
     except ValueError:
-        return '"Stones Moved" must be a number from 0 - 30'
+        return '"Wobble Goals delivered in End Game" must be a number from 0 - 2'
 
-    if teleopStones < 0 or teleopStones > 30:
-        return '"Stones Moved" must be a number from 0 - 30'
+    if teleopWobble < 0 or teleopWobble > 2:
+        return '"Wobble Goals delivered in End Game" must be a number from 0 - 2'
 
-    teleOpMaxLevel = 0
+    # check if number of rings on wobble goals is an integer between 0 - 10
+    teleopWobbleRings = 0
     try:
-        teleOpMaxLevel = int(form['teleop_max_level'])
+        teleopWobbleRings = int(form['teleop_wobble_rings'])
     except ValueError:
-        return '"Max Level" must be a number from 0 - 30'
+        return '"Wobble Goal Rings in End Game" must be a number from 0 - 10'
 
-    if teleOpMaxLevel < 0 or teleOpMaxLevel > 30:
-        return '"Max Level" must be a number from 0 - 30'
+    if teleopWobbleRings < 0 or teleopWobbleRings > 10:
+        return '"Wobble Goal Rings in End Game" must be a number from 0 - 10'
 
     notes = form['notes']
     if len(notes) > 800:
@@ -856,23 +854,42 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     for entry in preGameScoutingFormData:
         teamNumber = entry[0]
 
-        preAutonScore = entry[2]*2 + \
-            entry[3]*8 + entry[4]*4 + entry[5]*10 + entry[6]*5
-
+        # Auton score for Pre Game
+        preAutonScore = 0 #create preAutonScore variable
+        preAutonScore = entry[2]*15 # wobble goal delivery
+        if entry[3]: # powershots
+            preAutonScore += 45 
+        if entry[4]: # rings in high goal
+            preAutonScore += entry[7]*12
+        elif entry[5]: # rings in mid goal
+            preAutonScore += entry[7]*6
+        elif entry[6]: # rings in low goal
+            preAutonScore += entry[7]*3
+        if entry[8]: # parking points
+            preAutonScore += 5
+        # Store Pre Game Auton Score in data array
         data[teamNumber][0] = preAutonScore
 
-        preTeleopScore = entry[7]*1
-        if entry[8] > 0:
-            preTeleopScore += entry[7]*1
-        preTeleopScore += entry[8]*2
-        if entry[9]:
-            preTeleopScore += entry[8]*1+5
-        if entry[10]:
-            preTeleopScore += 15
-        if entry[11]:
-            preTeleopScore += 5
 
+        #Teleop score for Pre Game
+        preTeleopScore = 0
+        if entry[9]: # rings in high goal
+            preTeleopScore += entry[12]*6
+        elif entry[10]: # rings in mid goal
+            preTeleopScore += entry[12]*4
+        elif entry[11]: # rings in low goal
+            preTeleopScore += entry[12]*2
+        if entry[13]: # wobble goals on start line
+            preTeleopScore += entry[15]*5
+        elif entry[14]: # wobble goals in drop zone
+            preTeleopScore += entry[15]*20
+        preTeleopScore += entry[16]*5 # rings on wobble goal
+        if entry[17]: # power shots
+            preTeleopScore += 45
+
+        # Store Pre Game Teleop Score in data array
         data[teamNumber][1] = preTeleopScore
+        # Store Pre Game Total Score in data array
         data[teamNumber][2] = preAutonScore+preTeleopScore
 
     for entry in matchScoutingFormData:
