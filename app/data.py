@@ -298,30 +298,39 @@ class LoginForm(wtforms.Form):
 class PreGameScoutingForm(wtforms.Form):
     error = None
 
+    #General Labels
     team_number = wtforms.IntegerField("Team Number", validators=[
         wtforms.validators.required()])
     contact = wtforms.TextField("Contact / Web Page / Social Media", validators=[
         wtforms.validators.optional()])
-    gold_division = wtforms.BooleanField("Gold Division")
-    silicon_division = wtforms.BooleanField("Silicon Division")
 
-    auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
+    #Auton Labels
+    auton_wobble = wtforms.IntegerField("Wobble Goal Delivered", validators=[
         wtforms.validators.optional()])
-    auton_skystones = wtforms.IntegerField("Skystones Delivered", validators=[
+    auton_power = wtforms.BooleanField("Power Shots")
+    auton_high = wtforms.BooleanField("Rings in High Goal")
+    auton_mid = wtforms.BooleanField("Rings in Mid Goal")
+    auton_low = wtforms.BooleanField("Rings in Low Goal")
+    auton_rings = wtforms.IntegerField("Rings Scored", validators=[
         wtforms.validators.optional()])
-    auton_stones_on_foundation = wtforms.IntegerField("Stones on Foundation", validators=[
+    auton_park = wtforms.BooleanField("Park")
+        
+    #Teleop Labels
+    teleop_high = wtforms.BooleanField("Rings in High Goal")
+    teleop_mid = wtforms.BooleanField("Rings in Mid Goal")
+    teleop_low = wtforms.BooleanField("Rings in Low Goal")
+    teleop_rings = wtforms.IntegerField("Rings Scored", validators=[
         wtforms.validators.optional()])
-    auton_foundation = wtforms.BooleanField("Reposition Foundation")
-    auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
 
-    teleop_stones = wtforms.IntegerField("Stones Moved", validators=[
+    #End-Game Labels
+    teleop_wobble_start = wtforms.BooleanField("Wobble on Start")
+    teleop_wobble_drop = wtforms.BooleanField("Wobble in Drop")
+    teleop_wobble = wtforms.IntegerField("Wobble Delivered", validators=[
         wtforms.validators.optional()])
-    teleop_max_level = wtforms.IntegerField("Max Level", validators=[
+    teleop_wobble_rings = wtforms.IntegerField("Wobble Rings", validators=[
         wtforms.validators.optional()])
-    teleop_cap = wtforms.BooleanField("Cap Team Marker")
-    teleop_move_foundation = wtforms.BooleanField("Move Foundation")
-    teleop_park = wtforms.BooleanField("Park")
-
+    teleop_power = wtforms.BooleanField("Power Shots")
+   
     notes = wtforms.TextAreaField()
 
 
