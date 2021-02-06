@@ -342,40 +342,45 @@ class MatchScoutingForm(wtforms.Form):
     team_number = wtforms.IntegerField("Team Number", validators=[
         wtforms.validators.required()])
 
-    auton_stones = wtforms.IntegerField("Stones Delivered", validators=[
+    auton_wobble = wtforms.IntegerField("Wobble Goals Delivered", validators=[
         wtforms.validators.optional()])
-    auton_skystones = wtforms.IntegerField("Skystones Delivered", validators=[
+    auton_power = wtforms.IntegerField("Power Shots", validators=[
         wtforms.validators.optional()])
-    auton_stones_on_foundation = wtforms.IntegerField("Stones on Foundation", validators=[
+    auton_rings_high = wtforms.IntegerField("Rings in High Goal", validators=[
         wtforms.validators.optional()])
-    auton_foundation = wtforms.BooleanField("Reposition Foundation")
-    auton_under_skybridge = wtforms.BooleanField("Move Under Skybridge")
+    auton_rings_mid = wtforms.IntegerField("Rings in Mid Goal", validators=[
+        wtforms.validators.optional()])
+    auton_rings_low = wtforms.IntegerField("Rings in Low Goal", validators=[
+        wtforms.validators.optional()])
+    auton_park = wtforms.BooleanField("Parking")
 
-    teleop_stones_total = wtforms.IntegerField("Total Stones Moved", validators=[
+    teleop_rings_high = wtforms.IntegerField("Rings in High Goal", validators=[
         wtforms.validators.optional()])
-    teleop_stones_1 = wtforms.IntegerField("Stones in Stack")
-    teleop_stones_2 = wtforms.IntegerField("Stones in Stack")
-    teleop_stones_3 = wtforms.IntegerField("Stones in Stack")
-    teleop_stones_4 = wtforms.IntegerField("Stones in Stack")
+    teleop_rings_mid = wtforms.IntegerField("Rings in Mid Goal", validators=[
+        wtforms.validators.optional()])
+    teleop_rings_low = wtforms.IntegerField("Rings in Low Goal", validators=[
+        wtforms.validators.optional()])
+    
+    teleop_wobble_start = wtforms.IntegerField("Wobble on Start", validators=[
+        wtforms.validators.optional()])
+    teleop_wobble_drop = wtforms.IntegerField("Wobble in Drop", validators=[
+        wtforms.validators.optional()])
+    teleop_wobble_rings = wtforms.IntegerField("Rings on Wobble", validators=[
+        wtforms.validators.optional()])
+    teleop_power = wtforms.IntegerField("Power Shots", validators=[
+        wtforms.validators.optional()])
 
-    teleop_cap_1 = wtforms.BooleanField("Cap Team Marker")
-    teleop_cap_2 = wtforms.BooleanField("Cap Team Marker")
-    teleop_cap_3 = wtforms.BooleanField("Cap Team Marker")
-    teleop_cap_4 = wtforms.BooleanField("Cap Team Marker")
-    teleop_move_foundation = wtforms.BooleanField("Move Foundation")
-    teleop_park = wtforms.BooleanField("Park")
-    feeder = wtforms.BooleanField("Feeder Bot")
-    stacker = wtforms.BooleanField("Stacking Bot")
+    fast_intake = wtforms.BooleanField("Fast Intake")
+    fast_shooter = wtforms.BooleanField("Fast Shooter")
     speedy = wtforms.BooleanField("Speedy")
-    tall_lift = wtforms.BooleanField("Tall Lift")
-    under_bridge = wtforms.BooleanField("Fits Under Bridge")
-    not_under_bridge = wtforms.BooleanField("Doesn't Fit Under Bridge")
-    knocked_tower = wtforms.BooleanField("Toppled Own Tower")
+    high_goal = wtforms.BooleanField("High Goal")
+    power_shot = wtforms.BooleanField("Power Shots")
+    accurate_shooter = wtforms.BooleanField("Accurate Shooter")
+    wobble_goal = wtforms.BooleanField("Wobble Goal")
     DC = wtforms.BooleanField("DC :(")
-    dangerous_driving = wtforms.BooleanField("Dangerous Driving")
-    steps_over_bridge = wtforms.BooleanField("Steps Over Bridge")
     very_gp = wtforms.BooleanField("GP :)")
     not_gp = wtforms.BooleanField("Not GP :(")
+    pog_human_player = wtforms.BooleanField("Pog Human Player")
     notes = wtforms.TextAreaField()
 
 
@@ -447,7 +452,7 @@ def validatePreGameScoutingForm(form):
     # check if number of wobble goals delivered during auton is an integer between 0 - 2
     autonWobble = 0
     try:
-        autonWobble = int(form['autonWobble'])
+        autonWobble = int(form['auton_wobble'])
     except ValueError:
         return '"Wobble Goals Delivered in Auton" must be a number from 0 - 2'
     if autonWobble < 0 or autonWobble > 2:

@@ -44,14 +44,14 @@
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('auton_stones'))">
+                                    onclick="decrement(document.getElementById('auton_wobble'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.auton_stones(placeholder=form.auton_stones.label.text) }}
+                                    {{ form.auton_wobble(placeholder=form.auton_wobble.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('auton_stones'))">
+                                    onclick="increment(document.getElementById('auton_wobble'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
@@ -62,14 +62,14 @@
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('auton_skystones'))">
+                                    onclick="decrement(document.getElementById('auton_power'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.auton_skystones(placeholder=form.auton_skystones.label.text) }}
+                                    {{ form.auton_power(placeholder=form.auton_power.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('auton_skystones'))">
+                                    onclick="increment(document.getElementById('auton_power'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
@@ -80,14 +80,50 @@
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('auton_stones_on_foundation'))">
+                                    onclick="decrement(document.getElementById('auton_rings_high'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.auton_stones_on_foundation(placeholder=form.auton_stones_on_foundation.label.text) }}
+                                    {{ form.auton_rings_high(placeholder=form.auton_rings_high.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('auton_stones_on_foundation'))">
+                                    onclick="increment(document.getElementById('auton_rings_high'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('auton_rings_mid'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.auton_rings_mid(placeholder=form.auton_rings_mid.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('auton_rings_mid'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('auton_rings_low'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.auton_rings_low(placeholder=form.auton_rings_low.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('auton_rings_low'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
@@ -96,142 +132,142 @@
                         </div>
 
                         <div class="col-8 col-6-medium">
-                            {{ form.auton_foundation }}
-                            {{ form.auton_foundation.label }}
-                        </div>
-
-                        <div class="col-8 col-6-medium">
-                            {{ form.auton_under_skybridge }}
-                            {{ form.auton_under_skybridge.label }}
+                            {{ form.auton_park }}
+                            {{ form.auton_park.label }}
                         </div>
 
                         <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
                             <h2>Tele-Op</h2>
-                        </div>
+                        </div> 
+
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_stones_total'))">
+                                    onclick="decrement(document.getElementById('teleop_rings_high'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_stones_total(placeholder=form.teleop_stones_total.label.text) }}
+                                    {{ form.teleop_rings_high(placeholder=form.teleop_rings_high.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_stones_total'))">
+                                    onclick="increment(document.getElementById('teleop_rings_high'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
-                            <h4>Stack 1</h4>
-                        </div>
+
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_stones_1'))">
+                                    onclick="decrement(document.getElementById('teleop_rings_mid'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_stones_1(placeholder=form.teleop_stones_1.label.text) }}
+                                    {{ form.teleop_rings_mid(placeholder=form.teleop_rings_mid.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_stones_1'))">
+                                    onclick="increment(document.getElementById('teleop_rings_mid'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4 col-6-medium">
-                            {{ form.teleop_cap_1 }}
-                            {{ form.teleop_cap_1.label }}
-                        </div>
-                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
-                            <h4>Stack 2</h4>
-                        </div>
+                        
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_stones_2'))">
+                                    onclick="decrement(document.getElementById('teleop_rings_low'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_stones_2(placeholder=form.teleop_stones_2.label.text) }}
+                                    {{ form.teleop_rings_low(placeholder=form.teleop_rings_low.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_stones_2'))">
+                                    onclick="increment(document.getElementById('teleop_rings_low'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4 col-6-medium">
-                            {{ form.teleop_cap_2 }}
-                            {{ form.teleop_cap_2.label }}
-                        </div>
-                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
-                            <h4>Stack 3</h4>
-                        </div>
-                        <div class="col-4 col-6-medium">
-                            <div style="display: table">
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_stones_3'))">
-                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
-                                </div>
-                                <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_stones_3(placeholder=form.teleop_stones_3.label.text) }}
-                                </div>
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_stones_3'))">
-                                    <p
-                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
-                                        +</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4 col-6-medium">
-                            {{ form.teleop_cap_3 }}
-                            {{ form.teleop_cap_3.label }}
-                        </div>
-                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
-                            <h4>Stack 4</h4>
-                        </div>
-                        <div class="col-4 col-6-medium">
-                            <div style="display: table">
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_stones_4'))">
-                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
-                                </div>
-                                <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_stones_4(placeholder=form.teleop_stones_4.label.text) }}
-                                </div>
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_stones_4'))">
-                                    <p
-                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
-                                        +</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4 col-6-medium">
-                            {{ form.teleop_cap_4 }}
-                            {{ form.teleop_cap_4.label }}
-                        </div>
+                        
                         <div class="col-12" style="padding-top: 3em; padding-bottom: 0.7em">
                             <h2>End Game</h2>
                         </div>
 
-                        <div class="col-8 col-6-medium">
-                            {{ form.teleop_move_foundation }}
-                            {{ form.teleop_move_foundation.label }}
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_wobble_start'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_wobble_start(placeholder=form.teleop_wobble_start.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_wobble_start'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-8 col-6-medium">
-                            {{ form.teleop_park }}
-                            {{ form.teleop_park.label }}
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_wobble_drop'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_wobble_drop(placeholder=form.teleop_wobble_drop.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_wobble_drop'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_wobble_rings'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_wobble_rings(placeholder=form.teleop_wobble_rings.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_wobble_rings'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_power'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_power(placeholder=form.teleop_power.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_power'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-12" style="padding-top: 3em;">
@@ -245,13 +281,13 @@
                             <h2>Categories</h2>
                         </div>
                         <div class="col-6">
-                            {{ form.feeder }}
-                            {{ form.feeder.label }}
+                            {{ form.fast_intake }}
+                            {{ form.fast_intake.label }}
                         </div>
 
                         <div class="col-6">
-                            {{ form.stacker }}
-                            {{ form.stacker.label }}
+                            {{ form.fast_shooter }}
+                            {{ form.fast_shooter.label }}
                         </div>
 
                         <div class="col-6">
@@ -260,38 +296,28 @@
                         </div>
 
                         <div class="col-6">
-                            {{ form.tall_lift }}
-                            {{ form.tall_lift.label }}
+                            {{ form.high_goal }}
+                            {{ form.high_goal.label }}
                         </div>
                         
                         <div class="col-6">
-                            {{ form.under_bridge }}
-                            {{ form.under_bridge.label }}
+                            {{ form.power_shot }}
+                            {{ form.power_shot.label }}
                         </div>
 
                         <div class="col-6">
-                            {{ form.not_under_bridge }}
-                            {{ form.not_under_bridge.label }}
+                            {{ form.accurate_shooter }}
+                            {{ form.accurate_shooter.label }}
                         </div>
 
                         <div class="col-6">
-                            {{ form.knocked_tower }}
-                            {{ form.knocked_tower.label }}
+                            {{ form.wobble_goal }}
+                            {{ form.wobble_goal.label }}
                         </div>
 
                         <div class="col-6">
                             {{ form.DC }}
                             {{ form.DC.label }}
-                        </div>
-
-                        <div class="col-6">
-                            {{ form.dangerous_driving }}
-                            {{ form.dangerous_driving.label }}
-                        </div>
-
-                        <div class="col-6">
-                            {{ form.steps_over_bridge }}
-                            {{ form.steps_over_bridge.label }}
                         </div>
 
                         <div class="col-6">
@@ -303,7 +329,11 @@
                             {{ form.not_gp }}
                             {{ form.not_gp.label }}
                         </div>
-                        
+
+                        <div class="col-6">
+                            {{ form.pog_human_player }}
+                            {{ form.pog_human_player.label }}
+                        </div>
 
                         <div class="col-12" style="padding-top: 2em;">
                             <ul class="actions">
@@ -340,38 +370,68 @@
         }
 
         function fixEmptyStacks(element) {
-            for (let i = 1; i <= 4; i++) {
-                let element = document.getElementById('teleop_stones_' + i);
-                if (element.value == '') {
-                    element.value = '0';
-                }
-            }
-            element = document.getElementById('auton_stones');
+            element = document.getElementById('auton_wobble');
             if (element.value == '') {
                 element.value = '0';
             }
-            element = document.getElementById('auton_skystones');
+            element = document.getElementById('auton_power');
             if (element.value == '') {
                 element.value = '0';
             }
-            element = document.getElementById('auton_stones_on_foundation');
+            element = document.getElementById('auton_rings_high');
             if (element.value == '') {
                 element.value = '0';
             }
-            element = document.getElementById('teleop_stones_total');
+            element = document.getElementById('auton_rings_mid');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('auton_rings_low');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_rings_high');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_rings_mid');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_rings_low');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_wobble_start');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_wobble_drop');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_wobble_rings');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_power');
             if (element.value == '') {
                 element.value = '0';
             }
         }
 
-        document.getElementById('auton_stones').setAttribute("style", "text-align:center");
-        document.getElementById('auton_skystones').setAttribute("style", "text-align:center");
-        document.getElementById('auton_stones_on_foundation').setAttribute("style", "text-align:center");
-        document.getElementById('teleop_stones_total').setAttribute("style", "text-align:center");
-        document.getElementById('teleop_stones_1').setAttribute("style", "text-align:center");
-        document.getElementById('teleop_stones_2').setAttribute("style", "text-align:center");
-        document.getElementById('teleop_stones_3').setAttribute("style", "text-align:center");
-        document.getElementById('teleop_stones_4').setAttribute("style", "text-align:center");
+        document.getElementById('auton_wobble').setAttribute("style", "text-align:center");
+        document.getElementById('auton_power').setAttribute("style", "text-align:center");
+        document.getElementById('auton_rings_high').setAttribute("style", "text-align:center");
+        document.getElementById('auton_rings_mid').setAttribute("style", "text-align:center");
+        document.getElementById('auton_rings_low').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_rings_high').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_rings_mid').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_rings_low').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_wobble_start').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_wobble_drop').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_wobble_rings').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_power').setAttribute("style", "text-align:center");
     </script>
 </body>
 
