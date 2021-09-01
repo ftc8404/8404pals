@@ -1,6 +1,6 @@
 # FTC 8404 Quixilver's Python web app for dealing with tournament data
 
-This app uses Python to handle web stuff. The website is hosted on Azure at [https://quixilver8404data.azurewebsites.net/](https://quixilver8404data.azurewebsites.net/)
+This app uses Python to handle web stuff. The website is hosted on Azure at [https://pals.quixilver8404.org/](https://pals.quixilver8404.org/)
 Updates to this repository are automagically deployed to the web server.
 
 # Building for development
