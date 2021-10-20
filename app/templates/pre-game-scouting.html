@@ -44,14 +44,14 @@
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('auton_wobble'))">
+                                    onclick="decrement(document.getElementById('auton_freight_storage'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.auton_wobble(placeholder=form.auton_wobble.label.text) }}
+                                    {{ form.auton_freight_storage(placeholder=form.auton_freight_storage.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('auton_wobble'))">
+                                    onclick="increment(document.getElementById('auton_freight_storage'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
@@ -62,14 +62,14 @@
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('auton_rings'))">
+                                    onclick="decrement(document.getElementById('auton_freight_shipping'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.auton_rings(placeholder=form.auton_rings.label.text) }}
+                                    {{ form.auton_freight_shipping(placeholder=form.auton_freight_shipping.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('auton_rings'))">
+                                    onclick="increment(document.getElementById('auton_freight_shipping'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
@@ -77,29 +77,29 @@
                             </div>
                         </div>
 
-                        <div class="col-4 col-6-medium">
-                            {{ form.auton_power }}
-                            {{ form.auton_power.label }}
+                        <div class="col-4 col-12-medium">
+                            {{ form.auton_deliver_duck }}
+                            {{ form.auton_deliver_duck.label }}
                         </div>
 
                         <div class="col-4 col-6-medium">
-                            {{ form.auton_park }}
-                            {{ form.auton_park.label }}
+                            {{ form.auton_detect_duck }}
+                            {{ form.auton_detect_duck.label }}
+                        </div>
+
+                        <div class="col-8 col-6-medium">
+                            {{ form.auton_detect_team }}
+                            {{ form.auton_detect_team.label }}
                         </div>
 
                         <div class="col-4 col-6-medium">
-                            {{ form.auton_high }}
-                            {{ form.auton_high.label }}
+                            {{ form.auton_storage_park }}
+                            {{ form.auton_storage_park.label }}
                         </div>
 
                         <div class="col-4 col-6-medium">
-                            {{ form.auton_mid }}
-                            {{ form.auton_mid.label }}
-                        </div>
-
-                        <div class="col-4 col-6-medium">
-                            {{ form.auton_low }}
-                            {{ form.auton_low.label }}
+                            {{ form.auton_warehouse_park }}
+                            {{ form.auton_warehouse_park.label }}
                         </div>
 
                         <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
@@ -109,14 +109,108 @@
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_rings'))">
+                                    onclick="decrement(document.getElementById('teleop_freight_low'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
                                 <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_rings(placeholder=form.teleop_rings.label.text) }}
+                                    {{ form.teleop_freight_low(placeholder=form.teleop_freight_low.label.text) }}
                                 </div>
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_rings'))">
+                                    onclick="increment(document.getElementById('teleop_freight_low'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_freight_mid'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_freight_mid(placeholder=form.teleop_freight_mid.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_freight_mid'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_freight_high'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_freight_high(placeholder=form.teleop_freight_high.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_freight_high'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_freight_storage'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_freight_storage(placeholder=form.teleop_freight_storage.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_freight_storage'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_freight_shared'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_freight_shared(placeholder=form.teleop_freight_shared.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_freight_shared'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0.7em">
+                            <h2>End Game</h2>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_delivered_duck'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_delivered_duck(placeholder=form.teleop_delivered_duck.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_delivered_duck'))">
                                     <p
                                         style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
                                         +</p>
@@ -127,72 +221,23 @@
                         <div class="col-8 col-6-medium"></div>
 
                         <div class="col-4 col-6-medium">
-                            {{ form.teleop_high }}
-                            {{ form.teleop_high.label }}
+                            {{ form.teleop_shared_tipped }}
+                            {{ form.teleop_shared_tipped.label }}
+                        </div>
+
+                        <div class="col-8 col-6-medium">
+                            {{ form.teleop_shipping_balanced }}
+                            {{ form.teleop_shipping_balanced.label }}
                         </div>
 
                         <div class="col-4 col-6-medium">
-                            {{ form.teleop_mid }}
-                            {{ form.teleop_mid.label }}
+                            {{ form.teleop_park }}
+                            {{ form.teleop_park.label }}
                         </div>
 
                         <div class="col-4 col-6-medium">
-                            {{ form.teleop_low }}
-                            {{ form.teleop_low.label }}
-                        </div>
-
-                        <div class="col-12" style="padding-top: 3em; padding-bottom: 0.7em">
-                            <h2>End Game</h2>
-                        </div>
-
-                        <div class="col-4 col-6-medium">
-                            <div style="display: table">
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_wobble'))">
-                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
-                                </div>
-                                <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_wobble(placeholder=form.teleop_wobble.label.text) }}
-                                </div>
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_wobble'))">
-                                    <p
-                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
-                                        +</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-4 col-6-medium">
-                            <div style="display: table">
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_wobble_rings'))">
-                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
-                                </div>
-                                <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_wobble_rings(placeholder=form.teleop_wobble_rings.label.text) }}
-                                </div>
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_wobble_rings'))">
-                                    <p
-                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
-                                        +</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-4 col-6-small">
-                            {{ form.teleop_power }}
-                            {{ form.teleop_power.label }}
-                        </div>
-
-                        <div class="col-4 col-6-medium">
-                            {{ form.teleop_wobble_start }}
-                            {{ form.teleop_wobble_start.label }}
-                        </div>
-                        <div class="col-4 col-6-medium">
-                            {{ form.teleop_wobble_drop }}
-                            {{ form.teleop_wobble_drop.label }}
+                            {{ form.teleop_cap }}
+                            {{ form.teleop_cap.label }}
                         </div>
 
                         <div class="col-12" style="padding-top: 3em;">
@@ -257,11 +302,15 @@
                 element.value = '0';
             }
         }
-        document.getElementById('auton_wobble').setAttribute("style", "text-align:center");
-        document.getElementById('auton_rings').setAttribute("style", "text-align:center");
-        document.getElementById('teleop_rings').setAttribute("style", "text-align:center");
-        document.getElementById('teleop_wobble').setAttribute("style", "text-align:center");
-        document.getElementById('teleop_wobble_rings').setAttribute("style", "text-align:center");
+        document.getElementById('auton_freight_storage').setAttribute("style", "text-align:center");
+        document.getElementById('auton_freight_shipping').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_freight_storage').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_freight_low').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_freight_mid').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_freight_high').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_freight_shared').setAttribute("style", "text-align:center");
+        document.getElementById('teleop_delivered_duck').setAttribute("style", "text-align:center");
+
     </script>
 </body>
 

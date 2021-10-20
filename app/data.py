@@ -305,31 +305,35 @@ class PreGameScoutingForm(wtforms.Form):
         wtforms.validators.optional()])
 
     #Auton Labels
-    auton_wobble = wtforms.IntegerField("Wobble Goal Delivered", validators=[
+    auton_deliver_duck = wtforms.BooleanField("Deliver Duck")
+    auton_storage_park = wtforms.BooleanField("Park (Storage Unit)")
+    auton_warehouse_park = wtforms.BooleanField("Park (Warehouse)")
+    auton_freight_storage = wtforms.IntegerField("Freight in Storage", validators=[
         wtforms.validators.optional()])
-    auton_rings = wtforms.IntegerField("Rings Scored", validators=[
+    auton_freight_shipping = wtforms.IntegerField("Freight in Shipping", validators=[
         wtforms.validators.optional()])
-    auton_power = wtforms.BooleanField("Power Shots")
-    auton_park = wtforms.BooleanField("Park")
-    auton_high = wtforms.BooleanField("Rings in High Goal")
-    auton_mid = wtforms.BooleanField("Rings in Mid Goal")
-    auton_low = wtforms.BooleanField("Rings in Low Goal")
+    auton_detect_duck = wtforms.BooleanField("Detect Level (Duck)")
+    auton_detect_team = wtforms.BooleanField("Detect Level (Team)")
         
     #Teleop Labels
-    teleop_rings = wtforms.IntegerField("Rings Scored", validators=[
+    teleop_freight_storage = wtforms.IntegerField("Frieght in Storage", validators=[
         wtforms.validators.optional()])
-    teleop_high = wtforms.BooleanField("Rings in High Goal")
-    teleop_mid = wtforms.BooleanField("Rings in Mid Goal")
-    teleop_low = wtforms.BooleanField("Rings in Low Goal")
+    teleop_freight_low = wtforms.IntegerField("Freight in Low", validators=[
+        wtforms.validators.optional()])
+    teleop_freight_mid = wtforms.IntegerField("Freight in Mid", validators=[
+        wtforms.validators.optional()])
+    teleop_freight_high = wtforms.IntegerField("Freight in High", validators=[
+        wtforms.validators.optional()])
+    teleop_freight_shared = wtforms.IntegerField("Freight in Shared", validators=[
+        wtforms.validators.optional()])
 
     #End-Game Labels
-    teleop_wobble = wtforms.IntegerField("Wobble Delivered", validators=[
+    teleop_delivered_duck = wtforms.IntegerField("Ducks Delivered", validators=[
         wtforms.validators.optional()])
-    teleop_wobble_rings = wtforms.IntegerField("Wobble Rings", validators=[
-        wtforms.validators.optional()])
-    teleop_power = wtforms.BooleanField("Power Shots")
-    teleop_wobble_start = wtforms.BooleanField("Wobble on Start")
-    teleop_wobble_drop = wtforms.BooleanField("Wobble in Drop")
+    teleop_shared_tipped = wtforms.BooleanField("Shared Hub Tipped")
+    teleop_shipping_balanced = wtforms.BooleanField("Shipping Hub Balanced")
+    teleop_park = wtforms.BooleanField("Park")
+    teleop_cap = wtforms.BooleanField("Capping")
    
     notes = wtforms.TextAreaField()
 
@@ -508,7 +512,7 @@ def validatePreGameScoutingForm(form):
 
 
 def validateMatchScoutingForm(form):
-    # validate all the data inputted to ensure bad data won't go into the database
+    #all the data inputted to ensure bad data won't go into the database
 
     # check if team number is a positive integer
     teamNumber = 0
