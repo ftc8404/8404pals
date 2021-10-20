@@ -895,36 +895,37 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
 
         # Auton score for Pre Game
         preAutonScore = 0 #create preAutonScore variable
-        preAutonScore = entry[2]*15 # wobble goal delivery
-        if entry[3]: # powershots
-            preAutonScore += 45 
-        if entry[4]: # rings in high goal
-            preAutonScore += entry[7]*12
-        elif entry[5]: # rings in mid goal
-            preAutonScore += entry[7]*6
-        elif entry[6]: # rings in low goal
-            preAutonScore += entry[7]*3
-        if entry[8]: # parking points
-            preAutonScore += 5
+        if entry[2]: # delivered duck in auton
+            preAutonScore += 10
+        if entry[3]: # robot parked in storage unit
+            preAutonScore += 6
+        if entry[4]: # robot parked in warehouse
+            preAutonScore += 10
+        preAutonScore += 2 * entry[5] # freight delivered in storage unit
+        preAutonScore += 6 * entry[6] # freight delivered in shipping hub
+        if entry[7]: # detect level using duck
+            preAutonScore += 10
+        if entry[8]: # detect level using team element
+            preAutonScore += 20
         # Store Pre Game Auton Score in data array
         data[teamNumber][0] = preAutonScore
 
-
         #Teleop score for Pre Game
         preTeleopScore = 0
-        if entry[9]: # rings in high goal
-            preTeleopScore += entry[12]*6
-        elif entry[10]: # rings in mid goal
-            preTeleopScore += entry[12]*4
-        elif entry[11]: # rings in low goal
-            preTeleopScore += entry[12]*2
-        if entry[13]: # wobble goals on start line
-            preTeleopScore += entry[15]*5
-        elif entry[14]: # wobble goals in drop zone
-            preTeleopScore += entry[15]*20
-        preTeleopScore += entry[16]*5 # rings on wobble goal
-        if entry[17]: # power shots
-            preTeleopScore += 45
+        preTeleopScore += 1 * entry[9] # freight in storage unit
+        preTeleopScore += 2 * entry[10] # freight in lower level
+        preTeleopScore += 4 * entry[11] # freight in middle level
+        preTeleopScore += 6 * entry[12] # freight in higher level
+        preTeleopScore += 4 * entry[13] # freight in shared hub
+        preTeleopScore += 6 * entry[14] # ducks delivered in end game
+        if entry[15]: # shared hub is tipped
+            preAutonScore += 20
+        if entry[16]: # shipping hub is balanced
+            preAutonScore += 10
+        if entry[17]: # robot parked in warehouse
+            preAutonScore += 6
+        if entry[18]: # shipping hub is capped
+            preAutonScore += 15
 
         # Store Pre Game Teleop Score in data array
         data[teamNumber][1] = preTeleopScore
