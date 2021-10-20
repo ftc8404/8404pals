@@ -453,54 +453,84 @@ def validatePreGameScoutingForm(form):
     if teamMatchAmount == 0:
         return 'Team "'+str(teamNumber)+'" is not at this competition'
 
-    # check if number of wobble goals delivered during auton is an integer between 0 - 2
-    autonWobble = 0
+    # check if number of freight delivered in storage unit during auton is an integer between 0 - 4
+    autonFreightStorage = 0
     try:
-        autonWobble = int(form['auton_wobble'])
+        autonFreightStorage = int(form['auton_freight_storage'])
     except ValueError:
-        return '"Wobble Goals Delivered in Auton" must be a number from 0 - 2'
-    if autonWobble < 0 or autonWobble > 2:
-        return '"Wobble Goals Delivered in Auton" must be a number from 0 - 2'
+        return '"Frieght Delivered in the Storage Unit during Auton" must be a number from 0 - 4'
+    if autonFreightStorage < 0 or autonFreightStorage > 4:
+        return '"Frieght Delivered in the Storage Unit during Auton" must be a number from 0 - 4'
 
-    # check if number of rings scored during auton is an integer between 0 - 7
-    autonRings = 0
+    # check if number of freight delivered in shipping hub during auton is an integer between 0 - 4
+    autonFreightShipping = 0
     try:
-        autonRings = int(form['auton_rings'])
+        autonFreightShipping = int(form['auton_freight_shipping'])
     except ValueError:
-        return '"Rings Scored in Auton" must be a number from 0 - 7'
-    if autonRings < 0 or autonRings > 7:
-        return '"Rings Scored in Auton" must be a number from 0 - 7'
+        return '"Frieght Delivered in the Shipping Hub during Auton" must be a number from 0 - 4'
+    if autonFreightShipping < 0 or autonFreightShipping > 4:
+        return '"Frieght Delivered in the Shipping Hub during Auton" must be a number from 0 - 4'
 
     
-    # check if number of rings scored in teleop is an integer between 0 - 40
-    teleopRings = 0
+    # check if number of freight delivered in the storage during teleop is an integer between 0 - 50
+    teleopFreightStorage = 0
     try:
-        teleopRings = int(form['teleop_rings'])
+        teleopFreightStorage = int(form['teleop_freight_storage'])
     except ValueError:
-        return '"Rings Scored in Teleop" must be a number from 0 - 40'
+        return '"Frieght Delivered in Storage Unit during Teleop" must be a number from 0 - 30'
 
-    if teleopRings < 0 or teleopRings > 40:
-        return '"Rings Scored in Teleop" must be a number from 0 - 40'
+    if teleopFreightStorage < 0 or teleopFreightStorage > 30:
+        return '"Frieght Delivered in Storage Unit during Teleop" must be a number from 0 - 30'
+    
+    # check if number of freight delivered in the lower level during teleop is an integer between 0 - 50
+    teleopFreightLow = 0
+    try:
+        teleopFreightLow = int(form['teleop_freight_low'])
+    except ValueError:
+        return '"Frieght Delivered in Lower Level during Teleop" must be a number from 0 - 30'
 
+    if teleopFreightLow < 0 or teleopFreightLow > 30:
+        return '"Frieght Delivered in Lower Level during Teleop" must be a number from 0 - 30'
+
+    # check if number of freight delivered in the lower level during teleop is an integer between 0 - 50
+    teleopFreightMid = 0
+    try:
+        teleopFreightMid = int(form['teleop_freight_mid'])
+    except ValueError:
+        return '"Frieght Delivered in Middle Level during Teleop" must be a number from 0 - 30'
+
+    if teleopFreightMid < 0 or teleopFreightMid > 30:
+        return '"Frieght Delivered in Middle Level during Teleop" must be a number from 0 - 30'
+
+    # check if number of freight delivered in the lower level during teleop is an integer between 0 - 50
+    teleopFreightHigh = 0
+    try:
+        teleopFreightHigh = int(form['teleop_freight_high'])
+    except ValueError:
+        return '"Frieght Delivered in Higher Level during Teleop" must be a number from 0 - 30'
+
+    if teleopFreightHigh < 0 or teleopFreightHigh > 30:
+        return '"Frieght Delivered in Higher Level during Teleop" must be a number from 0 - 30'
+    
+    # check if number of freight delivered in the shared hub during teleop is an integer between 0 - 50
+    teleopFreightShared = 0
+    try:
+        teleopFreightShared = int(form['teleop_freight_shared'])
+    except ValueError:
+        return '"Frieght Delivered in Shared Hub during Teleop" must be a number from 0 - 30'
+
+    if teleopFreightShared < 0 or teleopFreightShared > 30:
+        return '"Frieght Delivered in Shared Hub during Teleop" must be a number from 0 - 30'
+    
     # check if number of wobble goals delivered is an integer between 0 - 2
-    teleopWobble = 0
+    teleopDeliveredDuck = 0
     try:
-        teleopWobble = int(form['teleop_wobble'])
+        teleopDeliveredDuck = int(form['teleop_delivered_duck'])
     except ValueError:
-        return '"Wobble Goals delivered in End Game" must be a number from 0 - 2'
+        return '"Ducks delivered in End Game" must be a number from 0 - 10'
 
-    if teleopWobble < 0 or teleopWobble > 2:
-        return '"Wobble Goals delivered in End Game" must be a number from 0 - 2'
-
-    # check if number of rings on wobble goals is an integer between 0 - 10
-    teleopWobbleRings = 0
-    try:
-        teleopWobbleRings = int(form['teleop_wobble_rings'])
-    except ValueError:
-        return '"Wobble Goal Rings in End Game" must be a number from 0 - 10'
-
-    if teleopWobbleRings < 0 or teleopWobbleRings > 10:
-        return '"Wobble Goal Rings in End Game" must be a number from 0 - 10'
+    if teleopDeliveredDuck < 0 or teleopDeliveredDuck > 10:
+        return '"Ducks delivered in End Game" must be a number from 0 - 10'
 
     notes = form['notes']
     if len(notes) > 800:
