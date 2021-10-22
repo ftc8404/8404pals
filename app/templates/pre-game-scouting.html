@@ -281,23 +281,35 @@
             element.value = num;
         }
         function fixEmptyFields() {
-            let element = document.getElementById('auton_wobble');
+            let element = document.getElementById('auton_freight_storage');
             if (element.value == '') {
                 element.value = '0';
             }
-            element = document.getElementById('auton_rings');
+            element = document.getElementById('auton_freight_shipping');
             if (element.value == '') {
                 element.value = '0';
             }
-            element = document.getElementById('teleop_rings');
+            element = document.getElementById('teleop_freight_storage');
             if (element.value == '') {
                 element.value = '0';
             }
-            element = document.getElementById('teleop_wobble');
+            element = document.getElementById('teleop_freight_low');
             if (element.value == '') {
                 element.value = '0';
             }
-            element = document.getElementById('teleop_wobble_rings');
+            element = document.getElementById('teleop_freight_mid');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_freight_high');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_freight_shared');
+            if (element.value == '') {
+                element.value = '0';
+            }
+            element = document.getElementById('teleop_delivered_duck');
             if (element.value == '') {
                 element.value = '0';
             }
