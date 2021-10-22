@@ -930,7 +930,7 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
         # Store Pre Game Teleop Score in data array
         data[teamNumber][1] = preTeleopScore
         # Store Pre Game Total Score in data array
-        data[teamNumber][2] = preAutonScore+preTeleopScore
+        data[teamNumber][2] = preAutonScore + preTeleopScore
 
     for entry in matchScoutingFormData:
         teamNumber = entry[1]
