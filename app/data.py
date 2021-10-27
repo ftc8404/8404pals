@@ -680,48 +680,45 @@ def getCategoriesList():
         "SELECT * FROM Categories").fetchall()
     sqlConn.close()
 
-    feeder_list = []
-    stacker_list = []
-    speedy_list = []
-    tall_lift_list = []
-    under_bridge_list = []
-    not_under_bridge_list = []
-    knocked_tower_list = []
-    DC_list = []
-    dangerous_driving_list = []
-    steps_over_bridge_list = []
+    detect_element_list = []
+    carousel_list = []
+    terrain_over_list = []
+    terrain_around_list = []
+    fast_freight_list = []
+    high_deposit_list = []
+    cap_list = []
+    dc_list = []
     very_gp_list = []
     not_gp_list = []
+    possessive_list = []
 
     for team in data:
         teamNumber = team[0]
         # Category Variables List
         if team[1]:
-            feeder_list.append(teamNumber)
+            detect_element_list.append(teamNumber)
         if team[2]:
-            stacker_list.append(teamNumber)
+            carousel_list.append(teamNumber)
         if team[3]:
-            speedy_list.append(teamNumber)
+            terrain_over_list.append(teamNumber)
         if team[4]:
-            tall_lift_list.append(teamNumber)
+            terrain_around_list.append(teamNumber)
         if team[5]:
-            under_bridge_list.append(teamNumber)
+            fast_freight_list.append(teamNumber)
         if team[6]:
-            not_under_bridge_list.append(teamNumber)
+            high_deposit_list.append(teamNumber)
         if team[7]:
-            knocked_tower_list.append(teamNumber)
+            cap_list.append(teamNumber)
         if team[8]:
-            DC_list.append(teamNumber)
+            dc_list.append(teamNumber)
         if team[9]:
-            dangerous_driving_list.append(teamNumber)
-        if team[10]:
-            steps_over_bridge_list.append(teamNumber)
-        if team[11]:
             very_gp_list.append(teamNumber)
-        if team[12]:
+        if team[10]:
             not_gp_list.append(teamNumber)
+        if team[11]:
+            possessive_list.append(teamNumber)
 
-    return feeder_list, stacker_list, speedy_list, tall_lift_list, under_bridge_list, not_under_bridge_list, knocked_tower_list, DC_list, dangerous_driving_list, steps_over_bridge_list, very_gp_list, not_gp_list
+    return detect_element_list, carousel_list, terrain_over_list, terrain_around_list, fast_freight_list, high_deposit_list, cap_list, dc_list, very_gp_list, not_gp_list, possessive_list
 
 
 def validateMatchInfoForm(form):
@@ -1009,28 +1006,30 @@ def getCompetitionOverviewData():
     sqlConn = getSqlConn()
     sqlCursor = sqlConn.cursor()
 
-    goldDivisionRaw = [sqlCursor.execute(
-        "SELECT gold_division FROM Divisions").fetchall()]
-    goldDivision = goldDivisionRaw[0]
-    siliconDivisionRaw = [sqlCursor.execute(
-        "SELECT silicon_division FROM Divisions").fetchall()]
-    siliconDivision = siliconDivisionRaw[0]
-    goldTeams = []
-    siliconTeams = []
+    # Divisions set up
+    # 
+    # goldDivisionRaw = [sqlCursor.execute(
+    #     "SELECT gold_division FROM Divisions").fetchall()]
+    # goldDivision = goldDivisionRaw[0]
+    # siliconDivisionRaw = [sqlCursor.execute(
+    #     "SELECT silicon_division FROM Divisions").fetchall()]
+    # siliconDivision = siliconDivisionRaw[0]
+    # goldTeams = []
+    # siliconTeams = []
 
-    index = 0
-    for team in goldDivision:
-        for item in team:
-            if item == True:
-                goldTeams.append(allTeamNumbers[index])
-        index += 1
+    # index = 0
+    # for team in goldDivision:
+    #     for item in team:
+    #         if item == True:
+    #             goldTeams.append(allTeamNumbers[index])
+    #     index += 1
 
-    index = 0
-    for team in siliconDivision:
-        for item in team:
-            if item == True:
-                siliconTeams.append(allTeamNumbers[index])
-        index += 1
+    # index = 0
+    # for team in siliconDivision:
+    #     for item in team:
+    #         if item == True:
+    #             siliconTeams.append(allTeamNumbers[index])
+    #     index += 1
 
     for teamNumber in allTeamNumbers:
         allData[teamNumber] = [teamNumber]+preGameScoutingData['data'][teamNumber] + \
@@ -1041,7 +1040,7 @@ def getCompetitionOverviewData():
         matchScoutingData['fields']+summaryData['fields']
 
     competitionData = {
-        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys, "goldDiv": goldTeams, "siliconDiv": siliconTeams}
+        "cityName": curCompetitionCityName, "id": curCompetitionId, "allData": allData, "tableKeys": allTableKeys}    #, "goldDiv": goldTeams, "siliconDiv": siliconTeams}
 
     return competitionData
 
