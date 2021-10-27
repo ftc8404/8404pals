@@ -917,13 +917,13 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
         preTeleopScore += 4 * entry[13] # freight in shared hub
         preTeleopScore += 6 * entry[14] # ducks delivered in end game
         if entry[15]: # shared hub is tipped
-            preAutonScore += 20
+            preTeleopScore += 20
         if entry[16]: # shipping hub is balanced
-            preAutonScore += 10
+            preTeleopScore += 10
         if entry[17]: # robot parked in warehouse
-            preAutonScore += 6
+            preTeleopScore += 6
         if entry[18]: # shipping hub is capped
-            preAutonScore += 15
+            preTeleopScore += 15
 
         # Store Pre Game Teleop Score in data array
         data[teamNumber][1] = preTeleopScore
@@ -933,31 +933,46 @@ def getDataSummary(allTeamNumbers, preGameScoutingFormData, matchScoutingFormDat
     for entry in matchScoutingFormData:
         teamNumber = entry[1]
 
-        matchAutonScore = entry[2]*2 + \
-            entry[3]*8 + entry[4]*4 + entry[5]*10 + entry[6]*5
-        matchTeleopScore = entry[7]*2
-        highestStack = 0
-        StackList = [entry[8], entry[9], entry[10], entry[11]]
-        for item in StackList:
-            if item > highestStack:
-                highestStack = item
-        matchTeleopScore += highestStack*2
-        CapList = [entry[12], entry[13], entry[14], entry[15]]
-        capIndex = -1
-        for item in CapList:
-            if item:
-                capIndex = CapList.index(item)
-        if(capIndex != -1):
-            matchTeleopScore += StackList[capIndex]*1+5
-        if entry[16]:
+        # Auton score for Pre Game
+        matchAutonScore = 0 #create preAutonScore variable
+        if entry[2]: # delivered duck in auton
+            matchAutonScore += 10
+        if entry[3]: # robot parked in storage unit (half)
+            matchAutonScore += 3
+        if entry[4]: # robot parked in storage unit (full)
+            matchAutonScore += 6
+        if entry[5]: # robot parked in warehouse (half)
+            matchAutonScore += 5
+        if entry[6]: # robot parked in warehouse (full)
+            matchAutonScore += 10
+        matchAutonScore += 2 * entry[7] # freight delivered in storage unit
+        matchAutonScore += 6 * entry[8] # freight delivered in shipping hub
+        if entry[9]: # detect level using duck
+            matchAutonScore += 10
+        if entry[10]: # detect level using team element
+            matchAutonScore += 20
+   
+        #Teleop score for Pre Game
+        matchTeleopScore = 0
+        matchTeleopScore += 1 * entry[11] # freight in storage unit
+        matchTeleopScore += 2 * entry[12] # freight in lower level
+        matchTeleopScore += 4 * entry[13] # freight in middle level
+        matchTeleopScore += 6 * entry[14] # freight in higher level
+        matchTeleopScore += 4 * entry[15] # freight in shared hub
+        matchTeleopScore += 6 * entry[16] # ducks delivered in end game
+        if entry[17]: # shared hub is tipped
+            matchTeleopScore += 20
+        if entry[18]: # shipping hub is balanced
+            matchTeleopScore += 10
+        if entry[19]: # robot parked in warehouse
+            matchTeleopScore += 6
+        if entry[20]: # shipping hub is capped
             matchTeleopScore += 15
-        if entry[17]:
-            matchTeleopScore += 5
 
         if matchEntryCount[teamNumber] > 0:
             data[teamNumber][3] += matchAutonScore
             data[teamNumber][4] += matchTeleopScore
-            data[teamNumber][5] += matchAutonScore+matchTeleopScore
+            data[teamNumber][5] += matchAutonScore + matchTeleopScore
         else:
             data[teamNumber][3] = matchAutonScore
             data[teamNumber][4] = matchTeleopScore
