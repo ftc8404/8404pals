@@ -346,47 +346,53 @@ class MatchScoutingForm(wtforms.Form):
     team_number = wtforms.IntegerField("Team Number", validators=[
         wtforms.validators.required()])
 
-    auton_wobble = wtforms.IntegerField("Wobble Goals Delivered", validators=[
+    #Auton Labels
+    auton_deliver_duck = wtforms.BooleanField("Deliver Duck")
+    auton_storage_half = wtforms.BooleanField("Partial Park (Storage Unit)")
+    auton_storage_full = wtforms.BooleanField("Full Park (Storage Unit)")
+    auton_warehouse_half = wtforms.BooleanField("Partial Park (Warehouse)")
+    auton_warehouse_full = wtforms.BooleanField("Full Park (Warehouse)")
+    auton_freight_storage = wtforms.IntegerField("Freight in Storage Unit", validators=[
         wtforms.validators.optional()])
-    auton_power = wtforms.IntegerField("Power Shots", validators=[
+    auton_freight_shipping = wtforms.IntegerField("Freight in Shipping Hub", validators=[
         wtforms.validators.optional()])
-    auton_rings_high = wtforms.IntegerField("Rings in High Goal", validators=[
-        wtforms.validators.optional()])
-    auton_rings_mid = wtforms.IntegerField("Rings in Mid Goal", validators=[
-        wtforms.validators.optional()])
-    auton_rings_low = wtforms.IntegerField("Rings in Low Goal", validators=[
-        wtforms.validators.optional()])
-    auton_park = wtforms.BooleanField("Parking")
+    auton_detect_duck = wtforms.BooleanField("Detect Level (Duck)")
+    auton_detect_team = wtforms.BooleanField("Detect Level (Team)")
 
-    teleop_rings_high = wtforms.IntegerField("Rings in High Goal", validators=[
+    #Teleop Labels
+    teleop_freight_storage = wtforms.IntegerField("Freight in Storage", validators=[
         wtforms.validators.optional()])
-    teleop_rings_mid = wtforms.IntegerField("Rings in Mid Goal", validators=[
+    teleop_freight_low = wtforms.IntegerField("Frieght in Low", validators=[
         wtforms.validators.optional()])
-    teleop_rings_low = wtforms.IntegerField("Rings in Low Goal", validators=[
+    teleop_freight_mid = wtforms.IntegerField("Frieght in Mid", validators=[
         wtforms.validators.optional()])
+    teleop_freight_high = wtforms.IntegerField("Frieght in High", validators=[
+        wtforms.validators.optional()])
+    teleop_freight_shared = wtforms.IntegerField("Frieght in Shared", validators=[
+        wtforms.validators.optional()])
+
+    #End Game Labels
+    teleop_delivered_duck = wtforms.IntegerField("Ducks Delivered", validators=[
+        wtforms.validators.optional()])
+    teleop_shared_tipped = wtforms.BooleanField("Shared Hub Tipped")
+    teleop_shipping_balanced = wtforms.BooleanField("Shipping Hub Balanced")
+    teleop_park_half = wtforms.BooleanField("Parked Halfway")
+    teleop_park_full = wtforms.BooleanField("Parked Fully")
+    teleop_cap = wtforms.BooleanField("Capped Shipping Hub")
     
-    teleop_wobble_start = wtforms.IntegerField("Wobble on Start", validators=[
-        wtforms.validators.optional()])
-    teleop_wobble_drop = wtforms.IntegerField("Wobble in Drop", validators=[
-        wtforms.validators.optional()])
-    teleop_wobble_rings = wtforms.IntegerField("Rings on Wobble", validators=[
-        wtforms.validators.optional()])
-    teleop_power = wtforms.IntegerField("Power Shots", validators=[
-        wtforms.validators.optional()])
-
-    fast_intake = wtforms.BooleanField("Fast Intake")
-    fast_shooter = wtforms.BooleanField("Fast Shooter")
-    speedy = wtforms.BooleanField("Speedy")
-    high_goal = wtforms.BooleanField("High Goal")
-    power_shot = wtforms.BooleanField("Power Shots")
-    accurate_shooter = wtforms.BooleanField("Accurate Shooter")
-    wobble_goal = wtforms.BooleanField("Wobble Goal")
-    DC = wtforms.BooleanField("DC :(")
+    #Categories
+    detect_element = wtforms.BooleanField("Detect Element")
+    carousel = wtforms.BooleanField("Carousel")
+    terrain_over = wtforms.BooleanField("Terrain Over")
+    terrain_around = wtforms.BooleanField("Terrain Around")
+    fast_freight = wtforms.BooleanField("Fast Freight Delivery")
+    high_deposit = wtforms.BooleanField("High Deposit")
+    cap = wtforms.BooleanField("Can Cap")
+    dc = wtforms.BooleanField("DC :(")
     very_gp = wtforms.BooleanField("GP :)")
     not_gp = wtforms.BooleanField("Not GP :(")
-    pog_human_player = wtforms.BooleanField("Pog Human Player")
+    possessive = wtforms.BooleanField("Possession Penalties")
     notes = wtforms.TextAreaField()
-
 
 def checkASCII(text):
     return len(text) == len(text.encode())
@@ -579,92 +585,84 @@ def validateMatchScoutingForm(form):
         if teamNumber not in matchList[matchNumber]:
             return "Team " + str(teamNumber) + " is not in match "+str(matchNumber)
 
-    # check if number of stones delivered during auton is an integer between 1 - 6
-    autonStones = 0
+    # check if number of freight delivered in storage unit during auton is an integer between 0 - 4
+    autonFreightStorage = 0
     try:
-        autonStones = int(form['auton_stones'])
+        autonFreightStorage = int(form['auton_freight_storage'])
     except ValueError:
-        return '"Stones Delivered" must be a number from 0 - 6'
-    if autonStones < 0 or autonStones > 6:
-        return '"Stones Delivered" must be a number from 0 - 6'
+        return '"Frieght Delivered in the Storage Unit during Auton" must be a number from 0 - 4'
+    if autonFreightStorage < 0 or autonFreightStorage > 4:
+        return '"Frieght Delivered in the Storage Unit during Auton" must be a number from 0 - 4'
 
-    # check if number of skystones delivered during auton is an integer between 1 - 2
-    autonSkystones = 0
+    # check if number of freight delivered in shipping hub during auton is an integer between 0 - 4
+    autonFreightShipping = 0
     try:
-        autonSkystones = int(form['auton_skystones'])
+        autonFreightShipping = int(form['auton_freight_shipping'])
     except ValueError:
-        return '"Skystones Delivered" must be a number from 0 - 2'
-    if autonSkystones < 0 or autonSkystones > 2:
-        return '"Skystones Delivered" must be a number from 0 - 2'
-    # check if number of skystones delivered in auton is less than or equal to number of total stones delivered
-    if autonStones < autonSkystones:
-        return '"Skystones Delivered" cannot be greater than "Stones Delivered"'
+        return '"Frieght Delivered in the Shipping Hub during Auton" must be a number from 0 - 4'
+    if autonFreightShipping < 0 or autonFreightShipping > 4:
+        return '"Frieght Delivered in the Shipping Hub during Auton" must be a number from 0 - 4'
 
-    # check if number of stones on the foundation is an integer 0-6
-    autonStonesOnFoundation = 0
+    
+    # check if number of freight delivered in the storage during teleop is an integer between 0 - 50
+    teleopFreightStorage = 0
     try:
-        autonStonesOnFoundation = int(form['auton_stones_on_foundation'])
+        teleopFreightStorage = int(form['teleop_freight_storage'])
     except ValueError:
-        return '"Stones On Foundation" must be a number from 0 - 6'
-    if autonStonesOnFoundation < 0 or autonStonesOnFoundation > 6:
-        return '"Stones On Foundation" must be a number from 0 - 6'
-    # check if number of stones on foundation is less than or equal to the number of stones delivered
-    if autonStonesOnFoundation > autonStones:
-        return '"Stones on Foundation" cannot be greater than "Stones Delivered"'
+        return '"Frieght Delivered in Storage Unit during Teleop" must be a number from 0 - 30'
 
-    # check if total stones moved in teleop is an integer between 0 - 30
-    teleopStonesTotal = 0
+    if teleopFreightStorage < 0 or teleopFreightStorage > 30:
+        return '"Frieght Delivered in Storage Unit during Teleop" must be a number from 0 - 30'
+    
+    # check if number of freight delivered in the lower level during teleop is an integer between 0 - 50
+    teleopFreightLow = 0
     try:
-        teleopStonesTotal = int(form['teleop_stones_total'])
+        teleopFreightLow = int(form['teleop_freight_low'])
     except ValueError:
-        return '"Stones Moved" must be a number from 0 - 30'
-    if teleopStonesTotal < 0 or teleopStonesTotal > 30:
-        return '"Stones Moved" must be a number from 0 - 30'
+        return '"Frieght Delivered in Lower Level during Teleop" must be a number from 0 - 30'
 
-    # check if the number of stones in stack 1 is an integer between 0 - 30
-    teleopStones1 = 0
+    if teleopFreightLow < 0 or teleopFreightLow > 30:
+        return '"Frieght Delivered in Lower Level during Teleop" must be a number from 0 - 30'
+
+    # check if number of freight delivered in the lower level during teleop is an integer between 0 - 50
+    teleopFreightMid = 0
     try:
-        teleopStones1 = int(form['teleop_stones_1'])
+        teleopFreightMid = int(form['teleop_freight_mid'])
     except ValueError:
-        return '"Stones in Stack" must be a number 0 - 30'
-    if teleopStones1 < 0 or teleopStones1 > 30:
-        return '"Stones in Stack" must be a number 0 - 30'
+        return '"Frieght Delivered in Middle Level during Teleop" must be a number from 0 - 30'
 
-    # check if the number of stones in stack 2 is an integer between 0 - 30
-    teleopStones2 = 0
+    if teleopFreightMid < 0 or teleopFreightMid > 30:
+        return '"Frieght Delivered in Middle Level during Teleop" must be a number from 0 - 30'
+
+    # check if number of freight delivered in the lower level during teleop is an integer between 0 - 50
+    teleopFreightHigh = 0
     try:
-        teleopStones2 = int(form['teleop_stones_2'])
+        teleopFreightHigh = int(form['teleop_freight_high'])
     except ValueError:
-        return '"Stones in Stack" must be a number 0 - 30'
-    if teleopStones2 < 0 or teleopStones2 > 30:
-        return '"Stones in Stack" must be a number 0 - 30'
+        return '"Frieght Delivered in Higher Level during Teleop" must be a number from 0 - 30'
 
-    # check if the number of stones in stack 3 is an integer between 0 - 30
-    teleopStones3 = 0
+    if teleopFreightHigh < 0 or teleopFreightHigh > 30:
+        return '"Frieght Delivered in Higher Level during Teleop" must be a number from 0 - 30'
+    
+    # check if number of freight delivered in the shared hub during teleop is an integer between 0 - 50
+    teleopFreightShared = 0
     try:
-        teleopStones3 = int(form['teleop_stones_3'])
+        teleopFreightShared = int(form['teleop_freight_shared'])
     except ValueError:
-        return '"Stones in Stack" must be a number 0 - 30'
-    if teleopStones3 < 0 or teleopStones3 > 30:
-        return '"Stones in Stack" must be a number 0 - 30'
+        return '"Frieght Delivered in Shared Hub during Teleop" must be a number from 0 - 30'
 
-    # check if the number of stones in stack 4 is an integer between 0 - 30
-    teleopStones4 = 0
+    if teleopFreightShared < 0 or teleopFreightShared > 30:
+        return '"Frieght Delivered in Shared Hub during Teleop" must be a number from 0 - 30'
+    
+    # check if number of wobble goals delivered is an integer between 0 - 2
+    teleopDeliveredDuck = 0
     try:
-        teleopStones4 = int(form['teleop_stones_4'])
+        teleopDeliveredDuck = int(form['teleop_delivered_duck'])
     except ValueError:
-        return '"Stones in Stack" must be a number 0 - 30'
-    if teleopStones4 < 0 or teleopStones4 > 30:
-        return '"Stones in Stack" must be a number 0 - 30'
+        return '"Ducks delivered in End Game" must be a number from 0 - 10'
 
-    # check if there is less than or equal to one capstone placed
-    numberOfCaps = 0
-    for i in range(1, 5):
-        field_name = 'teleop_cap_'+str(i)
-        if field_name in form and form[field_name] == 'y':
-            numberOfCaps += 1
-    if numberOfCaps > 1:
-        return 'Team can only place a Capstone once'
+    if teleopDeliveredDuck < 0 or teleopDeliveredDuck > 10:
+        return '"Ducks delivered in End Game" must be a number from 0 - 10'
 
     notes = form['notes']
     if len(notes) > 800:
