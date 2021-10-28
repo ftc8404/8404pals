@@ -51,14 +51,13 @@
 								onchange="updateChartScope()">
 							<label for="chart-scope-match-silicon">Match Silicon</label> -->
 							<input type="radio" name="chart-scope" id="chart-scope-pre-game" value="pre-game"
-								onchange="updateChartScope()" checked>
+								onchange="updateChartScope()">
 							<label for="chart-scope-pre-game">Pre-Game</label>
 							<input type="radio" name="chart-scope" id="chart-scope-match" value="match"
 								onchange="updateChartScope()">
 							<label for="chart-scope-match">Match</label>
 						</div>
-						<div class="chart-container"
-							style="padding-bottom: 3em; height:{{ (data.allData|length)*2+4 }}em; width:100%">
+						<div class="chart-container" style="padding-bottom: 3em; height: {{ (data.allData|length)*2+4 }}em; width:100%">
 							<canvas id="chart"></canvas>
 						</div>
 					</div>
