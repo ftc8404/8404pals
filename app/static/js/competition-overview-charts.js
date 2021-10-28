@@ -13,16 +13,21 @@ Chart.defaults.global.defaultFontColor.defaultFontFamily = "'Source Sans Pro', '
 Chart.defaults.global.defaultFontColor.defaultFontSize = 16;
 
 var allData = compData.allData;
-var goldTeamsPreGame = [];
-var siliconTeamsPreGame = [];
-var goldTeamsMatch = [];
-var siliconTeamsMatch = [];
+var teamsPreGame = [];
+var teamsMatch = [];
+// var goldTeamsPreGame = [];
+// var siliconTeamsPreGame = [];
+// var goldTeamsMatch = [];
+// var siliconTeamsMatch = [];
 
 
-var goldPreGameDatasets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ff6699', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }];
-var siliconPreGameDatasets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ff6699', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }];
-var goldMatchDatasets = [{ label: 'Match Autonomous', data: [], backgroundColor: '#cc99ff', stack: 'main' }, { label: 'Match Tele-Op', data: [], backgroundColor: '#6699ff', stack: 'main' }];
-var siliconMatchDatasets = [{ label: 'Match Autonomous', data: [], backgroundColor: '#cc99ff', stack: 'main' }, { label: 'Match Tele-Op', data: [], backgroundColor: '#6699ff', stack: 'main' }];
+// var goldPreGameDatasets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ff6699', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }];
+// var siliconPreGameDatasets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ff6699', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }];
+// var goldMatchDatasets = [{ label: 'Match Autonomous', data: [], backgroundColor: '#cc99ff', stack: 'main' }, { label: 'Match Tele-Op', data: [], backgroundColor: '#6699ff', stack: 'main' }];
+// var siliconMatchDatasets = [{ label: 'Match Autonomous', data: [], backgroundColor: '#cc99ff', stack: 'main' }, { label: 'Match Tele-Op', data: [], backgroundColor: '#6699ff', stack: 'main' }];
+
+var preGameDatasets = [{ label: 'Pre-Game Autonomous', data: [], backgroundColor: '#ff6699', stack: 'pre-game' }, { label: 'Pre-Game Tele-Op', data: [], backgroundColor: '#ffcc66', stack: 'pre-game' }];
+var matchDatasets = [{ label: 'Match Autonomous', data: [], backgroundColor: '#cc99ff', stack: 'main' }, { label: 'Match Tele-Op', data: [], backgroundColor: '#6699ff', stack: 'main' }];
 
 var preGameDataUnsorted = [];
 var matchDataUnsorted = [];
@@ -30,8 +35,9 @@ var matchDataUnsorted = [];
 var missingPreGameTeams = [];
 var missingMatchTeams = [];
 
-var goldDivisionTeams = compData.goldDiv;
-var siliconDivisionTeams = compData.siliconDiv;
+// var goldDivisionTeams = compData.goldDiv;
+// var siliconDivisionTeams = compData.siliconDiv;
+
 
 for (let teamNumber in allData) {
     let teamDataRaw = allData[teamNumber];
@@ -59,55 +65,82 @@ for (let i = 0; i < missingMatchTeams.length; i++) {
     matchDataUnsorted.push([missingMatchTeams[i], 0, 0]);
 }
 
+
+// for (let i = 0; i < preGameDataUnsorted.length; i++) {
+//     let entry = preGameDataUnsorted[i];
+//     teamNumber = parseInt(entry[0])
+//     if (goldDivisionTeams.indexOf(teamNumber) > -1) {
+//         goldTeamsPreGame.push(entry[0]);
+//         goldPreGameDatasets[0].data.push(entry[1]);
+//         goldPreGameDatasets[1].data.push(entry[2]);
+//     } else {
+//         siliconTeamsPreGame.push(entry[0]);
+//         siliconPreGameDatasets[0].data.push(entry[1]);
+//         siliconPreGameDatasets[1].data.push(entry[2]);
+//     }
+// }
+
 for (let i = 0; i < preGameDataUnsorted.length; i++) {
     let entry = preGameDataUnsorted[i];
     teamNumber = parseInt(entry[0])
-    if (goldDivisionTeams.indexOf(teamNumber) > -1) {
-        goldTeamsPreGame.push(entry[0]);
-        goldPreGameDatasets[0].data.push(entry[1]);
-        goldPreGameDatasets[1].data.push(entry[2]);
-    } else {
-        siliconTeamsPreGame.push(entry[0]);
-        siliconPreGameDatasets[0].data.push(entry[1]);
-        siliconPreGameDatasets[1].data.push(entry[2]);
-    }
+    teamsPreGame.push(entry[0])
+    preGameDatasets[0].data.push(entry[1]);
+    preGameDatasets[1].data.push(entry[2]);
 }
 
+// for (let i = 0; i < matchDataUnsorted.length; i++) {
+//     let entry = matchDataUnsorted[i];
+//     teamNumber = parseInt(entry[0])
+//     if (goldDivisionTeams.indexOf(teamNumber) > -1) {
+//         goldMatchDatasets[0].data.push(entry[1]);
+//         goldMatchDatasets[1].data.push(entry[2]);
+//     } else {
+//         siliconMatchDatasets[0].data.push(entry[1]);
+//         siliconMatchDatasets[1].data.push(entry[2]);
+//     }
+// }
 
 for (let i = 0; i < matchDataUnsorted.length; i++) {
     let entry = matchDataUnsorted[i];
     teamNumber = parseInt(entry[0])
-    if (goldDivisionTeams.indexOf(teamNumber) > -1) {
-        goldMatchDatasets[0].data.push(entry[1]);
-        goldMatchDatasets[1].data.push(entry[2]);
-    } else {
-        siliconMatchDatasets[0].data.push(entry[1]);
-        siliconMatchDatasets[1].data.push(entry[2]);
-    }
+    teamsMatch.push(entry[0])
+    matchDatasets[0].data.push(entry[1]);
+    matchDatasets[1].data.push(entry[2]);
 }
 
 function updateChartScope() {
-    if ($('input[name=chart-scope]:checked').val() == 'pre-game-gold') {
-        chartDispPreGameScouting("gold");
+    // if ($('input[name=chart-scope]:checked').val() == 'pre-game-gold') {
+    //     chartDispPreGameScouting("gold");
+    // }
+    // else if ($('input[name=chart-scope]:checked').val() == 'pre-game-silicon') {
+    //     chartDispPreGameScouting("silicon");
+    // }
+    // else if ($('input[name=chart-scope]:checked').val() == 'match-gold') {
+    //     chartDispMatchScouting("gold");
+    // } else {
+    //     chartDispMatchScouting("silicon");
+    // }
+
+    if ($('input[name=chart-scope]:checked').val() == 'pre-game') {
+        chartDispPreGameScouting("none");
     }
-    else if ($('input[name=chart-scope]:checked').val() == 'pre-game-silicon') {
-        chartDispPreGameScouting("silicon");
-    }
-    else if ($('input[name=chart-scope]:checked').val() == 'match-gold') {
-        chartDispMatchScouting("gold");
-    } else {
-        chartDispMatchScouting("silicon");
+    else if ($('input[name=chart-scope]:checked').val() == 'match') {
+        chartDispMatchScouting("none");
     }
 }
 
 function chartDispPreGameScouting(division) {
-    if (division == "gold") {
-        chart.data.labels = goldTeamsPreGame;
-        chart.data.datasets = goldPreGameDatasets;
-    }
-    if (division == "silicon") {
-        chart.data.labels = siliconTeamsPreGame;
-        chart.data.datasets = siliconPreGameDatasets;
+    // if (division == "gold") {
+    //     chart.data.labels = goldTeamsPreGame;
+    //     chart.data.datasets = goldPreGameDatasets;
+    // }
+    // if (division == "silicon") {
+    //     chart.data.labels = siliconTeamsPreGame;
+    //     chart.data.datasets = siliconPreGameDatasets;
+    // }
+    if (division == "none") {
+        chart.data.labels = teamsPreGame;
+        chart.data.datasets = preGameDatasets;
     }
     chart.options.scales.xAxes[0].stacked = true;
     chart.options.scales.yAxes[0].stacked = true;
@@ -115,13 +148,17 @@ function chartDispPreGameScouting(division) {
 }
 
 function chartDispMatchScouting(division) {
-    if (division == "gold") {
-        chart.data.labels = goldTeamsPreGame;
-        chart.data.datasets = goldMatchDatasets;
-    }
-    if (division == "silicon") {
-        chart.data.labels = siliconTeamsPreGame;
-        chart.data.datasets = siliconMatchDatasets;
+    // if (division == "gold") {
+    //     chart.data.labels = goldTeamsPreGame;
+    //     chart.data.datasets = goldMatchDatasets;
+    // }
+    // if (division == "silicon") {
+    //     chart.data.labels = siliconTeamsPreGame;
+    //     chart.data.datasets = siliconMatchDatasets;
+    // }
+    if (division == "none") {
+        chart.data.labels = teamsMatch;
+        chart.data.datasets = matchDatasets;
     }
     chart.options.scales.xAxes[0].stacked = true;
     chart.options.scales.yAxes[0].stacked = true;
