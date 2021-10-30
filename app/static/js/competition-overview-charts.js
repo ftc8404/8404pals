@@ -42,15 +42,15 @@ var missingMatchTeams = [];
 for (let teamNumber in allData) {
     let teamDataRaw = allData[teamNumber];
 
-    if (teamDataRaw[40] == 'N/A') {
+    if (teamDataRaw[50] == 'N/A') {
         missingPreGameTeams.push(teamNumber)
     }
     else {
-        preGameDataUnsorted.push([teamNumber, teamDataRaw[40], teamDataRaw[41]]); // TODO 
-    } if (teamDataRaw[43] == 'N/A') {
+        preGameDataUnsorted.push([teamNumber, teamDataRaw[50], teamDataRaw[51]]); // TODO 
+    } if (teamDataRaw[53] == 'N/A') {
         missingMatchTeams.push(teamNumber)
     } else {
-        matchDataUnsorted.push([teamNumber, teamDataRaw[43], teamDataRaw[44]]); // TODO 
+        matchDataUnsorted.push([teamNumber, teamDataRaw[53], teamDataRaw[54]]); // TODO 
     }
 }
 
