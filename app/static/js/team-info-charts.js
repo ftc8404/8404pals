@@ -25,8 +25,8 @@ var allData = compData.allData;
 var curTeamData = allData[teamNumber];
 
 var perfLabels = [
-    'Auton Stones', 'Auton Skystone', 'Auton Other',
-    'Tele-Op Stones', 'Tele-Op Bonuses', 'Tele-Op Other'
+    'Auton Frieght', 'Auton Duck', 'Auton Other',
+    'Tele-Op Frieght', 'Tele-Op Duck', 'Tele-Op Other'
 ];
 var perfColors = [
     '#00ff99', '#66ff66', '#99ffcc',
@@ -36,20 +36,34 @@ var perfColors = [
 var perfData = []
 
 // Auton scoring points
-perfData.push(curTeamData[2] * 2);
-perfData.push(curTeamData[3] * 8);
-perfData.push(curTeamData[4] * 4 + curTeamData[5] * 10 + curTeamData[6] * 5);
+
+// Count points from freight
+var auton_freight_score = (curTeamData[5] * 2 ) + (curTeamData[6] * 6);
+
+// Count points from ducks and detection
+var auton_duck_score = (curTeamData[2] * 10) + (curTeamData[7] * 10) + (curTeamData[8] *20)
+
+// Count parking points
+var auton_park = (curTeamData[3] * 6) + (curTeamData[4] * 10);
+
+perfData.push(auton_freight_score);
+perfData.push(auton_duck_score);
+perfData.push(auton_park);
 
 // Teleop scoring poits
-perfData.push(curTeamData[7] * 2 + curTeamData[8] * 2);
 
-var bonus = 0;
-if (curTeamData[9] > 0) {
-    bonus += curTeamData[8] + 5;
-}
-perfData.push(bonus)
-perfData.push(curTeamData[10] * 15 + curTeamData[11] * 5);
+// Count points from freight
+var teleop_freight_score = (curTeamData[9] * 1 ) + (curTeamData[10] * 2) + (curTeamData[11] * 4) + (curTeamData[12] * 6) + (curTeamData[13] * 4);
 
+// Count points from ducks and detection
+var teleop_duck_score = (curTeamData[14] * 6) + (curTeamData[15] * 20) + (curTeamData[16] * 10)
+
+// Count parking points
+var teleop_park = (curTeamData[17] * 6) + (curTeamData[18] * 15);
+
+perfData.push(teleop_freight_score);
+perfData.push(teleop_duck_score);
+perfData.push(teleop_park);
 
 
 
