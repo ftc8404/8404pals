@@ -41,31 +41,6 @@
                             <h2>Autonomous</h2>
                         </div>
 
-                        <div class="col-8 col-6-medium">
-                            {{ form.auton_deliver_duck }}
-                            {{ form.auton_deliver_duck.label }}
-                        </div>
-
-                        <div class="col-8 col-6-medium">
-                            {{ form.auton_storage_half }}
-                            {{ form.auton_storage_half.label }}
-                        </div>
-
-                        <div class="col-8 col-6-medium">
-                            {{ form.auton_storage_full }}
-                            {{ form.auton_storage_full.label }}
-                        </div>
-
-                        <div class="col-8 col-6-medium">
-                            {{ form.auton_warehouse_half }}
-                            {{ form.auton_warehouse_half.label }}
-                        </div>
-
-                        <div class="col-8 col-6-medium">
-                            {{ form.auton_warehouse_full }}
-                            {{ form.auton_warehouse_full.label }}
-                        </div>
-
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
@@ -101,13 +76,38 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        <div class="col-4 col-12-medium">
+                            {{ form.auton_deliver_duck }}
+                            {{ form.auton_deliver_duck.label }}
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            {{ form.auton_storage_half }}
+                            {{ form.auton_storage_half.label }}
+                        </div>
 
                         <div class="col-8 col-6-medium">
+                            {{ form.auton_storage_full }}
+                            {{ form.auton_storage_full.label }}
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            {{ form.auton_warehouse_half }}
+                            {{ form.auton_warehouse_half.label }}
+                        </div>
+
+                        <div class="col-8 col-6-medium">
+                            {{ form.auton_warehouse_full }}
+                            {{ form.auton_warehouse_full.label }}
+                        </div>
+
+                        <div class="col-4 col-6-medium">
                             {{ form.auton_detect_duck }}
                             {{ form.auton_detect_duck.label }}
                         </div>
 
-                        <div class="col-8 col-6-medium">
+                        <div class="col-4 col-6-medium">
                             {{ form.auton_detect_team }}
                             {{ form.auton_detect_team.label }}
                         </div>
@@ -115,24 +115,6 @@
                         <div class="col-12" style="padding-top: 3em; padding-bottom: 0">
                             <h2>Tele-Op</h2>
                         </div> 
-
-                        <div class="col-4 col-6-medium">
-                            <div style="display: table">
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="decrement(document.getElementById('teleop_freight_storage'))">
-                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
-                                </div>
-                                <div style="display: table-cell; width: 100%">
-                                    {{ form.teleop_freight_storage(placeholder=form.teleop_freight_storage.label.text) }}
-                                </div>
-                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
-                                    onclick="increment(document.getElementById('teleop_freight_storage'))">
-                                    <p
-                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
-                                        +</p>
-                                </div>
-                            </div>
-                        </div>
 
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
@@ -191,6 +173,24 @@
                         <div class="col-4 col-6-medium">
                             <div style="display: table">
                                 <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="decrement(document.getElementById('teleop_freight_storage'))">
+                                    <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
+                                </div>
+                                <div style="display: table-cell; width: 100%">
+                                    {{ form.teleop_freight_storage(placeholder=form.teleop_freight_storage.label.text) }}
+                                </div>
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
+                                    onclick="increment(document.getElementById('teleop_freight_storage'))">
+                                    <p
+                                        style="margin-bottom: 0; padding-left: 0.5em; padding-right: 0.5em; font-size: 1.5em">
+                                        +</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-4 col-6-medium">
+                            <div style="display: table">
+                                <div style="display: table-cell;-webkit-user-select: none;-khtml-user-select: none;-moz-user-select: none;-ms-user-select: none;-o-user-select: none;user-select: none;cursor: default;"
                                     onclick="decrement(document.getElementById('teleop_freight_shared'))">
                                     <p style="margin-bottom: 0; padding-right: 0.5em; font-size: 1.5em">-</p>
                                 </div>
@@ -227,18 +227,25 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-8 col-12-medium"></div>
 
-                        <div class="col-8 col-6-medium">
+
+                        <div class="col-4 col-6-medium">
                             {{ form.teleop_shared_tipped }}
                             {{ form.teleop_shared_tipped.label }}
                         </div>
 
-                        <div class="col-8 col-6-medium">
+                        <div class="col-4 col-6-medium">
                             {{ form.teleop_shipping_balanced }}
                             {{ form.teleop_shipping_balanced.label }}
                         </div>
 
-                        <div class="col-8 col-6-medium">
+                        <div class="col-4 col-6-medium">
+                            {{ form.teleop_cap }}
+                            {{ form.teleop_cap.label }}
+                        </div>
+
+                        <div class="col-4 col-6-medium">
                             {{ form.teleop_park_half }}
                             {{ form.teleop_park_half.label }}
                         </div>
@@ -246,11 +253,6 @@
                         <div class="col-8 col-6-medium">
                             {{ form.teleop_park_full }}
                             {{ form.teleop_park_full.label }}
-                        </div>
-
-                        <div class="col-8 col-6-medium">
-                            {{ form.teleop_cap }}
-                            {{ form.teleop_cap.label }}
                         </div>
 
                         <div class="col-12" style="padding-top: 3em;">
