@@ -1,15 +1,14 @@
-var match_feeder = true;
-var match_stacker = true;
-var match_speedy = true;
-var match_tall_lift = true;
-var match_under_bridge = true;
-var match_not_under_bridge = true;
-var match_knocked_tower = true;
-var match_DC = true;
-var match_dangerous_driving = true;
-var match_steps_over_bridge = true;
+var match_detect_element = true;
+var match_carousel = true;
+var match_terrain_over = true;
+var match_terrain_around = true;
+var match_fast_freight = true;
+var match_high_deposit = true;
+var match_cap = true;
+var match_dc = true;
 var match_very_gp = true;
 var match_not_gp = true;
+var match_possessive = true;
 
 
 $(document).ready(function () {
@@ -81,45 +80,42 @@ function toggleTableVisibility() {
     }
 }
 
-// function changeFilter(checkboxElem) {
-//     changeVisibility(checkboxElem.id, checkboxElem.checked)
-//     if(checkboxElem.id=="Match Feeder Bot" && !checkboxElem.checked){
-//         match_feeder = false;
-//     }
-//     if(checkboxElem.id=="Match Stacking Bot" && !checkboxElem.checked){
-//         match_stacker = false;
-//     }
-//     if(checkboxElem.id=="Match Speedy" && !checkboxElem.checked){
-//         match_speedy = false;
-//     }
-//     if(checkboxElem.id=="Match Tall Lift" && !checkboxElem.checked){
-//         match_tall_lift = false;
-//     }
-//     if(checkboxElem.id=="Match Fits Under Bridge" && !checkboxElem.checked){
-//         match_under_bridge = false;
-//     }
-//     if(checkboxElem.id=="Match Doesn't Fit Under Bridge" && !checkboxElem.checked){
-//         match_not_under_bridge = false;
-//     }
-//     if(checkboxElem.id=="Match Toppled Own Tower" && !checkboxElem.checked){
-//         match_knocked_tower = false;
-//     }
-//     if(checkboxElem.id=="Match DC :(" && !checkboxElem.checked){
-//         match_DC = false;
-//     }
-//     if(checkboxElem.id=="Match Dangerous Driving" && !checkboxElem.checked){
-//         match_dangerous_driving = false;
-//     }
-//     if(checkboxElem.id=="Match Steps Over Bridge" && !checkboxElem.checked){
-//         match_steps_over_bridge = false;
-//     }
-//     if(checkboxElem.id=="Match GP :)" && !checkboxElem.checked){
-//         match_very_gp = false;
-//     }
-//     if(checkboxElem.id=="Match Not GP :(" && !checkboxElem.checked){
-//         match_not_gp = false;
-//     }
-// }
+function changeFilter(checkboxElem) {
+    changeVisibility(checkboxElem.id, checkboxElem.checked)
+    if(checkboxElem.id=="Match Detect Element" && !checkboxElem.checked){
+        match_detect_element = false;
+    }
+    if(checkboxElem.id=="Match Carousel" && !checkboxElem.checked){
+        match_carousel = false;
+    }
+    if(checkboxElem.id=="Match Terrain Over" && !checkboxElem.checked){
+        match_terrain_over = false;
+    }
+    if(checkboxElem.id=="Match Terrain Around" && !checkboxElem.checked){
+        match_terrain_around = false;
+    }
+    if(checkboxElem.id=="Match Fast Freight" && !checkboxElem.checked){
+        match_fast_freight = false;
+    }
+    if(checkboxElem.id=="Match High Deposit" && !checkboxElem.checked){
+        match_not_under_bridge = false;
+    }
+    if(checkboxElem.id=="Match Cap" && !checkboxElem.checked){
+        match_knocked_tower = false;
+    }
+    if(checkboxElem.id=="Match DC :(" && !checkboxElem.checked){
+        match_dc = false;
+    }
+    if(checkboxElem.id=="Match GP :)" && !checkboxElem.checked){
+        match_very_gp = false;
+    }
+    if(checkboxElem.id=="Match Not GP :(" && !checkboxElem.checked){
+        match_not_gp = false;
+    }
+    if(checkboxElem.id=="Match Possession Penalties" && !checkboxElem.checked){
+        match_possessive = false;
+    }
+}
 
 function changeVisibility(columnName, isVisible) {
     var filterElems = document.getElementsByClassName('filter-' + columnName)

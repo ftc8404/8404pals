@@ -196,85 +196,80 @@ def addMatchScoutingEntry(formValues):
     catValue9 = 0
     catValue10 = 0
     catValue11 = 0
-    catValue12 = 0
 
-    field_name = 'feeder'
+    field_name = 'detect_element'
     if field_name in formValues and formValues[field_name] == 'y':
         catValue1 = 1
-    field_name = 'stacker'
+    field_name = 'carousel'
     if field_name in formValues and formValues[field_name] == 'y':
         catValue2 = 1
-    field_name = 'speedy'
+    field_name = 'terrain_over'
     if field_name in formValues and formValues[field_name] == 'y':
         catValue3 = 1
-    field_name = 'tall_lift'
+    field_name = 'terrain_around'
     if field_name in formValues and formValues[field_name] == 'y':
         catValue4 = 1
-    field_name = 'under_bridge'
+    field_name = 'fast_freight'
     if field_name in formValues and formValues[field_name] == 'y':
         catValue5 = 1
-    field_name = 'not_under_bridge'
+    field_name = 'high_deposit'
     if field_name in formValues and formValues[field_name] == 'y':
         catValue6 = 1
-    field_name = 'knocked_tower'
+    field_name = 'cap'
     if field_name in formValues and formValues[field_name] == 'y':
         catValue7 = 1
-    field_name = 'DC'
+    field_name = 'dc'
     if field_name in formValues and formValues[field_name] == 'y':
         catValue8 = 1
-    field_name = 'dangerous_driving'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue9 = 1
-    field_name = 'steps_over_bridge'
-    if field_name in formValues and formValues[field_name] == 'y':
-        catValue10 = 1
     field_name = 'very_gp'
     if field_name in formValues and formValues[field_name] == 'y':
-        catValue11 = 1
+        catValue9 = 1
     field_name = 'not_gp'
     if field_name in formValues and formValues[field_name] == 'y':
-        catValue12 = 1
+        catValue10 = 1
+    field_name = 'possessive'
+    if field_name in formValues and formValues[field_name] == 'y':
+        catValue11 = 1
+    
 
     if(len(sqlCursor.execute("SELECT * FROM Categories WHERE team_number=?", str(teamNumber)).fetchall()) == 0):
         sqlCursor.execute(
             "INSERT Categories (team_number) VALUES (?)", str(teamNumber))
 
     if (catValue1 == 1):
-        sqlCursor.execute("UPDATE Categories SET feeder=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET detect_element=? WHERE team_number=?", str(
             catValue1), str(teamNumber))
     if (catValue2 == 1):
-        sqlCursor.execute("UPDATE Categories SET stacker=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET carousel=? WHERE team_number=?", str(
             catValue2), str(teamNumber))
     if (catValue3 == 1):
-        sqlCursor.execute("UPDATE Categories SET speedy=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET terrain_over=? WHERE team_number=?", str(
             catValue3), str(teamNumber))
     if (catValue4 == 1):
-        sqlCursor.execute("UPDATE Categories SET tall_lift=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET terrain_around=? WHERE team_number=?", str(
             catValue4), str(teamNumber))
     if (catValue5 == 1):
-        sqlCursor.execute("UPDATE Categories SET under_bridge=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET fast_freight=? WHERE team_number=?", str(
             catValue5), str(teamNumber))
     if (catValue6 == 1):
-        sqlCursor.execute("UPDATE Categories SET not_under_bridge=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET high_deposit=? WHERE team_number=?", str(
             catValue6), str(teamNumber))
     if (catValue7 == 1):
-        sqlCursor.execute("UPDATE Categories SET knocked_tower=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET cap=? WHERE team_number=?", str(
             catValue7), str(teamNumber))
     if (catValue8 == 1):
         sqlCursor.execute("UPDATE Categories SET dc=? WHERE team_number=?", str(
             catValue8), str(teamNumber))
     if (catValue9 == 1):
-        sqlCursor.execute("UPDATE Categories SET dangerous_driving=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET very_gp=? WHERE team_number=?", str(
             catValue9), str(teamNumber))
     if (catValue10 == 1):
-        sqlCursor.execute("UPDATE Categories SET steps_over_bridge=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET not_gp=? WHERE team_number=?", str(
             catValue10), str(teamNumber))
     if (catValue11 == 1):
-        sqlCursor.execute("UPDATE Categories SET very_gp=? WHERE team_number=?", str(
+        sqlCursor.execute("UPDATE Categories SET possessive=? WHERE team_number=?", str(
             catValue11), str(teamNumber))
-    if (catValue12 == 1):
-        sqlCursor.execute("UPDATE Categories SET not_gp=? WHERE team_number=?", str(
-            catValue12), str(teamNumber))
+    
 
     sqlConn.commit()
     sqlConn.close()

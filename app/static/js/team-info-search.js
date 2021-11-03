@@ -15,67 +15,59 @@ Httpreq.send(null);
 var lists = JSON.parse(Httpreq.responseText);
 
 // Category Variables List
-var feeder_list = lists[0];
-var stacker_list = lists[1];
-var speedy_list = lists[2];
-var tall_lift_list = lists[3];
-var under_bridge_list = lists[4];
-var not_under_bridge_list = lists[5];
-var knocked_tower_list = lists[6];
-var DC_list = lists[7];
-var dangerous_driving_list = lists[8];
-var steps_over_bridge_list = lists[9];
-var very_gp_list = lists[10];
-var not_gp_list = lists[11];
-var gold_list = compData.goldDiv;
-var silicon_list = compData.siliconDiv;
+var detect_element_list = lists[0];
+var carousel_list = lists[1];
+var terrain_over_list = lists[2];
+var terrain_around_list = lists[3];
+var fast_freight_list = lists[4];
+var high_deposit_list = lists[5];
+var cap_list = lists[6];
+var dc_list = lists[7];
+var very_gp_list = lists[8];
+var not_gp_list = lists[9];
+var possessive_list = lists[10];
+// var gold_list = compData.goldDiv;
+// var silicon_list = compData.siliconDiv;
 
 
-var match_feeder = false;
-var match_stacker = false;
-var match_speedy = false;
-var match_tall_lift = false;
-var match_under_bridge = false;
-var match_not_under_bridge = false;
-var match_knocked_tower = false;
-var match_DC = false;
-var match_dangerous_driving = false;
-var match_steps_over_bridge = false;
+var match_detect_element = false;
+var match_carousel = false;
+var match_terrain_over = false;
+var match_terrain_around = false;
+var match_fast_freight = false;
+var match_high_deposit = false;
+var match_cap = false;
+var match_dc = false;
 var match_very_gp = false;
 var match_not_gp = false;
-var match_gold = false;
-var match_silicon = false;
+var match_possessive = false;
+// var match_gold = false;
+// var match_silicon = false;
 
 function changeFilter(checkboxElem) {
-    if (checkboxElem.id == "Match Feeder Bot") {
-        match_feeder = checkboxElem.checked;
+    if (checkboxElem.id == "Match Detect Element") {
+        match_detect_element = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Stacking Bot") {
-        match_stacker = checkboxElem.checked;
+    if (checkboxElem.id == "Match Carousel") {
+        match_carousel = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Speedy") {
-        match_speedy = checkboxElem.checked;
+    if (checkboxElem.id == "Match Terrain Over") {
+        match_terrain_over = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Tall Lift") {
-        match_tall_lift = checkboxElem.checked;
+    if (checkboxElem.id == "Match Terrain Around") {
+        match_terrain_around = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Fits Under Bridge") {
-        match_under_bridge = checkboxElem.checked;
+    if (checkboxElem.id == "Match Fast Freight") {
+        match_fast_freight = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Doesn't Fit Under Bridge") {
-        match_not_under_bridge = checkboxElem.checked;
+    if (checkboxElem.id == "Match High Deposit") {
+        match_high_deposit = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Toppled Own Tower") {
-        match_knocked_tower = checkboxElem.checked;
+    if (checkboxElem.id == "Match Cap") {
+        match_cap = checkboxElem.checked;
     }
     if (checkboxElem.id == "Match DC :(") {
-        match_DC = checkboxElem.checked;
-    }
-    if (checkboxElem.id == "Match Dangerous Driving") {
-        match_dangerous_driving = checkboxElem.checked;
-    }
-    if (checkboxElem.id == "Match Steps Over Bridge") {
-        match_steps_over_bridge = checkboxElem.checked;
+        match_dc = checkboxElem.checked;
     }
     if (checkboxElem.id == "Match GP :)") {
         match_very_gp = checkboxElem.checked;
@@ -83,50 +75,50 @@ function changeFilter(checkboxElem) {
     if (checkboxElem.id == "Match Not GP :(") {
         match_not_gp = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Gold Division") {
-        match_gold = checkboxElem.checked;
+    if (checkboxElem.id == "Match Possession Penalties") {
+        match_possessive = checkboxElem.checked;
     }
-    if (checkboxElem.id == "Match Silicon Division") {
-        match_silicon = checkboxElem.checked;
-    }
+    // if (checkboxElem.id == "Match Gold Division") {
+    //     match_gold = checkboxElem.checked;
+    // }
+    // if (checkboxElem.id == "Match Silicon Division") {
+    //     match_silicon = checkboxElem.checked;
+    // }
     searchChange();
 }
 
 function getTeams() {
-    if (!(match_gold || match_silicon || match_feeder || match_stacker || match_speedy || match_tall_lift || match_under_bridge || match_not_under_bridge || match_knocked_tower || match_DC || match_dangerous_driving || match_steps_over_bridge || match_very_gp || match_not_gp)) {
+    // if (!(match_gold || match_silicon || match_detect_element || match_carousel || match_terrain_over || match_terrain_around || match_fast_freight || match_high_deposit || match_cap || match_dc || match_very_gp || match_not_gp || match_possessive)) {
+    //     return teamsUnprocessed;
+    // }
+    if (!( match_detect_element || match_carousel || match_terrain_over || match_terrain_around || match_fast_freight || match_high_deposit || match_cap || match_dc || match_very_gp || match_not_gp || match_possessive)) {
         return teamsUnprocessed;
     }
     let teams = Object.keys(teamsUnprocessed);
     teams=teams.map(Number);
-    if (match_feeder) {
-        teams = teams.filter(element => feeder_list.includes(element));
+    if (match_detect_element) {
+        teams = teams.filter(element => detect_element_list.includes(element));
     }
-    if (match_stacker) {
-        teams = teams.filter(element => stacker_list.includes(element));
+    if (match_carousel) {
+        teams = teams.filter(element => carouselr_list.includes(element));
     }
-    if (match_speedy) {
-        teams = teams.filter(element => speedy_list.includes(element));
+    if (match_terrain_over) {
+        teams = teams.filter(element => terrain_over_list.includes(element));
     }
-    if (match_tall_lift) {
-        teams = teams.filter(element => tall_lift_list.includes(element));
+    if (match_terrain_around) {
+        teams = teams.filter(element => terrain_around_list.includes(element));
     }
-    if (match_under_bridge) {
-        teams = teams.filter(element => under_bridge_list.includes(element));
+    if (match_fast_freight) {
+        teams = teams.filter(element => fast_freight_list.includes(element));
     }
-    if (match_not_under_bridge) {
-        teams = teams.filter(element => not_under_bridge_list.includes(element));
+    if (match_high_deposit) {
+        teams = teams.filter(element => high_deposit_list.includes(element));
     }
-    if (match_knocked_tower) {
-        teams = teams.filter(element => knocked_tower_list.includes(element));
+    if (match_cap) {
+        teams = teams.filter(element => cap_list.includes(element));
     }
-    if (match_DC) {
-        teams = teams.filter(element => DC_list.includes(element));
-    }
-    if (match_dangerous_driving) {
-        teams = teams.filter(element => dangerous_driving_list.includes(element));
-    }
-    if (match_steps_over_bridge) {
-        teams = teams.filter(element => steps_over_bridge_list.includes(element));
+    if (match_dc) {
+        teams = teams.filter(element => dc_list.includes(element));
     }
     if (match_very_gp) {
         teams = teams.filter(element => very_gp_list.includes(element));
@@ -134,12 +126,15 @@ function getTeams() {
     if (match_not_gp) {
         teams = teams.filter(element => not_gp_list.includes(element));
     }
-    if (match_gold) {
-        teams = teams.filter(element => gold_list.includes(element));
+    if (match_possessive) {
+        teams = teams.filter(element => possessive_list.includes(element));
     }
-    if (match_silicon) {
-        teams = teams.filter(element => silicon_list.includes(element));
-    }
+    // if (match_gold) {
+    //     teams = teams.filter(element => gold_list.includes(element));
+    // }
+    // if (match_silicon) {
+    //     teams = teams.filter(element => silicon_list.includes(element));
+    // }
     let teamPairs = {}
     for (let element of teams) {
         teamPairs[element] = teamsUnprocessed[element];
